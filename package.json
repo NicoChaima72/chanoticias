@@ -1,0 +1,43 @@
+{
+  "name": "chaimanoticias",
+  "version": "1.0.0",
+  "description": "World news app",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon ./src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NicoChaima72/noticias.git"
+  },
+  "keywords": [
+    "noticias",
+    "news"
+  ],
+  "author": "Nicolas Chaima",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NicoChaima72/noticias/issues"
+  },
+  "homepage": "https://github.com/NicoChaima72/noticias#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
+    "cookie-session": "^2.0.0",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-session": "^1.17.3",
+    "method-override": "^3.0.0",
+    "mysql2": "^2.3.3",
+    "nodemailer": "^6.7.7",
+    "nodemon": "^2.0.19",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "sequelize": "^6.21.3",
+    "slugify": "^1.6.5",
+    "underscore": "^1.13.4",
+    "uniqid": "^5.4.0",
+    "validatorjs": "^3.22.1"
+  }
+}
