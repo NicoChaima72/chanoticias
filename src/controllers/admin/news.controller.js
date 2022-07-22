@@ -6,16 +6,19 @@ const uniqid = require("uniqid");
 const helpers = require("../../helpers/back");
 const { uploadImage, deleteImage } = require("../../services/images.service");
 const { getKeyByUrlS3 } = require("../../helpers/back");
+const Tag = require("../../models/tag.model");
 
 module.exports = {
   index: async (req, res) => {
     res.json({ ok: true });
   },
+
   create: async (req, res) => {
     res.json({ ok: true, msg: "Show form create news" });
   },
+
   store: async (req, res) => {
-    const { title, excerpt, body, category_id } = req.body;
+    const { title, excerpt, body, category_id, tags } = req.body;
     const file = req.files;
 
     const user = await User.findByPk(12);
@@ -66,8 +69,21 @@ module.exports = {
         .json({ ok: false, error: helpers.handleErrorSequelize(err) });
     }
 
+    try {
+      await news.addTags(tags || []);
+    } catch (err) {
+      await Promise.all([
+        news.destroy(),
+        deleteImage(getKeyByUrlS3(news.imageUrl)),
+      ]);
+      return res.status(400).json({ ok: false, err });
+    }
+
+    news = await News.findByPk(news.id, { include: [User, Category, Tag] });
+
     return res.json({ ok: true, news });
   },
+
   show: async (req, res) => {
     const { news_slug } = req.params;
 
@@ -77,26 +93,27 @@ module.exports = {
 
     return res.json({ ok: true, news });
   },
+
   edit: async (req, res) => {
     res.json({ ok: true, msg: "Show form edit news" });
   },
+
   update: async (req, res) => {
     const { news_slug } = req.params;
-    const { title, excerpt, body, category_id } = req.body;
+    const { title, excerpt, body, category_id, tags } = req.body;
 
-    const news = await News.findOne({ where: { slug: news_slug }, include: User });
+    const news = await News.findOne({
+      where: { slug: news_slug },
+    });
     if (!news)
       return res.status(400).json({ ok: false, msg: "Noticia no encontrada" });
 
     let result = [];
-    if (req.files.length) {
+    if (req.files.length)
       result = await Promise.all([
         uploadImage(req.files),
         deleteImage(getKeyByUrlS3(news.imageUrl)),
       ]);
-
-      console.log(result[0].Data[0].Location);
-    }
 
     await news.update({
       title,
@@ -106,8 +123,13 @@ module.exports = {
       imageUrl: !!result.length ? result[0].Data[0].Location : news.imageUrl,
     });
 
-    return res.json({ ok: true, news });
+    await news.setTags(tags || []);
+
+    result = await News.findByPk(news.id, { include: [User, Category, Tag] });
+
+    return res.json({ ok: true, news: result });
   },
+
   destroy: async (req, res) => {
     const { news_slug } = req.params;
 
@@ -121,5 +143,15 @@ module.exports = {
     ]);
 
     return res.json({ ok: true });
+  },
+
+  addTags: async (req, res) => {
+    const { tags } = req.body;
+
+    res.json({ ok: true });
+  },
+
+  deleteTags: async (req, res) => {
+    res.json({ ok: true });
   },
 };

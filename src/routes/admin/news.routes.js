@@ -2,8 +2,22 @@ const express = require("express");
 const router = express.Router();
 
 const news = require("../../controllers/admin/news.controller");
+const News = require("../../models/news.model");
+const Tag = require("../../models/tag.model");
 const newsRequest = require("../../requests/admin/news.request");
 const { uploadFileMiddleware } = require("../../services/images.service");
+
+// router.get("/example",async (req,res) => {
+//   const news = await News.findByPk(8, {include: Tag})
+//   const tag = await Tag.findByPk(2)
+//   const result = await news.addTags([2])
+//   // await news.addTags(tag)
+//   // await news.addTags([tag])
+
+//   // const tags = await news.getTags();
+//   // const result = await news.setTags([tag])
+//   res.json({ok:true, result})
+// });
 
 router.get("/", news.index);
 router.get("/create", news.create);

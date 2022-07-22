@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const sequelize = require("../config/database.config");
 
 const Role = sequelize.define("Role", {
-  id: { type: DataTypes.INTEGER, primaryKey: true },
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement:true },
   description: {
     type: DataTypes.STRING,
     allowNull: false,
