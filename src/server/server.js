@@ -1,6 +1,7 @@
 const express = require("express");
 const methodOverride = require("method-override");
 const flash = require("connect-flash");
+const bodyParser = require("body-parser");
 // const session = require("express-session");
 const session = require("cookie-session");
 const path = require("path");
@@ -15,8 +16,8 @@ module.exports = (app) => {
   app.set("port", process.env.PORT);
 
   // middlewares
-  app.use(express.urlencoded({ extended: true }));
-  app.use(express.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(bodyParser.json());
   app.use(methodOverride("_method"));
   app.use(flash());
   app.use(

@@ -32,4 +32,8 @@ module.exports = {
       .replace(/"/g, "&quot;")
       .trim();
   },
+
+  getKeyByUrlS3: (url) => {
+    return url.substring(url.lastIndexOf("/") + 1);
+  },
 };

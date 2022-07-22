@@ -4,6 +4,8 @@ const User = require("../../models/user.model");
 const Category = require("../../models/category.model");
 const uniqid = require("uniqid");
 const helpers = require("../../helpers/back");
+const { uploadImage, deleteImage } = require("../../services/images.service");
+const { getKeyByUrlS3 } = require("../../helpers/back");
 
 module.exports = {
   index: async (req, res) => {
@@ -14,6 +16,8 @@ module.exports = {
   },
   store: async (req, res) => {
     const { title, excerpt, body, category_id } = req.body;
+    const file = req.files;
+
     const user = await User.findByPk(12);
     const category = await Category.findByPk(category_id, {
       where: { isActive: 1 },
@@ -24,6 +28,14 @@ module.exports = {
         ok: false,
         msg: "La categoria no existe",
       });
+
+    let image;
+    try {
+      image = await uploadImage(file);
+    } catch (err) {
+      await news.destroy();
+      return res.status(400).json({ ok: false, err });
+    }
 
     let slug = slugify(title, { lower: true });
 
@@ -44,6 +56,7 @@ module.exports = {
           body,
           CategoryId: category.id,
           UserId: user.id,
+          imageUrl: image.Data[0].Location,
         },
         { include: [User, Category] }
       );
@@ -55,10 +68,58 @@ module.exports = {
 
     return res.json({ ok: true, news });
   },
-  show: async (req, res) => {},
+  show: async (req, res) => {
+    const { news_slug } = req.params;
+
+    const news = News.findOne({ where: { slug: news_slug } });
+    if (!news)
+      return res.status(400).json({ ok: false, msg: "Noticia no encontrada" });
+
+    return res.json({ ok: true, news });
+  },
   edit: async (req, res) => {
     res.json({ ok: true, msg: "Show form edit news" });
   },
-  update: async (req, res) => {},
-  destroy: async (req, res) => {},
+  update: async (req, res) => {
+    const { news_slug } = req.params;
+    const { title, excerpt, body, category_id } = req.body;
+
+    const news = await News.findOne({ where: { slug: news_slug }, include: User });
+    if (!news)
+      return res.status(400).json({ ok: false, msg: "Noticia no encontrada" });
+
+    let result = [];
+    if (req.files.length) {
+      result = await Promise.all([
+        uploadImage(req.files),
+        deleteImage(getKeyByUrlS3(news.imageUrl)),
+      ]);
+
+      console.log(result[0].Data[0].Location);
+    }
+
+    await news.update({
+      title,
+      excerpt,
+      body,
+      CategoryId: category_id,
+      imageUrl: !!result.length ? result[0].Data[0].Location : news.imageUrl,
+    });
+
+    return res.json({ ok: true, news });
+  },
+  destroy: async (req, res) => {
+    const { news_slug } = req.params;
+
+    const news = await News.findOne({ where: { slug: news_slug } });
+    if (!news)
+      return res.status(400).json({ ok: false, msg: "Noticia no encontrada" });
+
+    await Promise.all([
+      news.destroy(),
+      deleteImage(getKeyByUrlS3(news.imageUrl)),
+    ]);
+
+    return res.json({ ok: true });
+  },
 };

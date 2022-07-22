@@ -13,7 +13,6 @@ exports.sendEmail = async (options) => {
   };
 
   return new Promise((resolve, reject) => {
-    console.log(emailConfig);
     transporter.sendMail(mailOptions, (err, info) => {
       if (err) return reject(err);
 
