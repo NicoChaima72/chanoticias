@@ -15,8 +15,8 @@ module.exports = {
     });
   },
   store: async (req, res) => {
-    const { name, description, color, popularity } = req.body;
-    const user = await User.findByPk(12);
+    const { name, description, color, popularity, user_id } = req.body;
+    const user = await User.findByPk(user_id);
 
     const existCategory = await Category.findOne({ where: { name } });
     if (existCategory)
@@ -34,7 +34,7 @@ module.exports = {
           description,
           color,
           popularity,
-          UserId: 12,
+          UserId: user.id,
         },
         { include: User }
       );
@@ -75,7 +75,7 @@ module.exports = {
 
     return res.json({
       ok: true,
-      msg: "Mostrando el formulario create category",
+      msg: "Mostrando el formulario edit category",
     });
   },
   update: async (req, res) => {

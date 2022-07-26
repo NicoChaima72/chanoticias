@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 
 const sequelize = require("../config/database.config");
 const Role = require("./role.model");
+const { getWithAllPermissions } = require("../helpers/back");
 
 const User = sequelize.define(
   "User",
@@ -68,6 +69,10 @@ const User = sequelize.define(
 
 User.prototype.verifyPassword = function (password) {
   return bcrypt.compareSync(password, this.password);
+};
+
+User.prototype.getWithAllPermissions = function () {
+  return getWithAllPermissions(this);
 };
 
 Role.hasMany(User, { onDelete: "CASCADE" });

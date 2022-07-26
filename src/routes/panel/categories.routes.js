@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const categories = require("../../controllers/admin/categories.controller");
-const categoriesRequest = require("../../requests/admin/categories.request");
+const categories = require("../../controllers/panel/categories.controller");
+const categoriesRequest = require("../../requests/panel/categories.request");
 
 router.get("/", categories.index);
 router.get("/create", categories.create);

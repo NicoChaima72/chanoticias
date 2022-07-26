@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const tags = require("../../controllers/admin/tags.controller");
-const tagsRequest = require("../../requests/admin/tags.request");
+const tags = require("../../controllers/panel/tags.controller");
+const tagsRequest = require("../../requests/panel/tags.request");
 
 router.get("/", tags.index);
 router.get("/create", tags.create);

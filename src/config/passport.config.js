@@ -2,6 +2,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("../models/user.model");
 const Role = require("../models/role.model");
+const Permission = require("../models/permission.model");
 
 passport.use(
   "local.signin",
@@ -16,7 +17,7 @@ passport.use(
       try {
         user = await User.scope("withAllInfo").findOne({
           where: { email },
-          include: { model: Role },
+          include: [Permission, { model: Role, include: Permission }],
         });
       } catch (e) {
         return done(null, false, {
@@ -36,22 +37,22 @@ passport.use(
         return done(null, false, { msg: "No está activo" });
       }
 
-      return done(null, user);
+      return done(null, user.getWithAllPermissions());
     }
   )
 );
 
 passport.serializeUser(async (user, done) => {
-  done(null, user);
+  done(null, user.getWithAllPermissions());
 });
 
 passport.deserializeUser(async (user, done) => {
   try {
     user = await User.scope("withAllInfo").findOne({
       where: { email },
-      include: { model: Role },
+      include: [Permission, { model: Role, include: Permission }],
     });
-    done(null, user);
+    done(null, user.getWithAllPermissions());
   } catch (e) {
     return done(null, false, {});
   }

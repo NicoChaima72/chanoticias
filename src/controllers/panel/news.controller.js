@@ -18,10 +18,10 @@ module.exports = {
   },
 
   store: async (req, res) => {
-    const { title, excerpt, body, category_id, tags } = req.body;
+    const { title, excerpt, body, category_id, tags,user_id } = req.body;
     const file = req.files;
 
-    const user = await User.findByPk(12);
+    const user = await User.findByPk(user_id);
     const category = await Category.findByPk(category_id, {
       where: { isActive: 1 },
     });
@@ -50,7 +50,6 @@ module.exports = {
 
     let news;
     try {
-      // TODO: Agregar imagen
       news = await News.create(
         {
           title,
@@ -63,7 +62,7 @@ module.exports = {
         },
         { include: [User, Category] }
       );
-    } catch (error) {
+    } catch (err) {
       return res
         .status(400)
         .json({ ok: false, error: helpers.handleErrorSequelize(err) });

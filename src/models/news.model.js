@@ -52,5 +52,4 @@ News.belongsTo(Category);
 News.belongsToMany(Tag, { through: News_Tag });
 Tag.belongsToMany(News, { through: News_Tag });
 
-
 module.exports = News;

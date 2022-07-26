@@ -1,7 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/database.config");
 const News = require("./news.model");
-const NewsTag = require("./news_tag.model");
 const User = require("./user.model");
 
 const Tag = sequelize.define("Tag", {

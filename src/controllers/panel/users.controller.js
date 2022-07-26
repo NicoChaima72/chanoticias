@@ -4,6 +4,7 @@ const { Op } = require("sequelize");
 const uniqid = require("uniqid");
 const helpers = require("../../helpers/back");
 const emailService = require("../../services/email.service");
+const Permission = require("../../models/permission.model");
 
 module.exports = {
   index: async (req, res) => {
@@ -76,7 +77,9 @@ module.exports = {
   },
   show: async (req, res) => {
     const { user_id } = req.params;
-    const user = await User.findByPk(user_id, { include: Role });
+    const user = await User.findByPk(user_id, {
+      include: { model: Role, include: Permission },
+    });
     if (!user) {
       return res.status(400).json({ ok: false, msg: "Usuario no encontrado" });
     }

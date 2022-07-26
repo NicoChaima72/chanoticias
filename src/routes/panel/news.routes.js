@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-const news = require("../../controllers/admin/news.controller");
+const news = require("../../controllers/panel/news.controller");
 const News = require("../../models/news.model");
 const Tag = require("../../models/tag.model");
-const newsRequest = require("../../requests/admin/news.request");
+const newsRequest = require("../../requests/panel/news.request");
 const { uploadFileMiddleware } = require("../../services/images.service");
 
 // router.get("/example",async (req,res) => {

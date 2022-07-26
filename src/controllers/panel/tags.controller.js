@@ -23,7 +23,7 @@ module.exports = {
         msg: "El nombre del tag ya está registrado",
       });
 
-    const user = await User.findByPk(9);
+    const user = await User.findByPk(1);
     let tag;
     try {
       tag = await Tag.create({

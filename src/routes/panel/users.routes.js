@@ -1,6 +1,6 @@
 const express = require("express");
-const users = require("../../controllers/admin/users.controller");
-const usersRequest = require("../../requests/admin/users.request");
+const users = require("../../controllers/panel/users.controller");
+const usersRequest = require("../../requests/panel/users.request");
 
 const router = express.Router();
 

@@ -36,4 +36,38 @@ module.exports = {
   getKeyByUrlS3: (url) => {
     return url.substring(url.lastIndexOf("/") + 1);
   },
+
+  getWithAllPermissions: (user) => {
+    const permissionsByRole = user.Role.Permissions;
+    const customPermissions = user.Permissions;
+
+    let idsToRemove = customPermissions.filter(
+      (permission) => permission.Permission_User.action === "remove"
+    );
+
+    idsToRemove = idsToRemove.map((permission) => permission.id);
+
+    const permissions = [];
+
+    permissionsByRole.map((permission) => {
+      if (!idsToRemove.includes(permission.id)) permissions.push(permission);
+    });
+
+    customPermissions.map((permission, index) => {
+      if (permission.Permission_User.action === "add")
+        permissions.push(permission);
+    });
+
+    let result = { ...user.get(), AllPermissions: permissions };
+    delete result.Permissions;
+    delete result.Role;
+
+    result.Role = {
+      id: user.Role.id,
+      slug: user.Role.slug,
+      description: user.Role.description,
+    };
+
+    return result;
+  },
 };
