@@ -1,9 +1,9 @@
 const express = require("express");
+const router = express.Router();
 const authRoute = require("./auth.routes");
 const panelRoute = require("./panel/routes");
 const apiRoute = require("./api/routes");
-const router = express.Router();
-const pages = require('./pages.routes')
+const pagesRoute = require("./pages/routes");
 const authMiddleware = require("../middlewares/auth.middleware");
 
 module.exports = (app) => {
@@ -14,7 +14,11 @@ module.exports = (app) => {
   // router.get("/", authMiddleware.isAuthenticated, (req, res) => {
   //   return res.json({ ok: "Hello world!" });
   // });
-  router.use('/', pages)
+  router.use("/", pagesRoute);
 
+  router.all('*', (req, res) => {
+    res.status(404).send('<h1>404! Page not found</h1>');
+  });
+  
   return router;
 };

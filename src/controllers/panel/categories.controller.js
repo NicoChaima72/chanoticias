@@ -93,7 +93,7 @@ module.exports = {
 
     await category.update({ name, description, color, popularity });
 
-    res.json({ ok: true, category });
+    return res.json({ ok: true, category });
   },
 
   active: async (req, res) => {

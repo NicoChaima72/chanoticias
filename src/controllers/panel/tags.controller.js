@@ -83,6 +83,6 @@ module.exports = {
 
     await tag.destroy();
 
-    res.json({ ok: true.valueOf, tag });
+    return res.json({ ok: true, tag });
   },
 };

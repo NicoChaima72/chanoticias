@@ -10,11 +10,11 @@ const Tag = require("../../models/tag.model");
 
 module.exports = {
   index: async (req, res) => {
-    res.json({ ok: true });
+    return res.json({ ok: true });
   },
 
   create: async (req, res) => {
-    res.json({ ok: true, msg: "Show form create news" });
+    return res.json({ ok: true, msg: "Show form create news" });
   },
 
   store: async (req, res) => {
@@ -94,7 +94,7 @@ module.exports = {
   },
 
   edit: async (req, res) => {
-    res.json({ ok: true, msg: "Show form edit news" });
+    return res.json({ ok: true, msg: "Show form edit news" });
   },
 
   update: async (req, res) => {
@@ -142,15 +142,5 @@ module.exports = {
     ]);
 
     return res.json({ ok: true });
-  },
-
-  addTags: async (req, res) => {
-    const { tags } = req.body;
-
-    res.json({ ok: true });
-  },
-
-  deleteTags: async (req, res) => {
-    res.json({ ok: true });
   },
 };

@@ -9,7 +9,7 @@ module.exports = {
   listUsers: async (req, res) => {
     const users = await User.findAll({ include: [Permission, { model: Role, include: Permission }] });
 
-    res.json({ ok: true });
+    return res.json({ ok: true });
   },
 
   getUser: async (req, res) => {

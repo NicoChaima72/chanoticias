@@ -48,11 +48,12 @@ module.exports = (app) => {
     next();
   });
 
+  // config extra
+  app.use(express.static(path.join(__dirname, "../../public")));
+
   // routes
   app.use(routes(app));
 
-  // config extra
-  app.use(express.static(path.join(__dirname, "../../public")));
 
   return app;
 };

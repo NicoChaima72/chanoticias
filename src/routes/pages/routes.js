@@ -7,7 +7,11 @@ router.use((req, res, next) => {
 });
 
 router.get("/", (req, res) => {
-  res.render("home.html");
+  return res.render("home.html");
+});
+
+router.all('*', (req, res) => {
+  res.status(404).send('<h1>404! Pagina no encontrada en pagesRouter</h1>');
 });
 
 module.exports = router

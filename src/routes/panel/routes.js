@@ -15,7 +15,7 @@ router.use((req, res, next) => {
 });
 
 router.get("/", (req, res) => {
-  res.render('panel/home.html');
+  return res.render('panel/home.html');
 });
 
 router.use("/users", usersRouter);
@@ -24,5 +24,9 @@ router.use("/news", newsRouter);
 router.use("/tags", tagsRouter);
 router.use("/roles", rolesRouter);
 router.use("/permissions", permissionsRouter);
+
+router.all('*', (req, res) => {
+  res.status(404).send('<h1>404! Pagina no encontrada en PanelRouter</h1>');
+});
 
 module.exports = router;

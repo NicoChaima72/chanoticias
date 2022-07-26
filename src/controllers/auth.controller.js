@@ -10,7 +10,7 @@ const Role = require("../models/role.model");
 
 module.exports = {
   showLoginForm: (req, res) => {
-    res.json({ ok: "show login" });
+    return res.json({ ok: "show login" });
   },
 
   login: (req, res, next) => {
@@ -25,7 +25,7 @@ module.exports = {
   },
 
   showRegisterForm: (req, res) => {
-    res.json({ ok: "show register" });
+    return res.json({ ok: "show register" });
   },
 
   register: async (req, res) => {
@@ -100,7 +100,7 @@ module.exports = {
   },
 
   showForgetPasswordForm: (req, res) => {
-    res.json({ ok: true, msg: "Mostrando olvide mi contraseña" });
+    return res.json({ ok: true, msg: "Mostrando olvide mi contraseña" });
   },
 
   forgetPassword: async (req, res) => {
@@ -143,7 +143,7 @@ module.exports = {
   },
 
   showUpdatePasswordForm: (req, res) => {
-    res.json({ ok: true, msg: "Mostrando actualizar mi contraseña" });
+    return res.json({ ok: true, msg: "Mostrando actualizar mi contraseña" });
   },
 
   updatePassword: async (req, res) => {
