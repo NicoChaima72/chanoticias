@@ -2,6 +2,7 @@ const express = require("express");
 const methodOverride = require("method-override");
 const flash = require("connect-flash");
 const ejs = require("ejs");
+const expressLayouts = require("express-ejs-layouts");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const path = require("path");
@@ -17,6 +18,10 @@ module.exports = (app) => {
   app.set("views", path.join(path.dirname(__dirname), "views"));
   app.engine("html", ejs.renderFile);
   app.set("view engine", "ejs");
+  app.use(expressLayouts);
+  app.set("layout extractScripts", true);
+  // configurando en cada una de las rutas principales ver: panel/routes.js
+  // app.set("layout", "layouts/layout.html");
 
   // middlewares
   app.use(bodyParser.urlencoded({ extended: true }));

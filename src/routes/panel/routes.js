@@ -8,8 +8,14 @@ const permissionsRouter = require("./permissions.routes");
 
 const router = express.Router();
 
+router.use((req, res, next) => {
+  // changing layout for my admin panel
+  req.app.set('layout', "panel/layouts/layout.html");
+  next();
+});
+
 router.get("/", (req, res) => {
-  res.json({ ok: true, msg: "Admin" });
+  res.render('panel/home.html');
 });
 
 router.use("/users", usersRouter);
