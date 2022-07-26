@@ -4,7 +4,7 @@
   "description": "World news app",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./src/index.js",
+    "dev": "concurrently \"nodemon ./src/index.js -e ejs,js,css,html,jpg,png,scss\" \"npx tailwindcss -i public/css/tailwind.css -o public/css/style.css --watch\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -25,6 +25,7 @@
     "aws-sdk": "^2.1180.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.0",
+    "concurrently": "^7.3.0",
     "connect-flash": "^0.1.1",
     "cookie-session": "^2.0.0",
     "dotenv": "^16.0.1",
@@ -39,8 +40,10 @@
     "nodemon": "^2.0.19",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
+    "reload": "^3.2.0",
     "sequelize": "^6.21.3",
     "slugify": "^1.6.5",
+    "tailwindcss": "^3.1.6",
     "underscore": "^1.13.4",
     "uniqid": "^5.4.0",
     "validatorjs": "^3.22.1"

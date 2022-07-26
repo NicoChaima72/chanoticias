@@ -1,10 +1,15 @@
 require("dotenv").config();
 
 const express = require("express");
-const server = require("./server/server");
+const configServer = require("./server/server");
+const http = require('http')
+const reload = require('reload')
 
-const app = server(express());
+const app = configServer(express());
 
-app.listen(app.get("port"), () =>
+const server = http.createServer(app)
+server.listen(app.get("port"), () =>
   console.log(`Server run on port ${app.get("port")}`)
 );
+
+reload(app);
