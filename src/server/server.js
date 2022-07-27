@@ -21,7 +21,7 @@ module.exports = (app) => {
   app.use(expressLayouts);
   app.set("layout extractScripts", true);
   // configurando en cada una de las rutas principales ver: panel/routes.js
-  // app.set("layout", "layouts/layout.html");
+  app.set("layout", "layouts/layout.html");
 
   // middlewares
   app.use(bodyParser.urlencoded({ extended: true }));
@@ -50,6 +50,7 @@ module.exports = (app) => {
 
   // config extra
   app.use(express.static(path.join(__dirname, "../../public")));
+  app.use('/flowbite', express.static(path.join(__dirname, "../../node_modules/flowbite/dist")));
 
   // routes
   app.use(routes(app));

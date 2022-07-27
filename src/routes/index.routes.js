@@ -16,9 +16,9 @@ module.exports = (app) => {
   // });
   router.use("/", pagesRoute);
 
-  router.all('*', (req, res) => {
-    res.status(404).send('<h1>404! Page not found</h1>');
-  });
+  // router.all('*', (req, res) => {
+  //   res.status(404).send('<h1>404! Page not found</h1>');
+  // });
   
   return router;
 };

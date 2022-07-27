@@ -7,9 +7,11 @@ const reload = require('reload')
 
 const app = configServer(express());
 
+reload(app);
+
 const server = http.createServer(app)
+
+
 server.listen(app.get("port"), () =>
   console.log(`Server run on port ${app.get("port")}`)
 );
-
-reload(app);
