@@ -19,7 +19,7 @@ module.exports = (app) => {
   app.engine("html", ejs.renderFile);
   app.set("view engine", "ejs");
   app.use(expressLayouts);
-  app.set("layout extractScripts", true);
+  // app.set("layout extractScripts", true);
   // configurando en cada una de las rutas principales ver: panel/routes.js
   app.set("layout", "layouts/layout.html");
 

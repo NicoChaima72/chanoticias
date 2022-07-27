@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  /* Eliminar fondo azul dispositivo movil click */
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
