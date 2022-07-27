@@ -10,6 +10,8 @@
     <link rel="manifest" href="/favicon/site.webmanifest" />
     <title>Chaimanoticias - Inicio</title>
     <link rel="stylesheet" href="/css/style.css" />
+    
+    <script src="https://kit.fontawesome.com/e28f7980be.js" crossorigin="anonymous"></script>
     <script>
       // On page load or when changing themes, best to add inline in `head` to avoid FOUC
       if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -19,10 +21,14 @@
       }
   </script>
   </head>
-  <body class="bg-white dark:bg-gray-900 dark:text-white">
+  <body class="bg-white dark:bg-gray-900 dark:text-white text-gray-700">
     <%- include('../partials/navbar.html') %>
-    <%- body %>
-
+    <%- include('../partials/messages.html') %>
+    <div class="container max-w-none mt-5">
+      <%- body %>
+    </div>
+    
+    <%- include('../partials/footer.html') %>
     <script src="/flowbite/flowbite.js"></script>
     <script src="/reload/reload.js"></script>
   </body>
