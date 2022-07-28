@@ -2,7 +2,11 @@
 module.exports = {
   content: ["./src/**/*.{html,js}", "/node_modules/flowbite/**/*.js"],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        '2xl': '1670px'
+      } 
+    },
     container: {
       center: true,
       padding: {
@@ -10,7 +14,7 @@ module.exports = {
         sm: "1rem",
         lg: "2.5rem",
         xl: "5rem",
-        "2xl": "5rem",
+        "2xl": "20rem",
       },
     },
   },

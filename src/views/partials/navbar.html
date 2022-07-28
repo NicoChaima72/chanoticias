@@ -28,7 +28,7 @@
         <button
           id="dropdownRightStartButton"
           data-dropdown-toggle="dropdownRightStart"
-          data-dropdown-placement="right-start"
+          data-dropdown-placement=""
           class="hover:bg-gray-100 focus:ring-2 focus:outline-none focus:ring-gray-200 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
           type="button"
         >
@@ -40,10 +40,15 @@
           id="dropdownRightStart"
           class="hidden z-10 bg-white dark:bg-gray-700 rounded divide-y divide-gray-100 shadow border"
         >
-          <ul class="py-1 text-sm" aria-labelledby="dropdownDefault">
+          <ul class="py-1 text-sm divide-y" aria-labelledby="dropdownDefault">
             <li>
-              <a href="#" class="block py-2 px-4 dark:hover:text-white"
+              <a href="/auth/login" class="block py-2 px-4 dark:hover:text-white"
                 >Iniciar sesion</a
+              >
+            </li>
+            <li>
+              <a href="/auth/register" class="block py-2 px-4 dark:hover:text-white"
+                >Registrarme</a
               >
             </li>
           </ul>
