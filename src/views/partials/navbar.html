@@ -26,32 +26,76 @@
       </button>
       <div>
         <button
-          id="dropdownRightStartButton"
-          data-dropdown-toggle="dropdownRightStart"
-          data-dropdown-placement=""
+          id="dropdownLeftStartButton"
+          data-dropdown-toggle="dropdownLeftStart"
+          data-dropdown-placement="left-start"
           class="hover:bg-gray-100 focus:ring-2 focus:outline-none focus:ring-gray-200 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
           type="button"
         >
+          <% if (user_logged) { %>
+          <i class="fa-solid fa-user-check"></i>
+          <% } else { %>
           <i class="fa-solid fa-user"></i>
+          <% } %>
         </button>
 
         <!-- Dropdown menu -->
         <div
-          id="dropdownRightStart"
+          id="dropdownLeftStart"
           class="hidden z-10 bg-white dark:bg-gray-700 rounded divide-y divide-gray-100 shadow border"
         >
+          <% if (!user_logged) { %>
           <ul class="py-1 text-sm divide-y" aria-labelledby="dropdownDefault">
             <li>
-              <a href="/auth/login" class="block py-2 px-4 dark:hover:text-white"
+              <a
+                href="/auth/login?redirect=<%= _.getPathname(current_url) %>"
+                class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600"
                 >Iniciar sesion</a
               >
             </li>
             <li>
-              <a href="/auth/register" class="block py-2 px-4 dark:hover:text-white"
+              <a
+                href="/auth/register?redirect=<%= _.getPathname(current_url) %>"
+                class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600"
                 >Registrarme</a
               >
             </li>
           </ul>
+          <% } else { %>
+          <div class="divide-y">
+            <p class="py-4 px-4 font-semibold">Nicolas Chaima</p>
+
+            <ul
+              class="py-1 text-sm w-40 pb-2"
+              aria-labelledby="dropdownDefault"
+            >
+              <li>
+                <a
+                  href="/auth/login"
+                  class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600"
+                  >Noticias guardadas</a
+                >
+              </li>
+              <% if (user_logged.Role.description !== 'USER_ROLE') { %>
+              <li>
+                <a
+                  href="/auth/login"
+                  class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600"
+                  >Ir al panel</a
+                >
+              </li>
+              <% } %>
+            </ul>
+            <form action="/auth/logout" method="post">
+              <button
+                type="submit"
+                class="text-sm block py-3 px-4 text-red-500 hover:text-red-300"
+              >
+                Cerrar sesion
+              </button>
+            </form>
+          </div>
+          <% } %>
         </div>
       </div>
       <button

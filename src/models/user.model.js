@@ -47,6 +47,9 @@ const User = sequelize.define(
       withAllInfo: {
         attributes: {},
       },
+      withToken: {
+        attributes: {exclude: ["password", "isActive"]}
+      }
     },
     hooks: {
       beforeCreate(user) {

@@ -20,21 +20,26 @@ passport.use(
           include: [Permission, { model: Role, include: Permission }],
         });
       } catch (e) {
-        return done(null, false, {
-          msg: "Ha ocurrido un error, intenta más tarde",
-        });
+        req.flash("error", helpers.handleErrorSequelize(e));
+        return done(null, false, {});
       }
 
       if (!user) {
-        return done(null, false, { msg: "El email no está registrado" });
+        req.flash("data", { email, password });
+        req.flash("error", "Usuario y/o contraseña incorrectos");
+        return done(null, false, {});
       }
 
       if (!user.verifyPassword(password)) {
-        return done(null, false, { msg: "La contraseña es incorrecta" });
+        req.flash("data", { email, password });
+        req.flash("error", "Usuario y/o contraseña incorrectos");
+        return done(null, false, {});
       }
 
       if (user.isActive != 1) {
-        return done(null, false, { msg: "No está activo" });
+        req.flash("data", { email });
+        req.flash("error", "Usuario no activo, verifica tu correo");
+        return done(null, false, {});
       }
 
       return done(null, user.getWithAllPermissions());
@@ -43,13 +48,13 @@ passport.use(
 );
 
 passport.serializeUser(async (user, done) => {
-  done(null, user.getWithAllPermissions());
+  done(null, user);
 });
 
 passport.deserializeUser(async (user, done) => {
   try {
     user = await User.scope("withAllInfo").findOne({
-      where: { email },
+      where: { email: user.email },
       include: [Permission, { model: Role, include: Permission }],
     });
     done(null, user.getWithAllPermissions());

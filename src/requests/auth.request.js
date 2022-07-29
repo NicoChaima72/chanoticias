@@ -15,12 +15,12 @@ module.exports = {
       email: "required|email",
       password: "required|min:8|confirmed",
       password_confirmation: "required",
-      role_id: "required|integer",
+      // role_id: "required|integer",
     };
 
     const customMessages = {
       "confirmed.password": "Las contraseñas no coinciden",
-      "required.role_id": "El rol del usuario es requerido",
+      // "required.role_id": "El rol del usuario es requerido",
     };
 
     return validate(req.body, validationRule, customMessages, req, res, next);

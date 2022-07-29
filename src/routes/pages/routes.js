@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const pages = require('../../controllers/pages.controller')
+const authMiddleware  = require('../../middlewares/auth.middleware');
 
 router.use((req, res, next) => {
   req.app.set("layout", "layouts/layout.html");
