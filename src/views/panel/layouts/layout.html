@@ -1,18 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/panel/apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/panel/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/panel/favicon-16x16.png" />
-  <link rel="manifest" href="/favicon/panel/site.webmanifest" />
-  <title>PANEL Chaimanoticias - Inicio</title>
-  <link rel="stylesheet" href="/css/style.css" />
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/panel/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/panel/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/panel/favicon-16x16.png" />
+    <link rel="manifest" href="/favicon/panel/site.webmanifest" />
+    <title>CHA Panel - <%- defineContent('title') || 'Agregar titulo' %></title>
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="/panel/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="/panel/css/adminlte.min.css">
+    <script src="/panel/plugins/jquery/jquery.min.js"></script>
+  <%- defineContent('styles') %>
 </head>
-<body>
-  <%- body %>
+<body class="hold-transition sidebar-mini layout-fixed">
+  <div class="wrapper">
+    <%- include('../partials/navbar.html') %>
+    <%- include('../partials/sidebar.html') %>
+    
+    <div class="content-wrapper">
+      <%- include('../partials/messages.html') %>
+
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-8">
+              <h1 class="m-0"><%- defineContent('header-title') || 'Cambiar titulo' %></h1>
+            </div>
+            <div class="col-sm-4">
+              <div class="float-sm-right mt-2 mt-sm-0">
+                <%- defineContent('header-button') %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="content">
+        <div class="container-fluid pb-5">
+          <%- body %>
+        </div>
+      </section>
+    </div>
+  </div>
+  <script src="/panel/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/panel/js/adminlte.min.js"></script>
+
+  <%- defineContent('scripts') %>
 
   <script src="/reload/reload.js"></script>
 </body>

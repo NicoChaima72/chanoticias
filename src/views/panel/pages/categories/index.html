@@ -1,0 +1,146 @@
+<%- contentFor('title') %> Ver categorias <%- contentFor('header-title') %>
+Categorias <%- contentFor('header-button') %>
+<a href="/panel/categories/create" class="btn btn-primary"
+  >Agregar categoria <i class="fas fa-plus ml-2"></i
+></a>
+<%- contentFor('body') %>
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Mostrando todas las categorias</h3>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <table id="data-table" class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Popularidad</th>
+              <th>Autor</th>
+              <th>Estado</th>
+              <th>Noticias</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% categories.map(category => { %>
+            <tr>
+              <td>
+                <span
+                  class="rounded text-white py-1 px-2"
+                  style="background-color: <%= category.color %>"
+                  ><%= category.id %></span
+                >
+              </td>
+              <td><%= category.name %></td>
+              <td><%= category.popularity %></td>
+              <td><%= category.User.name %></td>
+              <td>
+                <% if (category.isActive) { %>
+                <span class="badge badge-pill badge-success">Activo</span>
+                <% } else { %>
+                <span class="badge badge-pill badge-danger">Inactivo</span>
+                <% } %>
+              </td>
+              <td><%= category.NewsCount %></td>
+              <td>
+                <div class="d-flex gap-2">
+                  <a
+                    href="/categories/<%= category.slug %>"
+                    target="_blank"
+                    class="btn btn-outline-warning mx-1"
+                    >Ver</a
+                  >
+                  <a
+                    href="/panel/categories/<%= category.slug %>/edit"
+                    class="btn btn-outline-primary mx-1"
+                    >Editar</a
+                  >
+                  <% if (category.NewsCount == 0) { %>
+                  <button
+                    type="submit"
+                    class="btn btn-outline-danger mx-1"
+                    onclick="confirm('¿Eliminar categoria <%= category.name %>?') ?
+                    document.getElementById('form-delete-<%= category.id %>').submit() : null"
+                  >
+                    Eliminar
+                  </button>
+                  <form
+                    action="/panel/categories/<%= category.slug %>/?_method=DELETE"
+                    method="post"
+                    class="d-none"
+                    id="form-delete-<%= category.id %>"
+                  >
+                    <input type="hidden" name="_method" value="DELETE" />
+                  </form>
+                  <% } else { %>
+                  <button
+                    type="submit"
+                    class="btn btn-outline-danger mx-1"
+                    onclick="confirm('¿Cambiar de estado a la categoria <%= category.name %>?') ?
+                    document.getElementById('form-delete-<%= category.id %>').submit() : null"
+                  >
+                    Bajar
+                  </button>
+                  <form
+                    action="/panel/categories/<%= category.slug %>/active?_method=PUT"
+                    method="post"
+                    class="d-none"
+                    id="form-delete-<%= category.id %>"
+                  >
+                    <input type="hidden" name="_method" value="PUT" />
+                  </form>
+                  <% } %>
+                </div>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+  
+        </table>
+      </div>
+      <!-- /.card-body -->
+    </div>
+  </div>
+</div>
+
+<%- contentFor('styles') %>
+<link
+  rel="stylesheet"
+  href="/panel/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/panel/plugins/datatables-responsive/css/responsive.bootstrap4.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/panel/plugins/datatables-buttons/css/buttons.bootstrap4.min.css"
+/>
+
+<%- contentFor('scripts') %>
+<script src="/panel/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/panel/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="/panel/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/panel/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="/panel/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="/panel/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="/panel/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="/panel/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="/panel/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script>
+  $(function () {
+    $("#data-table").DataTable({
+      language: {url: '//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json'},
+      paging: true,
+      lengthChange: false,
+      searching: true,
+      ordering: true,
+      info: true,
+      autoWidth: false,
+      responsive: true,
+    });
+  });
+</script>

@@ -48,14 +48,14 @@
           <ul class="py-1 text-sm divide-y" aria-labelledby="dropdownDefault">
             <li>
               <a
-                href="/auth/login?redirect=<%= _.getPathname(current_url) %>"
+                href="/auth/login<%= _.getPathname(current_url) %>"
                 class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600"
                 >Iniciar sesion</a
               >
             </li>
             <li>
               <a
-                href="/auth/register?redirect=<%= _.getPathname(current_url) %>"
+                href="/auth/register<%= _.getPathname(current_url) %>"
                 class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600"
                 >Registrarme</a
               >
@@ -77,14 +77,14 @@
                 >
               </li>
               <% if (user_logged.Role.description !== 'USER_ROLE') { %>
+                <% } %>
               <li>
                 <a
-                  href="/auth/login"
+                  href="/panel"
                   class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600"
                   >Ir al panel</a
                 >
               </li>
-              <% } %>
             </ul>
             <form action="/auth/logout" method="post">
               <button

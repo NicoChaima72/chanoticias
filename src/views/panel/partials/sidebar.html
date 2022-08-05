@@ -1,0 +1,176 @@
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <!-- Brand Logo -->
+  <a href="/" class="brand-link d-flex align-items-center">
+    <img
+      src="/favicon/favicon-32x32.png"
+      alt="AdminLTE Logo"
+      class="brand-image elevation-3"
+      style="opacity: 0.8; width: 28px; height: 28px; margin-left: 15px;"
+    />
+    <span class="brand-text font-weight-light">CHAIMANOTICIAS</span>
+  </a>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Sidebar user panel (optional) -->
+    <div class="user-panel mt-1 pb-1 mb-1">
+      <div class="d-flex align-items-center">
+        <div class="image">
+          <i class="fas fa-user text-white pl-2 pr-1" style="font-size: 20px"></i>
+        </div>
+        <div class="info text-white brand-text">
+          <p class="m-0 d-inline-block text-truncate" style="max-width: 180px;">Nicolas Ignacio Chaima</p>
+          <span class="text-xs d-block font-weight-light" style="margin-top: -9px;">Administrador</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul
+        class="nav nav-pills nav-sidebar flex-column"
+        data-widget="treeview"
+        role="menu"
+        data-accordion="false"
+      >
+      <li class="nav-item">
+        <a href="/panel" class="nav-link <%= _.isActiveUrl(current_url, '/') && 'active' %>">
+          <i class="nav-icon fas fa-tachometer-alt"></i>
+          <p>
+            Dashboard
+          </p>
+        </a>
+      </li>
+        <li class="nav-item <%= _.isActiveUrl(current_url, '/users/*') && 'menu-open' %>">
+          <a href="#" class="nav-link <%= _.isActiveUrl(current_url, '/users/*') && 'active' %>">
+            <i class="nav-icon fas fa-users"></i>
+            <p>
+              Usuarios
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="/panel/users" class="nav-link <%= _.isActiveUrl(current_url, '/users') && 'active' %>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Ver usuarios</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/panel/users/create" class="nav-link <%= _.isActiveUrl(current_url, '/users/create') && 'active' %>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Agregar usuario</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item <%= _.isActiveUrl(current_url, '/roles/*') && 'menu-open' %>">
+          <a href="#" class="nav-link <%= _.isActiveUrl(current_url, '/roles/*') && 'active' %>">
+            <i class="nav-icon fas fa-user-tag"></i>
+            <p>
+              Roles
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="/panel/roles/" class="nav-link <%= _.isActiveUrl(current_url, '/roles') && 'active' %>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Ver roles</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/panel/roles/create" class="nav-link <%= _.isActiveUrl(current_url, '/roles/create') && 'active' %>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Agregar rol</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item <%= _.isActiveUrl(current_url, '/permissions/*') && 'menu-open' %>">
+          <a href="#" class="nav-link <%= _.isActiveUrl(current_url, '/permissions/*') && 'active' %>">
+            <i class="nav-icon fas fa-user-tag"></i>
+            <p>
+              Permisos de usuarios
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="/panel/permissions/users" class="nav-link <%= _.isActiveUrl(current_url, '/permissions/users') && 'active' %>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Ver permisos</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item <%= _.isActiveUrl(current_url, '/categories/*') && 'menu-open' %>">
+          <a href="#" class="nav-link <%= _.isActiveUrl(current_url, '/categories/*') && 'active' %>">
+            <i class="nav-icon fas fa-copy"></i>
+            <p>
+              Categorias
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="/panel/categories" class="nav-link <%= _.isActiveUrl(current_url, '/categories') && 'active' %>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Ver categorias</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/panel/categories/create" class="nav-link <%= _.isActiveUrl(current_url, '/categories/create') && 'active' %>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Agregar categoria</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item <%= _.isActiveUrl(current_url, '/tags/*') && 'menu-open' %>">
+          <a href="#" class="nav-link <%= _.isActiveUrl(current_url, '/tags/*') && 'active' %>">
+            <i class="nav-icon fas fa-tags"></i>
+            <p>
+              Etiquetas
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="/panel/tags" class="nav-link <%= _.isActiveUrl(current_url, '/tags') && 'active' %>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Ver etiquetas</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item <%= _.isActiveUrl(current_url, '/news/*') && 'menu-open' %>">
+          <a href="#" class="nav-link <%= _.isActiveUrl(current_url, '/news/*') && 'active' %>">
+            <i class="nav-icon fas fa-newspaper"></i>
+            <p>
+              Noticias
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="/panel/news" class="nav-link <%= _.isActiveUrl(current_url, '/news') && 'active' %>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Ver noticias</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="/panel/news/create" class="nav-link <%= _.isActiveUrl(current_url, '/news/create') && 'active' %>">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Agregar noticia</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</aside>

@@ -54,11 +54,18 @@ module.exports = {
 
     const existUser = await User.findOne({ where: { email } });
 
-    if (existUser)
+    if (existUser) {
+      req.flash("data", req.body);
+      req.flash("errors", {
+        email: { message: "El email ya está registrado" },
+      });
+      return res.redirect(req.header("Referer") || "/");
+
       return res.json({
         ok: false,
         msg: "El usuario con este email ya existe",
       });
+    }
 
     try {
       user = await User.create(

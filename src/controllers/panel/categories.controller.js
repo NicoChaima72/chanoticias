@@ -1,36 +1,59 @@
 const Category = require("../../models/category.model");
 const User = require("../../models/user.model");
+const News = require("../../models/news.model");
 const helpers = require("../../helpers/back");
 const slugify = require("slugify");
+const Sequelize = require("sequelize");
+const uniqid = require("uniqid");
 
 module.exports = {
   index: async (req, res) => {
-    const categories = await Category.findAll({ include: { model: User } });
-    return res.json({ ok: true, categories });
+    const categories = await Category.findAll({
+      attributes: {
+        include: [
+          [Sequelize.fn("COUNT", Sequelize.col("News.id")), "NewsCount"],
+        ],
+      },
+      include: [{ model: User }, { model: News, attributes: [] }],
+      group: ["Category.id"],
+    });
+
+    // return res.json({ok: true, categories});
+    return res.render("panel/pages/categories/index.html", {
+      categories: JSON.parse(JSON.stringify(categories)),
+    });
   },
   create: async (req, res) => {
-    return res.json({
-      ok: true,
-      msg: "Mostrando el formulario create category",
+    return res.render("panel/pages/categories/form.html", {
+      category: {},
+      action: "create",
     });
   },
   store: async (req, res) => {
-    const { name, description, color, popularity, user_id } = req.body;
-    const user = await User.findByPk(user_id);
+    const { name, description, color, popularity } = req.body;
+    const user = await User.findByPk(req.user.id);
 
-    const existCategory = await Category.findOne({ where: { name } });
-    if (existCategory)
-      return res.status(400).json({
-        ok: false,
-        msg: "El nombre de la categoria ya está registrado",
+    let existCategory = await Category.findOne({ where: { name } });
+    if (existCategory) {
+      req.flash("data", req.body);
+      req.flash("errors", {
+        name: { message: "El nombre de la categoria ya está registrado." },
       });
+      return res.redirect(req.header("Referer") || "/");
+    }
+
+    let slug = slugify(name, { lower: true });
+
+    existCategory = await Category.findOne({ where: { slug } });
+
+    slug = existCategory ? `${slug}-${uniqid.time()}` : slug;
 
     let category;
     try {
       category = await Category.create(
         {
           name,
-          slug: slugify(name, { lower: true }),
+          slug,
           description,
           color,
           popularity,
@@ -39,12 +62,11 @@ module.exports = {
         { include: User }
       );
     } catch (err) {
-      return res
-        .status(400)
-        .json({ ok: false, error: helpers.handleErrorSequelize(err) });
+      req.flash("error", "Ha ocurrido un error, intenta más tarde.");
+      return res.redirect("/panel/categories");
     }
-
-    return res.json({ ok: true, category });
+    req.flash("success", "Se ha agregado la categoria exitosamente.");
+    return res.redirect("/panel/categories");
   },
   show: async (req, res) => {
     const { category_slug } = req.params;
@@ -70,12 +92,13 @@ module.exports = {
     });
 
     if (!category) {
-      return res.status(400).json({ ok: false, msg: "La categoria no existe" });
+      req.flash("warning", "La categoria no existe.");
+      return res.redirect("/panel/categories");
     }
 
-    return res.json({
-      ok: true,
-      msg: "Mostrando el formulario edit category",
+    return res.render("panel/pages/categories/form.html", {
+      category,
+      action: "edit",
     });
   },
   update: async (req, res) => {
@@ -88,12 +111,32 @@ module.exports = {
     });
 
     if (!category) {
-      return res.status(400).json({ ok: false, msg: "La categoria no existe" });
+      req.flash("warning", "La categoria no existe.");
+      return res.redirect("/panel/categories");
     }
 
     await category.update({ name, description, color, popularity });
 
-    return res.json({ ok: true, category });
+    req.flash("success", "La categoria se ha actualizado exitosamente.");
+    return res.redirect("/panel/categories");
+  },
+
+  delete: async (req, res) => {
+    const { category_slug } = req.params;
+    const category = await Category.findOne({
+      where: { slug: category_slug },
+      include: User,
+    });
+
+    if (!category) {
+      req.flash("warning", "La categoria no existe.");
+      return res.redirect("/panel/categories");
+    }
+
+    await category.destroy();
+
+    req.flash("success", "La categoria " + category.name + " se ha eliminado.");
+    return res.redirect("/panel/categories");
   },
 
   active: async (req, res) => {
@@ -105,11 +148,16 @@ module.exports = {
     });
 
     if (!category) {
-      return res.status(400).json({ ok: false, msg: "La categoria no existe" });
+      req.flash("warning", "La categoria no existe.");
+      return res.redirect("/panel/categories");
     }
 
     await category.update({ isActive: !category.isActive });
 
-    return res.json({ ok: true, category });
+    req.flash(
+      "success",
+      "Se ha cambiado el estado a la categoria " + category.name + "."
+    );
+    return res.redirect("/panel/categories");
   },
 };

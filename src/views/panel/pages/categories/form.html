@@ -1,0 +1,113 @@
+<%- contentFor('title') %> <%= action == 'create' ? 'Agregar categoria' :
+'Editar categoria' %> <%- contentFor('header-title') %> <%= action == 'create' ?
+'Agregar categoria' : 'Editar categoria' %> <%- contentFor('body') %>
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">
+      Formulario para <%= action == 'create' ? 'agregar' : 'editar' %> categoria
+    </h3>
+  </div>
+  <form action="<%= action == 'create' ? '/panel/categories' :
+  '/panel/categories/' + category.slug + '?_method=PUT' %>" method="POST">
+    <% if (action == 'edit') { %>
+      <input type="hidden" name="_method" value="PUT" />
+    <% } %>
+    <div class="card-body">
+      <div class="form-group">
+        <label for="name">Nombre</label>
+        <input
+          type="text"
+          class="form-control <%= errors.name && 'is-invalid' %>"
+          id="name"
+          name="name"
+          value="<%= _.getValue(data.name, category.name) %>"
+          autocomplete="off"
+        />
+        <% if (errors.name) { %>
+        <span class="text-xs text-danger"><%- errors.name.message %></span>
+        <% } %>
+      </div>
+      <div class="form-group">
+        <label for="description">Descripcion</label>
+        <textarea
+          name="description"
+          id="description"
+          class="form-control <%= errors.description && 'is-invalid' %>"
+          rows="2"
+        >
+<%= _.getValue(data.description, category.description) %></textarea
+        >
+        <% if (errors.description) { %>
+        <span class="text-xs text-danger"
+          ><%- errors.description.message %></span
+        >
+        <% } %>
+      </div>
+      <div class="form-group">
+        <div class="d-flex">
+          <label>Color</label>
+          <span
+            class="d-block p-2 ml-1 rounded-circle mt-1 border"
+            id="previewColor"
+            style="width: 1px; height: 1px; <%= !!_.getValue(data.color, category.color) && 'background-color:' + _.getValue(data.color, category.color)  %>"
+          ></span>
+        </div>
+        <select
+          id="select"
+          name="color"
+          class="custom-select <%= errors.color && 'is-invalid' %>"
+        >
+          <option class="text-secondary" <%= !_.getValue(data.color, category.color) && 'selected' %> disabled>
+            --Seleccionar color--
+          </option>
+          <% _.getColorsCategories().map(color => { %>
+          <option
+            class="text-white"
+            value="<%= color.value %>"
+            <%= _.getValue(data.color, category.color) == color.value && 'selected' %>
+            style="background-color: <%= color.value %>"
+          >
+            <%= color.name %>
+          </option>
+          <% }) %>
+        </select>
+        <% if (errors.color) { %>
+        <span class="text-xs text-danger"><%- errors.color.message %></span>
+        <% } %>
+      </div>
+      <div class="form-group">
+        <label for="popularity">Popularidad</label>
+        <input
+          type="number"
+          name="popularity"
+          id="popularity"
+          class="form-control <%= errors.popularity && 'is-invalid' %>"
+          min="0"
+          max="100"
+          value="<%= _.getValue(data.popularity, category.popularity) %>"
+        />
+        <% if (errors.popularity) { %>
+        <span class="text-xs text-danger"
+          ><%- errors.popularity.message %></span
+        >
+        <% } %>
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <button type="submit" class="btn btn-primary"><%= action == 'create' ? 'Agregar' :
+        'Guardar' %></button>
+    </div>
+  </form>
+</div>
+
+<%- contentFor('scripts') %>
+<script>
+  $(function () {
+    const select = document.getElementById("select");
+    select.addEventListener("change", () => {
+      document.getElementById("previewColor").style.backgroundColor =
+        select.value;
+    });
+  });
+</script>

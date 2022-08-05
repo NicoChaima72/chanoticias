@@ -4,6 +4,7 @@ module.exports = {
   store: (req, res, next) => {
     const validationRule = {
       name: "required",
+      description: "required",
       color: "required",
       popularity: "required|integer|min:0|max:100",
     };
