@@ -2,7 +2,11 @@
 <div class="grid grid-cols-12 w-full">
   <div class="col-span-12 md:col-span-8 md:col-start-3">
     <h1 class="text-3xl font-bold mx-auto mt-3">Iniciar sesion</h1>
-    <form action="/auth/login<%= _.getRedirectUrl(current_url) %>" method="post" class="mt-5">
+    <form
+      action="/auth/login<%= _.getRedirectUrl(current_url) %>"
+      method="post"
+      class="mt-5"
+    >
       <div class="mb-6">
         <label
           for="email"
@@ -12,7 +16,7 @@
         <input
           type="email"
           id="email"
-          class="<%= errors.email ? 'border-red-500' :  'border-gray-300 dark:border-gray-600' %> border bg-gray-50 dark:bg-gray-700 focus:border-blue-500 dark:focus:border-blue-500 dark:placeholder-gray-400 text-sm rounded-lg block w-full p-2.5"
+          class="<%= errors.email ? 'border-red-500' : 'border-gray-300 dark:border-gray-600' %> border bg-gray-50 dark:bg-gray-700 focus:border-blue-500 dark:focus:border-blue-500 dark:placeholder-gray-400 text-sm rounded-lg block w-full p-2.5"
           name="email"
           value="<%= data.email && data.email %>"
           required
@@ -31,7 +35,7 @@
         >
         <input
           type="password"
-          class="<%= errors.password ? 'border-red-500' :  'border-gray-300 dark:border-gray-600' %> border bg-gray-50 dark:bg-gray-700 focus:border-blue-500 dark:focus:border-blue-500 dark:placeholder-gray-400 text-sm rounded-lg block w-full p-2.5"
+          class="<%= errors.password ? 'border-red-500' : 'border-gray-300 dark:border-gray-600' %> border bg-gray-50 dark:bg-gray-700 focus:border-blue-500 dark:focus:border-blue-500 dark:placeholder-gray-400 text-sm rounded-lg block w-full p-2.5"
           name="password"
           value="<%= data.password && data.password %>"
           required
@@ -42,16 +46,26 @@
         </p>
         <% } %>
       </div>
-      <div class="flex justify-between flex-wrap items-center pb-8 border-b border-gray-300 dark:border-gray-700">
+      <div
+        class="flex justify-between flex-wrap items-center pb-8 border-b border-gray-300 dark:border-gray-700"
+      >
         <button
-        type="submit"
-        class=" text-white text-sm bg-blue-700 hover:bg-blue-800 focus:ring-4 px-7 focus:outline-none focus:ring-blue-300 font-medium rounded-lg w-full sm:w-auto py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          type="submit"
+          class="text-white text-sm bg-blue-700 hover:bg-blue-800 focus:ring-4 px-7 focus:outline-none focus:ring-blue-300 font-medium rounded-lg w-full sm:w-auto py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
-        Ingresar
-      </button>
-      <a href="/auth/forget-password" class="text-center text-xs d-block w-full sm:w-auto hover:text-blue-700 dark:hover:text-blue-400 mt-5 sm:mt-0">Olvidé mi contraseña</a>
-    </div>
-    <a href="/auth/register<%= _.getRedirectUrl(current_url) %>" class="text-sm mt-4 block text-center hover:text-blue-700 dark:hover:text-blue-400">No tengo cuenta, registrarme</a>
+          Ingresar
+        </button>
+        <a
+          href="/auth/forget-password"
+          class="text-center text-xs d-block w-full sm:w-auto hover:text-blue-700 dark:hover:text-blue-400 mt-5 sm:mt-0"
+          >Olvidé mi contraseña</a
+        >
+      </div>
+      <a
+        href="/auth/register<%= _.getRedirectUrl(current_url) %>"
+        class="text-sm mt-4 block text-center hover:text-blue-700 dark:hover:text-blue-400"
+        >No tengo cuenta, registrarme</a
+      >
     </form>
   </div>
 </div>

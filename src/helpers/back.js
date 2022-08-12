@@ -74,4 +74,15 @@ module.exports = {
 
     return result;
   },
+
+  separateByValue: (list, separate) => {
+    const arr = list.reduce((groups, item) => {
+      const group = (groups[item[separate]] || []);
+      group.push(item);
+      groups[item.group] = group;
+      return groups;
+    }, {});
+
+    return arr
+  }
 };

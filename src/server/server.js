@@ -50,9 +50,9 @@ module.exports = (app) => {
   // global variables
   const helpers = require("../helpers/front");
   app.use((req, res, next) => {
-    res.locals.title = "Chaimanoticias";
-    res.locals.user_logged = req.user || null;
     res.locals._ = helpers;
+    res.locals._title = "Chaimanoticias";
+    res.locals._user = req.user || null;
     res.locals.flash_success = req.flash("success");
     res.locals.flash_warning = req.flash("warning");
     res.locals.flash_error = req.flash("error");

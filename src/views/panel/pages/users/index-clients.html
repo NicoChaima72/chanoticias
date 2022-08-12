@@ -1,0 +1,131 @@
+<%- contentFor('title') %> Ver clientes %> <%- contentFor('header-title') %>
+Clientes %> <%- contentFor('body') %>
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Mostrando todos los clientes</h3>
+      </div>
+      <div class="card-body">
+        <table id="data-table" class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <!-- TODO: Editar el passport para que solo pueda acceder usuarios con status = 1 o 3 -->
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>Estado</th>
+              <th>Noticias guardadas</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% users.map(user => { %>
+            <tr>
+              <td><%= user.name %></td>
+              <td><%= user.email %></td>
+              <td>
+                <% if (user.status == 0) { %>
+                <span class="badge badge-warning">Sin verificar</span>
+                <% } if (user.status == 1) { %>
+                <span class="badge badge-success">Activo</span>
+                <% } if (user.status == 2) { %>
+                <span class="badge badge-danger">Inactivo</span>
+                <% } %>
+              </td>
+              <td>0</td>
+              <td>
+                <div class="d-flex">
+                  <% if (user.status == 1) { %>
+                  <button
+                    type="submit"
+                    class="btn btn-outline-danger mx-1"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Dar da baja al cliente"
+                    onclick="confirm('¿Dar da baja al cliente <%= user.name %>?') ?
+                  document.getElementById('form-active-<%= user.id %>').submit() : null"
+                  >
+                    <i class="fas fa-arrow-down"></i>
+                  </button>
+                  <form
+                    action="/panel/users/<%= user.id %>/status?_method=PUT"
+                    method="post"
+                    class="d-none"
+                    id="form-active-<%= user.id %>"
+                  >
+                    <input type="hidden" name="_method" value="PUT" />
+                    <input type="hidden" name="type" value="clients" />
+                  </form>
+                  <% } else { %>
+                  <button
+                    type="submit"
+                    class="btn btn-outline-success mx-1"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Dar da alta al cliente"
+                    onclick="confirm('¿Dar da alta al cliente <%= user.name %>?') ?
+                  document.getElementById('form-active-<%= user.id %>').submit() : null"
+                  >
+                    <i class="fas fa-arrow-up"></i>
+                  </button>
+                  <form
+                    action="/panel/users/<%= user.id %>/status?_method=PUT"
+                    method="post"
+                    class="d-none"
+                    id="form-active-<%= user.id %>"
+                  >
+                    <input type="hidden" name="_method" value="PUT" />
+                    <input type="hidden" name="type" value="clients" />
+                  </form>
+                  <% } %>
+                </div>
+              </td>
+            </tr>
+            <%}) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- contentFor('styles') %>
+<link
+  rel="stylesheet"
+  href="/panel/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/panel/plugins/datatables-responsive/css/responsive.bootstrap4.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/panel/plugins/datatables-buttons/css/buttons.bootstrap4.min.css"
+/>
+
+<%- contentFor('scripts') %>
+<script src="/panel/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/panel/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="/panel/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/panel/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="/panel/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="/panel/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="/panel/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="/panel/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="/panel/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script>
+  $(function () {
+    $("#data-table").DataTable({
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json",
+      },
+      paging: true,
+      lengthChange: false,
+      searching: true,
+      ordering: true,
+      info: true,
+      autoWidth: false,
+      responsive: true,
+    });
+  });
+</script>

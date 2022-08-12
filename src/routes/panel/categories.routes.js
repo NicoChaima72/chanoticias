@@ -9,7 +9,7 @@ router.post("/", categoriesRequest.store, categories.store);
 router.get("/:category_slug", categories.show);
 router.get("/:category_slug/edit", categories.edit);
 router.put("/:category_slug", categoriesRequest.update, categories.update);
-router.delete("/:category_slug", categories.delete);
+router.delete("/:category_slug", categories.destroy);
 router.put("/:category_slug/active", categories.active);
 
 module.exports = router;

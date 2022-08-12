@@ -8,7 +8,7 @@
       href="/"
       class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"
     >
-      <%= title %>
+      <%= _title %>
     </a>
     <div class="flex items-center md:order-2 ml-auto">
       <button
@@ -32,7 +32,7 @@
           class="hover:bg-gray-100 focus:ring-2 focus:outline-none focus:ring-gray-200 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
           type="button"
         >
-          <% if (user_logged) { %>
+          <% if (_user) { %>
           <i class="fa-solid fa-user-check"></i>
           <% } else { %>
           <i class="fa-solid fa-user"></i>
@@ -44,7 +44,7 @@
           id="dropdownLeftStart"
           class="hidden z-10 bg-white dark:bg-gray-700 rounded divide-y divide-gray-100 shadow border"
         >
-          <% if (!user_logged) { %>
+          <% if (!_user) { %>
           <ul class="py-1 text-sm divide-y" aria-labelledby="dropdownDefault">
             <li>
               <a
@@ -76,7 +76,7 @@
                   >Noticias guardadas</a
                 >
               </li>
-              <% if (user_logged.Role.description !== 'USER_ROLE') { %>
+              <% if (_user.Role.description !== 'USER_ROLE') { %>
                 <% } %>
               <li>
                 <a

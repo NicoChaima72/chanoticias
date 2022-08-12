@@ -37,19 +37,22 @@ const User = sequelize.define(
     },
     token: { type: DataTypes.STRING },
     expire: { type: DataTypes.DATE },
-    isActive: { type: DataTypes.INTEGER, defaultValue: 0 }, // 0 Pendiente confirm email | 1 Activo | 2 Dado de baja | 3 Cambiar contraseña
+    status: { type: DataTypes.INTEGER, defaultValue: 0 }, // 0 Pendiente confirm email | 1 Activo | 2 Dado de baja | 3 Cambiar contraseña
   },
   {
     defaultScope: {
-      attributes: { exclude: ["password", "token", "expire", "isActive"] },
+      attributes: { exclude: ["password", "token", "expire", "status"] },
     },
     scopes: {
       withAllInfo: {
         attributes: {},
       },
       withToken: {
-        attributes: {exclude: ["password", "isActive"]}
-      }
+        attributes: { exclude: ["password", "status"] },
+      },
+      withStatus: {
+        attributes: { exclude: ["password", "token", "expire"] },
+      },
     },
     hooks: {
       beforeCreate(user) {

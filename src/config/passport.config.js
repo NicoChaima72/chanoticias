@@ -36,7 +36,7 @@ passport.use(
         return done(null, false, {});
       }
 
-      if (user.isActive != 1) {
+      if (user.status != 1 && user.status != 3) {
         req.flash("data", { email });
         req.flash("error", "Usuario no activo, verifica tu correo");
         return done(null, false, {});

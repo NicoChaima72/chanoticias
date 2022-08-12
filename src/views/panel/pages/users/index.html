@@ -1,0 +1,165 @@
+<%- contentFor('title') %> Ver usuarios %>
+<%- contentFor('header-title') %> Usuarios
+%> <%- contentFor('header-button') %> 
+<a href="/panel/users/create" class="btn btn-primary"
+  >Agregar usuario <i class="fas fa-plus ml-2"></i
+></a>
+<%- contentFor('body') %>
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">
+          Mostrando todos los usuarios
+        </h3>
+      </div>
+      <div class="card-body">
+        <table id="data-table" class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>Rol</th>
+              <th title="Permisos adicionales">P. A.</th>
+              <th>Estado</th>
+              <th>n° Noticias</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% users.map(user => { %>
+            <tr>
+              <td><%= user.name %></td>
+              <td><%= user.email %></td>
+              <td><%= user.Role.description %></td>
+              <td><div class="d-flex">
+                <span>
+                  <i class="fas fa-plus text-success text-xs"></i>
+                  <%= user.Permissions.filter(p=>p.Permission_User.action=='add').length %>
+                </span>
+                <span class="ml-1">
+                  <i class="fas fa-arrow-down text-danger text-xs"></i>
+                  <%= user.Permissions.filter(p=>p.Permission_User.action=='remove').length %>
+                </span>
+              </div></td>
+              <td>
+                <% if (user.status == 0) { %>
+                <span class="badge badge-warning">Sin verificar</span>
+                <% } if (user.status == 1) { %>
+                <span class="badge badge-success">Activo</span>
+                <% } if (user.status == 2) { %>
+                <span class="badge badge-danger">Inactivo</span>
+                <% } if (user.status == 3) { %>
+                <span
+                  class="badge badge-info"
+                  title="El usuario todavia no ha cambiado su contraseña"
+                  >Sin ingresar</span
+                >
+                <% } %>
+              </td>
+              <td><%= user.News.length %></td>
+              <td>
+                <div class="d-flex">
+                  <a href="" class="btn btn-outline-warning mx-1"
+                    ><i class="fas fa-eye"></i
+                  ></a>
+                  <a href="/panel/permissions/users/<%= user.id%>" class="btn btn-outline-info mx-1" title="Editar permisos"
+                    ><i class="fas fa-key"></i
+                  ></a>
+                  <a href="/panel/users/<%= user.id %>/edit" class="btn btn-outline-primary mx-1"
+                    ><i class="fas fa-pen"></i
+                  ></a>
+                  <% if (user.status == 1 || user.status == 3) { %>
+                  <button
+                    type="submit"
+                    class="btn btn-outline-danger mx-1"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Dar da baja al usuario"
+                    onclick="confirm('¿Dar da baja al usuario <%= user.name %>?') ?
+                  document.getElementById('form-active-<%= user.id %>').submit() : null"
+                  >
+                    <i class="fas fa-arrow-down"></i>
+                  </button>
+                  <form
+                    action="/panel/users/<%= user.id %>/status?_method=PUT"
+                    method="post"
+                    class="d-none"
+                    id="form-active-<%= user.id %>"
+                  >
+                    <input type="hidden" name="_method" value="PUT" />
+                    <input type="hidden" name="type" value="users" />
+                  </form>
+                  <% } else { %>
+                  <button
+                    type="submit"
+                    class="btn btn-outline-success mx-1"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Dar da alta al usuario"
+                    onclick="confirm('¿Dar da alta al usuario <%= user.name %>?') ?
+                  document.getElementById('form-active-<%= user.id %>').submit() : null"
+                  >
+                    <i class="fas fa-arrow-up"></i>
+                  </button>
+                  <form
+                    action="/panel/users/<%= user.id %>/status?_method=PUT"
+                    method="post"
+                    class="d-none"
+                    id="form-active-<%= user.id %>"
+                  >
+                    <input type="hidden" name="_method" value="PUT" />
+                    <input type="hidden" name="type" value="users" />
+                  </form>
+                  <% } %>
+                </div>
+              </td>
+            </tr>
+            <%}) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- contentFor('styles') %>
+<link
+  rel="stylesheet"
+  href="/panel/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/panel/plugins/datatables-responsive/css/responsive.bootstrap4.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/panel/plugins/datatables-buttons/css/buttons.bootstrap4.min.css"
+/>
+
+<%- contentFor('scripts') %>
+<script src="/panel/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/panel/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="/panel/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/panel/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="/panel/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="/panel/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="/panel/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="/panel/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="/panel/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script>
+  $(function () {
+    $("#data-table").DataTable({
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json",
+      },
+      paging: true,
+      lengthChange: false,
+      searching: true,
+      ordering: true,
+      info: true,
+      autoWidth: false,
+      responsive: true,
+    });
+  });
+</script>

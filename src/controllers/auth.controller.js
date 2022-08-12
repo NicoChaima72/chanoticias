@@ -60,11 +60,6 @@ module.exports = {
         email: { message: "El email ya está registrado" },
       });
       return res.redirect(req.header("Referer") || "/");
-
-      return res.json({
-        ok: false,
-        msg: "El usuario con este email ya existe",
-      });
     }
 
     try {
@@ -73,7 +68,7 @@ module.exports = {
           name,
           email,
           password,
-          RoleId: role_id ? role_id : 2,
+          RoleId: role_id ? role_id : 3,
           token: uniqid(),
         },
         { include: Role }
@@ -111,7 +106,7 @@ module.exports = {
   activate: async (req, res) => {
     const { token } = req.params;
 
-    const user = await User.findOne({ where: { token } });
+    const user = await User.scope("withStatus").findOne({ where: { token } });
 
     if (!user) {
       req.flash("error", "El token ingresado no es valido");
@@ -124,7 +119,13 @@ module.exports = {
       }
     });
 
-    await user.update({ isActive: 1, token: null });
+    if (!user.status === 0) {
+      req.flash("warning", "Lo sentimos, no puedes ingresar a este recurso");
+      return res.redirect("/auth/login");
+    }
+
+    if (user.RoleId === 1) await user.update({ status: 1, token: null });
+    else await user.update({ status: 3, token: null });
 
     req.flash("success", "Cuenta verificada, puedes iniciar sesion");
     return res.redirect("/auth/login");

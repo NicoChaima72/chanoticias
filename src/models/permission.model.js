@@ -13,11 +13,18 @@ const Permission = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notEmpty: { msg: "La descripcion del rol es requerida" },
-        notNull: { msg: "La descripcion del rol es requerida" },
+        notEmpty: { msg: "La descripcion del permiso es requerido" },
+        notNull: { msg: "La descripcion del permiso es requerido" },
       },
       unique: { args: true, msg: "Rol ya registrado" },
     },
+    group: {
+      type: DataTypes.STRING, allowNull: false,
+      validate: {
+        notEmpty: { msg: "El grupo es requerido" },
+        notNull: { msg: "El grupo es requerido" },
+      },
+    }
   },
   { timestamps: false }
 );

@@ -1,0 +1,96 @@
+<%- contentFor('title') %> <%= action == 'show' ? 'Ver rol' : action == 'create'
+? 'Agregar rol' : 'Editar' %> <%- contentFor('header-title') %> <%= action ==
+'show' ? 'Ver rol' : action == 'create' ? 'Agregar rol' : 'Editar' %> <%-
+contentFor('body') %>
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">
+      Formulario para <%= action == 'show' ? 'ver' : action == 'create' ?
+      'agregar' : 'editar' %> rol
+    </h3>
+  </div>
+  <% if (action != 'show') { %>
+  <form
+    action="<%= action == 'create' ? '/panel/roles' :
+    '/panel/roles/' + role.slug + '?_method=PUT' %>"
+    method="POST"
+  >
+    <% if (action == 'edit') { %>
+    <input type="hidden" name="_method" value="PUT" />
+    <% } %> <% } %>
+    <div class="card-body">
+      <div class="form-group">
+        <label for="description">Descripcion</label>
+        <input
+          type="text"
+          class="form-control <%= errors.description && 'is-invalid' %>"
+          id="description"
+          name="description"
+          value="<%= _.getValue(data.description, role.description) %>"
+          autocomplete="off"
+          <%= action == 'show' && 'disabled' %>
+        />
+        <% if (errors.description) { %>
+        <span class="text-xs text-danger"
+          ><%- errors.description.message %></span
+        >
+        <% } %>
+      </div>
+      <div class="form-group">
+        <label>Permisos</label> 
+        <div class="<%= errors.permissions && 'border border-danger' %> rounded p-2">
+          <% Object.keys(permissions).map((group, index) => { %>
+          <p
+            class="text-sm text-secondary m-0 mb-1 <%= index != 0 && 'mt-4' %>"
+          >
+            <%= group %>
+          </p>
+          <div class="row">
+            <% permissions[group].map(permission => { %>
+            <div class="col-12 col-md-6">
+              <div class="custom-control custom-checkbox">
+                <input
+                  class="custom-control-input custom-control-input-primary"
+                  name="permissions"
+                  value="<%= permission.id %>"
+                  type="checkbox"
+                  id="permission-<%= permission.id %>"
+                  <%= action == 'show' && 'disabled' %>
+                  <%= String(_.getValue(data.permissions, role.Permissions?.map(n=>n.id))).split(',').includes(String(permission.id)) && 'checked' %>
+                />
+                <label
+                  for="permission-<%= permission.id %>"
+                  class="custom-control-label"
+                  ><%= permission.description %> - <%= permission.id %></label
+                >
+              </div>
+            </div>
+            <% }) %>
+          </div>
+          <% }) %>
+        </div>
+        <% if (errors.permissions) { %>
+        <span class="text-xs text-danger"
+          ><%- errors.permissions.message %></span
+        >
+        <% } %>
+      </div>
+    </div>
+
+    <% if (action != 'show') { %>
+    <div class="card-footer">
+      <button type="submit" class="btn btn-primary">
+        <%= action == 'create' ? 'Agregar' : 'Guardar' %>
+      </button>
+    </div>
+  </form>
+  <% } %>
+  <% if (action == 'show') { %>
+    <div class="card-footer">
+
+      <a href="/panel/roles" class="btn btn-outline-info">
+        <i class="fas fa-arrow-left mr-1"></i>
+        Volver</a>
+    </div>
+  <% } %>
+</div>

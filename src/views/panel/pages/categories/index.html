@@ -41,7 +41,13 @@ Categorias <%- contentFor('header-button') %>
                 <% if (category.isActive) { %>
                 <span class="badge badge-pill badge-success">Activo</span>
                 <% } else { %>
-                <span class="badge badge-pill badge-danger">Inactivo</span>
+                <span
+                  class="badge badge-pill badge-danger"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="No se pueden agregar nuevas noticias"
+                  >Inactivo</span
+                >
                 <% } %>
               </td>
               <td><%= category.NewsCount %></td>
@@ -51,38 +57,29 @@ Categorias <%- contentFor('header-button') %>
                     href="/categories/<%= category.slug %>"
                     target="_blank"
                     class="btn btn-outline-warning mx-1"
-                    >Ver</a
-                  >
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Ver categoria en pagina principal"
+                    ><i class="fas fa-rocket"></i
+                  ></a>
                   <a
                     href="/panel/categories/<%= category.slug %>/edit"
                     class="btn btn-outline-primary mx-1"
-                    >Editar</a
-                  >
-                  <% if (category.NewsCount == 0) { %>
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Editar categoria"
+                    ><i class="fas fa-pen"></i
+                  ></a>
                   <button
                     type="submit"
                     class="btn btn-outline-danger mx-1"
-                    onclick="confirm('¿Eliminar categoria <%= category.name %>?') ?
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Dar de baja la categoria"
+                    onclick="confirm('¿Cambiar de estado a la categoria <%= category.name %>? <%= category.NewsCount != 0 ? `No se puede eliminar porque contiene noticias asociadas` : ``%>') ?
                     document.getElementById('form-delete-<%= category.id %>').submit() : null"
                   >
-                    Eliminar
-                  </button>
-                  <form
-                    action="/panel/categories/<%= category.slug %>/?_method=DELETE"
-                    method="post"
-                    class="d-none"
-                    id="form-delete-<%= category.id %>"
-                  >
-                    <input type="hidden" name="_method" value="DELETE" />
-                  </form>
-                  <% } else { %>
-                  <button
-                    type="submit"
-                    class="btn btn-outline-danger mx-1"
-                    onclick="confirm('¿Cambiar de estado a la categoria <%= category.name %>?') ?
-                    document.getElementById('form-delete-<%= category.id %>').submit() : null"
-                  >
-                    Bajar
+                    <i class="fas fa-arrow-down"></i>
                   </button>
                   <form
                     action="/panel/categories/<%= category.slug %>/active?_method=PUT"
@@ -92,13 +89,32 @@ Categorias <%- contentFor('header-button') %>
                   >
                     <input type="hidden" name="_method" value="PUT" />
                   </form>
+                  <% if (category.NewsCount == 0) { %>
+                  <button
+                    type="submit"
+                    class="btn btn-outline-danger mx-1"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Eliminar categoria"
+                    onclick="confirm('¿Eliminar categoria <%= category.name %>?') ?
+                document.getElementById('form-delete-<%= category.id %>').submit() : null"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                  <form
+                    action="/panel/categories/<%= category.slug %>/?_method=DELETE"
+                    method="post"
+                    class="d-none"
+                    id="form-delete-<%= category.id %>"
+                  >
+                    <input type="hidden" name="_method" value="DELETE" />
+                  </form>
                   <% } %>
                 </div>
               </td>
             </tr>
             <% }) %>
           </tbody>
-  
         </table>
       </div>
       <!-- /.card-body -->
@@ -133,7 +149,9 @@ Categorias <%- contentFor('header-button') %>
 <script>
   $(function () {
     $("#data-table").DataTable({
-      language: {url: '//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json'},
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json",
+      },
       paging: true,
       lengthChange: false,
       searching: true,

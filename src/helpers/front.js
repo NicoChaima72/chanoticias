@@ -4,13 +4,17 @@ module.exports = {
       0,
       url.indexOf("?") === -1 ? url.length : url.indexOf("?")
     );
-    return pathname !== "/" ? "?redirect=" + pathname : "";
+    return pathname !== "/" &&
+      pathname.substring(0, pathname.substring(1).indexOf("/") + 1) !== "/auth"
+      ? "?redirect=" + pathname
+      : "";
   },
 
   getRedirectUrl: (url) =>
     url.indexOf("?redirect") !== -1
-      ? url.substring(url.indexOf("?redirect  ="))
+      ? url.substring(url.indexOf("?redirect="))
       : "",
+
   getValue: (data, model) => {
     if (!!data) return data;
     if (!!model) return model;
@@ -18,12 +22,12 @@ module.exports = {
   },
   isActiveUrl: (currentUrl, checkUrl) => {
     currentUrl = currentUrl.substring("/panel".length);
-    currentUrl = currentUrl === '/' ? '' : currentUrl;
+    currentUrl = currentUrl === "/" ? "" : currentUrl;
     checkUrl =
       checkUrl[checkUrl.length - 1] === "/"
         ? checkUrl.substring(0, checkUrl.length - 1)
         : checkUrl;
-        
+
     if (checkUrl.indexOf("*") === -1) return currentUrl === checkUrl;
 
     checkUrl = checkUrl.substring(0, checkUrl.length - 1);

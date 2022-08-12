@@ -121,7 +121,7 @@ module.exports = {
     return res.redirect("/panel/categories");
   },
 
-  delete: async (req, res) => {
+  destroy: async (req, res) => {
     const { category_slug } = req.params;
     const category = await Category.findOne({
       where: { slug: category_slug },
