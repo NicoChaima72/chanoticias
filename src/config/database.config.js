@@ -9,6 +9,10 @@ const sequelize = new Sequelize(
     dialect: "mysql",
     logging: false, // Mensajes en consola
     // logging: console.log,
+    define: {
+      charset: 'utf8mb4',
+      collate: 'utf8mb4_unicode_ci', 
+    }
   }
 );
 

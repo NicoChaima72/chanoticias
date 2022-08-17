@@ -12,7 +12,7 @@ const Tag = sequelize.define("Tag", {
       notNull: { msg: "La descripcion es requerida" },
       notEmpty: { msg: "La descripcion es requerida" },
     },
-    unique: { args: true, msg: "Tag ya registrado" },
+    unique: false,
   },
   slug: {
     type: DataTypes.STRING,

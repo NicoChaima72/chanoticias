@@ -6,42 +6,63 @@ const Category = require("./category.model");
 const Tag = require("./tag.model");
 const News_Tag = require("./news_tag.model");
 
-const News = sequelize.define("News", {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  title: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      notNull: { msg: "EL titulo es requerido" },
-      notEmpty: { msg: "El titulo es requerido" },
+const News = sequelize.define(
+  "News",
+  {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: { msg: "EL titulo es requerido" },
+        notEmpty: { msg: "El titulo es requerido" },
+      },
+    },
+    slug: { type: DataTypes.STRING, allowNull: false },
+    excerpt: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: { msg: "EL extracto es requerido" },
+        notEmpty: { msg: "El extracto es requerido" },
+      },
+    },
+    body: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        notNull: { msg: "EL cuerpo es requerido" },
+        notEmpty: { msg: "El cuerpo es requerido" },
+      },
+    },
+    imageUrl: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: { msg: "La imagen es requerida" },
+        notEmpty: { msg: "La imagen es requerida" },
+      },
+    },
+    status: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: { msg: "El estado es requerido" },
+        notEmpty: { msg: "El estado es requerido" },
+      },
+      defaultValue: 0, // 0-> Sin revision | 1-> Verificado | 2-> Rechazado
+    },
+    popularity: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
     },
   },
-  slug: { type: DataTypes.STRING, allowNull: false },
-  excerpt: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      notNull: { msg: "EL extracto es requerido" },
-      notEmpty: { msg: "El extracto es requerido" },
-    },
-  },
-  body: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-    validate: {
-      notNull: { msg: "EL cuerpo es requerido" },
-      notEmpty: { msg: "El cuerpo es requerido" },
-    },
-  },
-  imageUrl: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      notNull: { msg: "La imagen es requerida" },
-      notEmpty: { msg: "La imagen es requerida" },
-    },
-  },
-});
+  {
+    // PARA LOS EMOJIS
+    charset: "utf8mb4",
+    collate: "utf8mb4_unicode_ci",
+  }
+);
 
 User.hasMany(News, { onDelete: "CASCADE" });
 News.belongsTo(User);

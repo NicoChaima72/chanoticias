@@ -45,18 +45,18 @@
         <li class="nav-item">
           <a
             href="/panel"
-            class="nav-link <%= _.isActiveUrl(current_url, '/') && 'active' %>"
+            class="nav-link <%= _.isActiveUrl(current_url, '/panel/') && 'active' %>"
           >
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>Dashboard</p>
           </a>
         </li>
         <li
-          class="nav-item <%= _.isActiveUrl(current_url, '/users/*') && 'menu-open' %>"
+          class="nav-item <%= _.isActiveUrl(current_url, '/panel/users/*') && 'menu-open' %>"
         >
           <a
             href="#"
-            class="nav-link <%= _.isActiveUrl(current_url, '/users/*') && 'active' %>"
+            class="nav-link <%= _.isActiveUrl(current_url, '/panel/users/*') && 'active' %>"
           >
             <i class="nav-icon fas fa-users"></i>
             <p>
@@ -68,7 +68,7 @@
             <li class="nav-item">
               <a
                 href="/panel/users"
-                class="nav-link <%= _.isActiveUrl(current_url, '/users') && 'active' %>"
+                class="nav-link <%= _.isActiveUrl(current_url, '/panel/users') && 'active' %>"
               >
                 <i class="far fa-circle nav-icon"></i>
                 <p>Ver usuarios</p>
@@ -77,7 +77,7 @@
             <li class="nav-item">
               <a
                 href="/panel/users/create"
-                class="nav-link <%= _.isActiveUrl(current_url, '/users/create') && 'active' %>"
+                class="nav-link <%= _.isActiveUrl(current_url, '/panel/users/create') && 'active' %>"
               >
                 <i class="far fa-circle nav-icon"></i>
                 <p>Agregar usuario</p>
@@ -86,7 +86,7 @@
             <li class="nav-item">
               <a
                 href="/panel/users/clients"
-                class="nav-link <%= _.isActiveUrl(current_url, '/users/clients') && 'active' %>"
+                class="nav-link <%= _.isActiveUrl(current_url, '/panel/users/clients') && 'active' %>"
               >
                 <i class="far fa-circle nav-icon"></i>
                 <p>Ver clientes</p>
@@ -95,11 +95,11 @@
           </ul>
         </li>
         <li
-          class="nav-item <%= _.isActiveUrl(current_url, '/roles/*') && 'menu-open' %>"
+          class="nav-item <%= _.isActiveUrl(current_url, '/panel/roles/*') && 'menu-open' %>"
         >
           <a
             href="#"
-            class="nav-link <%= _.isActiveUrl(current_url, '/roles/*') && 'active' %>"
+            class="nav-link <%= _.isActiveUrl(current_url, '/panel/roles/*') && 'active' %>"
           >
             <i class="nav-icon fas fa-user-tag"></i>
             <p>
@@ -111,7 +111,7 @@
             <li class="nav-item">
               <a
                 href="/panel/roles/"
-                class="nav-link <%= _.isActiveUrl(current_url, '/roles') && 'active' %>"
+                class="nav-link <%= _.isActiveUrl(current_url, '/panel/roles') && 'active' %>"
               >
                 <i class="far fa-circle nav-icon"></i>
                 <p>Ver roles</p>
@@ -120,7 +120,7 @@
             <li class="nav-item">
               <a
                 href="/panel/roles/create"
-                class="nav-link <%= _.isActiveUrl(current_url, '/roles/create') && 'active' %>"
+                class="nav-link <%= _.isActiveUrl(current_url, '/panel/roles/create') && 'active' %>"
               >
                 <i class="far fa-circle nav-icon"></i>
                 <p>Agregar rol</p>
@@ -129,11 +129,11 @@
           </ul>
         </li>
         <li
-          class="nav-item <%= _.isActiveUrl(current_url, '/categories/*') && 'menu-open' %>"
+          class="nav-item <%= _.isActiveUrl(current_url, '/panel/categories/*') && 'menu-open' %>"
         >
           <a
             href="#"
-            class="nav-link <%= _.isActiveUrl(current_url, '/categories/*') && 'active' %>"
+            class="nav-link <%= _.isActiveUrl(current_url, '/panel/categories/*') && 'active' %>"
           >
             <i class="nav-icon fas fa-copy"></i>
             <p>
@@ -145,7 +145,7 @@
             <li class="nav-item">
               <a
                 href="/panel/categories"
-                class="nav-link <%= _.isActiveUrl(current_url, '/categories') && 'active' %>"
+                class="nav-link <%= _.isActiveUrl(current_url, '/panel/categories') && 'active' %>"
               >
                 <i class="far fa-circle nav-icon"></i>
                 <p>Ver categorias</p>
@@ -154,7 +154,7 @@
             <li class="nav-item">
               <a
                 href="/panel/categories/create"
-                class="nav-link <%= _.isActiveUrl(current_url, '/categories/create') && 'active' %>"
+                class="nav-link <%= _.isActiveUrl(current_url, '/panel/categories/create') && 'active' %>"
               >
                 <i class="far fa-circle nav-icon"></i>
                 <p>Agregar categoria</p>
@@ -163,11 +163,11 @@
           </ul>
         </li>
         <li
-          class="nav-item <%= _.isActiveUrl(current_url, '/tags/*') && 'menu-open' %>"
+          class="nav-item <%= _.isActiveUrl(current_url, '/panel/tags/*') && 'menu-open' %>"
         >
           <a
             href="#"
-            class="nav-link <%= _.isActiveUrl(current_url, '/tags/*') && 'active' %>"
+            class="nav-link <%= _.isActiveUrl(current_url, '/panel/tags/*') && 'active' %>"
           >
             <i class="nav-icon fas fa-tags"></i>
             <p>
@@ -179,7 +179,7 @@
             <li class="nav-item">
               <a
                 href="/panel/tags"
-                class="nav-link <%= _.isActiveUrl(current_url, '/tags') && 'active' %>"
+                class="nav-link <%= _.isActiveUrl(current_url, '/panel/tags') && 'active' %>"
               >
                 <i class="far fa-circle nav-icon"></i>
                 <p>Ver etiquetas</p>
@@ -188,11 +188,11 @@
           </ul>
         </li>
         <li
-          class="nav-item <%= _.isActiveUrl(current_url, '/news/*') && 'menu-open' %>"
+          class="nav-item <%= _.isActiveUrl(current_url, '/panel/news/*') && 'menu-open' %>"
         >
           <a
             href="#"
-            class="nav-link <%= _.isActiveUrl(current_url, '/news/*') && 'active' %>"
+            class="nav-link <%= _.isActiveUrl(current_url, '/panel/news/*') && 'active' %>"
           >
             <i class="nav-icon fas fa-newspaper"></i>
             <p>
@@ -204,7 +204,7 @@
             <li class="nav-item">
               <a
                 href="/panel/news"
-                class="nav-link <%= _.isActiveUrl(current_url, '/news') && 'active' %>"
+                class="nav-link <%= _.isActiveUrl(current_url, '/panel/news') && 'active' %>"
               >
                 <i class="far fa-circle nav-icon"></i>
                 <p>Ver noticias</p>
@@ -213,10 +213,19 @@
             <li class="nav-item">
               <a
                 href="/panel/news/create"
-                class="nav-link <%= _.isActiveUrl(current_url, '/news/create') && 'active' %>"
+                class="nav-link <%= _.isActiveUrl(current_url, '/panel/news/create') && 'active' %>"
               >
                 <i class="far fa-circle nav-icon"></i>
                 <p>Agregar noticia</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                href="/panel/news/verify"
+                class="nav-link <%= _.isActiveUrl(current_url, '/panel/news/verify') && 'active' %>"
+              >
+                <i class="far fa-circle nav-icon"></i>
+                <p>Verificar noticias</p>
               </a>
             </li>
           </ul>

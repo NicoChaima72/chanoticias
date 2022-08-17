@@ -224,9 +224,10 @@ module.exports = {
         return next(err);
       }
       return res.redirect(
-        req.user.Role.description === "USER_ROLE"
-          ? req.header("Referer") || "/"
-          : "/"
+        '/'
+        // req.user.Role.description === "USER_ROLE"
+        //   ? req.header("Referer") || "/"
+        //   : "/"
       );
     });
   },

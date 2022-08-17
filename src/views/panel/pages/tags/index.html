@@ -1,0 +1,105 @@
+<%- contentFor('title') %> Ver etiquetas <%- contentFor('header-title') %>
+Etiquetas <%- contentFor('body') %>
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Mostrando todas las etiquetas</h3>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <table id="data-table" class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Autor</th>
+              <th>N° noticias</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% tags.map(tag => {%>
+            <tr>
+              <td><%= tag.id %></td>
+              <td><%= tag.name %></td>
+              <td><%= tag.User.name %></td>
+              <td><%= tag.News_Count %></td>
+              <td>
+                <div class="d-flex">
+                  <a
+                    href="/tags/<%=tag.slug %>"
+                    class="btn btn-outline-warning"
+                  >
+                    <i class="fas fa-rocket"></i>
+                  </a>
+                  <% if (tag.News_Count == 0) { %>
+                  <button
+                    type="submit"
+                    class="btn btn-outline-danger mx-1"
+                    title="Eliminar noticia"
+                    onclick="confirm('¿Eliminar la etiqueta <%= tag.name %>?') ?
+                document.getElementById('form-delete-<%= tag.id %>').submit() : null"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                  <form
+                    action="/panel/tags/<%= tag.slug %>?_method=DELETE"
+                    method="post"
+                    class="d-none"
+                    id="form-delete-<%= tag.id %>"
+                  >
+                    <input type="hidden" name="_method" value="DELETE" />
+                  </form>
+                  <% } %>
+                </div>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- contentFor('styles') %>
+<link
+  rel="stylesheet"
+  href="/panel/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/panel/plugins/datatables-responsive/css/responsive.bootstrap4.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="/panel/plugins/datatables-buttons/css/buttons.bootstrap4.min.css"
+/>
+
+<%- contentFor('scripts') %>
+<script src="/panel/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/panel/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="/panel/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/panel/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="/panel/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="/panel/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="/panel/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="/panel/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="/panel/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script>
+  $(function () {
+    $("#data-table").DataTable({
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json",
+      },
+      paging: true,
+      lengthChange: false,
+      searching: true,
+      ordering: true,
+      info: true,
+      autoWidth: false,
+      responsive: true,
+    });
+  });
+</script>

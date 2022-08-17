@@ -63,7 +63,7 @@
           </ul>
           <% } else { %>
           <div class="divide-y">
-            <p class="py-4 px-4 font-semibold">Nicolas Chaima</p>
+            <p class="py-4 px-4 font-semibold"><%= _user.name %></p>
 
             <ul
               class="py-1 text-sm w-40 pb-2"
@@ -76,8 +76,7 @@
                   >Noticias guardadas</a
                 >
               </li>
-              <% if (_user.Role.description !== 'USER_ROLE') { %>
-                <% } %>
+              <% if (_user.Role.description !== 'USER_ROLE') { %> <% } %>
               <li>
                 <a
                   href="/panel"
@@ -167,74 +166,16 @@
           >
             <div class="p-4">
               <ul class="grid grid-cols-4 gap-4">
+                <% _categories.map(category => { %>
                 <li>
                   <a
-                    href="#"
+                    href="/categories/<%= category.slug %>"
                     class="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500"
                   >
-                    About Us
+                    <%= category.name %>
                   </a>
                 </li>
-                <li>
-                  <a
-                    href="#"
-                    class="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500"
-                  >
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500"
-                  >
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500"
-                  >
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500"
-                  >
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500"
-                  >
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500"
-                  >
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500"
-                  >
-                    About Us
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </li>
+                <% }) %>
       </ul>
     </div>
   </div>
@@ -243,11 +184,6 @@
 <script>
   var themeToggleDarkIcon = document.getElementById("theme-toggle-dark-icon");
   var themeToggleLightIcon = document.getElementById("theme-toggle-light-icon");
-
-  console.log({
-    themeToggleDarkIcon: themeToggleDarkIcon,
-    themeToggleLightIcon: themeToggleLightIcon,
-  });
 
   // Change the icons inside the button based on previous settings
   if (

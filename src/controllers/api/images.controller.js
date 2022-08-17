@@ -4,8 +4,6 @@ module.exports = {
   upload: async (req, res) => {
     const file = req.files;
 
-    return res.json({ ok: true, file });
-
     try {
       const result = await uploadImage(file);
       return res.json({

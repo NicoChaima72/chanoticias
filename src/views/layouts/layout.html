@@ -12,6 +12,7 @@
     <link rel="manifest" href="/favicon/site.webmanifest" />
     <title>Chaimanoticias - Inicio</title>
     <link rel="stylesheet" href="/css/style.css" />
+    <%- defineContent('styles') %>
     
     <script src="https://kit.fontawesome.com/e28f7980be.js" crossorigin="anonymous"></script>
     <script>
@@ -32,6 +33,7 @@
     
     <%- include('../partials/footer.html') %>
     <script src="/flowbite/flowbite.js"></script>
-    <script src="/reload/reload.js"></script>
+    <%- defineContent('scripts') %>
+    <!-- <script src="/reload/reload.js"></script> -->
   </body>
 </html>

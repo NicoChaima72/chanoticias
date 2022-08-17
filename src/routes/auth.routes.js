@@ -3,8 +3,20 @@ const passport = require("passport");
 const auth = require("../controllers/auth.controller");
 const authRequest = require("../requests/auth.request");
 const authMiddleware = require("../middlewares/auth.middleware");
+const Category = require("../models/category.model");
+const News = require("../models/news.model");
 
 const router = express.Router();
+
+router.use(async (req, res, next) => {
+  req.app.set("layout", "layouts/layout.html");
+  const categories = await Category.findAll({order: [['popularity', 'DESC']]});
+  const lastNews = await News.findAll({order:[['createdAt', 'DESC']], limit: 5})
+
+  res.locals._lastNews = lastNews; 
+  res.locals._categories = categories; 
+  next();
+});
 
 router.get("/login", authMiddleware.isNotAuthenticated, auth.showLoginForm);
 router.post(

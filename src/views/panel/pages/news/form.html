@@ -1,0 +1,211 @@
+<%- contentFor('title') %> <%= action == 'create' ? 'Agregar noticia' :
+'Editar noticia' %> <%- contentFor('header-title') %> <%= action == 'create' ?
+'Agregar noticia' : 'Editar noticia' %> <%- contentFor('body') %>
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">
+      Formulario para <%= action == 'create' ? 'agregar' : 'editar' %> noticia
+    </h3>
+  </div>
+  <form id="form" action="<%= action == 'create' ? '/panel/news' :
+  '/panel/news/' + news.slug + '?_method=PUT' %>" method="POST" enctype="multipart/form-data">
+    <% if (action == 'edit') { %>
+      <input type="hidden" name="_method" value="PUT" />
+    <% } %>
+    <div class="card-body">
+      <div class="form-group">
+        <label for="title">Titulo</label>
+        <input
+          type="text"
+          class="form-control <%= errors.title && 'is-invalid' %>"
+          id="title"
+          name="title"
+          value="<%= _.getValue(data.title, news.title) %>"
+          autocomplete="off"
+        />
+        <% if (errors.title) { %>
+        <span class="text-xs text-danger"><%- errors.title.message %></span>
+        <% } %>
+      </div>
+      <div class="form-group">
+        <label for="excerpt">Extracto</label>
+        <textarea
+          name="excerpt"
+          id="excerpt"
+          class="form-control <%= errors.excerpt && 'is-invalid' %>"
+          rows="2"
+        >
+<%= _.getValue(data.excerpt, news.excerpt) %></textarea
+        >
+        <% if (errors.excerpt) { %>
+        <span class="text-xs text-danger"
+          ><%- errors.excerpt.message %></span
+        >
+        <% } %>
+      </div>
+      <div class="form-group">
+        <label for="popularity">Popularidad</label>
+        <input
+          type="number"
+          name="popularity"
+          id="popularity"
+          class="form-control <%= errors.popularity && 'is-invalid' %>"
+          min="0"
+          max="100"
+          value="<%= _.getValue(data.popularity, news.popularity) %>"
+        />
+        <% if (errors.popularity) { %>
+        <span class="text-xs text-danger"
+          ><%- errors.popularity.message %></span
+        >
+        <% } %>
+      </div>
+      <div class="form-group">
+        <div class="d-flex">
+          <label>Categoria</label>
+        </div>
+        <select
+          id="select"
+          name="category_id"
+          class="custom-select <%= errors.category_id && 'is-invalid' %>"
+        >
+          <option class="text-secondary" <%= !_.getValue(data.category_id, news.CategoryId) && 'selected' %> disabled>
+            --Seleccionar categoria--
+          </option>
+          <% categories.map(category => { %>
+          <option
+            value="<%= category.id %>"
+            <%= _.getValue(data.category_id, news.CategoryId) == category.id && 'selected' %>
+          >
+            <%= category.name %>
+          </option>
+          <% }) %>
+        </select>
+        <% if (errors.category_id) { %>
+        <span class="text-xs text-danger"><%- errors.category_id.message %></span>
+        <% } %>
+      </div>
+      <div class="form-group">
+        <label for="file">Imagen</label>
+        <div class="row">
+          <div class="col-12 col-md-7 col-lg-8">
+            <div class="custom-file">
+              <input type="file" class="custom-file-input <%= errors.file && 'is-invalid' %>" accept="image/*" id="file" name="file" onchange="loadImage(event)">
+              <label class="custom-file-label" for="exampleInputFile">Elegir imagen</label>
+              <% if (errors.file) { %>
+                <span class="text-xs text-danger"
+                  ><%- errors.file.message %></span
+                >
+                <% } %>
+            </div>
+          </div>
+          <div class="col-12 col-md-5 col-lg-4">
+            <div id="containerImagePreview" class="<%= !news.imageUrl && 'd-none' %>">
+              <div class="border rounded w-100">
+                <img src="<%= !news.imageUrl ? '' : news.imageUrl %>" alt="image preview" id="imagePreview" class="w-100" style="aspect-ratio: 16 / 9;">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Tags</label>
+        <div class="select2-primary">
+          <select id="tags" class="select2 form-control" name="tags" multiple="multiple" data-dropdown-css-class="select2-primary">
+            <% tags.map(tag => { %>
+              <option value=" <%= tag.id %>" <%= news.Tags?.map(t=>t.id).includes(tag.id) ? 'selected': ''%> ><%= tag.name %></option>
+            <% }) %>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="body">Cuerpo</label>
+        <div class="w-100 position-relative">
+          <div class="document-editor__toolbar w-100 position-sticky sticky-top"></div>
+          <div class="editor border <%= errors.body && 'border-danger' %> w-100" id="editor"><%= news.body %></div>
+        </div>
+        <textarea
+          name="body"
+          id="body"
+          class="form-control d-none <%= errors.body && 'is-invalid' %>"
+          rows="2"
+        >
+<%= _.getValue(data.body, news.body) %></textarea
+        >
+        <% if (errors.body) { %>
+        <span class="text-xs text-danger"
+          ><%- errors.body.message %></span
+        >
+        <% } %>
+        <span id="error-body" class="text-xs text-danger d-none"
+          >El cuerpo es obligatorio</span
+        >
+      </div>
+    </div>
+
+    <div class="card-footer">
+      <button type="submit" class="btn btn-primary"><%= action == 'create' ? 'Agregar' :
+        'Guardar' %></button>
+    </div>
+  </form>
+</div>
+
+<%- contentFor('styles') %>
+<link rel="stylesheet" href="/panel/plugins/select2/css/select2.min.css">
+<link rel="stylesheet" href="/panel/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+<style>
+  body {
+    overflow-x: hidden;
+  }
+</style>
+<%- contentFor('scripts') %>
+<script>
+  document.getElementById('editor').innerHTML = document.getElementById('body').value;
+</script>
+<script>
+  const loadImage = (e) => {
+        let container = document.getElementById('containerImagePreview');
+        container.classList.contains('d-none') ? container.classList.remove('d-none') : null;
+
+        let image = document.getElementById('imagePreview');
+        image.src = URL.createObjectURL(e.target.files[0]);
+        image.onload = () => {
+            URL.revokeObjectURL(image.src);
+        }
+  }
+
+  const form = document.getElementById('form');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const editorValue = document.querySelector('#editor').innerHTML;
+    if (editorValue == '<br data-cke-filler="true">' || editorValue.trim() == '') {
+      document.getElementById('error-body').classList.remove('d-none');
+    } else {
+      document.getElementById('body').value = editorValue
+      form.submit();
+    }
+
+  })
+  
+</script>
+
+<script src="/panel/plugins/select2/js/select2.full.min.js"></script>
+<script>
+  $(function () {
+    $('.select2').select2({
+      tags:true,
+      tokenSeparators: [' ']
+    });
+    $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    })
+  })
+</script>
+<script>
+  const tags = document.querySelector('.select2-search');
+  console.log({tags});
+</script>
+
+<script src="/panel/js/ckeditor.js"></script>
+<script src="/js/loadCkeditor.js"></script>

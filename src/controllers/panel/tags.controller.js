@@ -2,12 +2,32 @@ const helpers = require("../../helpers/back");
 const Tag = require("../../models/tag.model");
 const slugify = require("slugify");
 const User = require("../../models/user.model");
+const News = require("../../models/news.model");
+const Sequelize = require("sequelize");
 
 module.exports = {
   index: async (req, res) => {
-    const tags = await Tag.findAll();
+    let tags = await Tag.findAll({
+      group: ["Tag.id"],
+      includeIgnoreAttributes: false,
+      include: [News],
+      attributes: {
+        include: [
+          [Sequelize.fn("COUNT", Sequelize.col("News.id")), "News_Count"],
+        ],
+      },
+      order: [[Sequelize.literal("News_Count"), "DESC"]],
+    });
 
-    return res.json({ ok: true, tags });
+    const user = await Tag.findAll({include: User});
+
+    tags = tags.map(tag => {
+      const userTag = user.filter(t=> t.id == tag.id)[0];
+      return {...JSON.parse(JSON.stringify(tag)), User: JSON.parse(JSON.stringify(userTag.User))}
+    })
+
+    return res.render('panel/pages/tags/index.html', {tags })
+    // return res.json({ ok: true, tags });
   },
 
   create: async (req, res) => {
@@ -83,6 +103,8 @@ module.exports = {
 
     await tag.destroy();
 
+    req.flash('success', 'La etiqueta se ha borrado exitosamente');
+    return res.redirect('/panel/tags');
     return res.json({ ok: true, tag });
   },
 };

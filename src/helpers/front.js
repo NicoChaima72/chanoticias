@@ -1,3 +1,5 @@
+const moment = require("moment");
+
 module.exports = {
   getPathname: (url) => {
     const pathname = url.substring(
@@ -21,7 +23,7 @@ module.exports = {
     return "";
   },
   isActiveUrl: (currentUrl, checkUrl) => {
-    currentUrl = currentUrl.substring("/panel".length);
+    // currentUrl = currentUrl.substring("/panel".length);
     currentUrl = currentUrl === "/" ? "" : currentUrl;
     checkUrl =
       checkUrl[checkUrl.length - 1] === "/"
@@ -59,4 +61,6 @@ module.exports = {
     { value: "#ec4899", name: "Pink" },
     { value: "#f43f5e", name: "Rose" },
   ],
+
+  moment: (time, format) => moment(time).format(format),
 };

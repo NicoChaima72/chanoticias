@@ -2,9 +2,18 @@ const express = require("express");
 const router = express.Router();
 const pages = require('../../controllers/pages.controller')
 const authMiddleware  = require('../../middlewares/auth.middleware');
+const Category = require("../../models/category.model");
+const News = require("../../models/news.model");
 
-router.use((req, res, next) => {
+
+
+router.use(async (req, res, next) => {
   req.app.set("layout", "layouts/layout.html");
+  const categories = await Category.findAll({order: [['popularity', 'DESC']]});
+  const lastNews = await News.findAll({order:[['createdAt', 'DESC']], limit: 5})
+
+  res.locals._lastNews = lastNews; 
+  res.locals._categories = categories; 
   next();
 });
 
