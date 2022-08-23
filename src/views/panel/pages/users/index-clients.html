@@ -11,6 +11,7 @@ Clientes %> <%- contentFor('body') %>
           <thead>
             <tr>
               <!-- TODO: Editar el passport para que solo pueda acceder usuarios con status = 1 o 3 -->
+              <th>ID</th>
               <th>Nombre</th>
               <th>Email</th>
               <th>Estado</th>
@@ -21,6 +22,7 @@ Clientes %> <%- contentFor('body') %>
           <tbody>
             <% users.map(user => { %>
             <tr>
+              <td><%= user.id %></td>
               <td><%= user.name %></td>
               <td><%= user.email %></td>
               <td>
@@ -126,6 +128,7 @@ Clientes %> <%- contentFor('body') %>
       info: true,
       autoWidth: false,
       responsive: true,
+      order: [[0, 'desc']]
     });
   });
 </script>

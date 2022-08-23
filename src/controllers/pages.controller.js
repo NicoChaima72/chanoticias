@@ -49,20 +49,20 @@ module.exports = {
     let { page } = req.query;
 
     page = page ? page - 1 : undefined;
-
+    
     const { count, rows } = await News.findAndCountAll({
       include: [Category],
       order: [["createdAt", "DESC"]],
-      limit: 1,
-      offset: 1 * page || 0,
+      limit: 4,
+      offset: 4 * page || 0,
     });
 
     return res.render("pages/list.html", {
       data: { name: "Ultimas noticias" },
       news: rows,
-      page: Number(page) + 1,
+      page: Number(page) + 1 || 1,
       count,
-      limit: 1,
+      limit: 4,
       action: "lastNews",
     });
   },
@@ -71,11 +71,12 @@ module.exports = {
     let { page } = req.query;
     const { category_slug } = req.params;
 
-    page = page ? page - 1 : undefined;
-
+    
     const category = await Category.findOne({
       where: { slug: category_slug },
     });
+    
+    page = page ? page - 1 : undefined;
 
     const { count, rows } = await News.findAndCountAll({
       where: { CategoryId: category.id },
@@ -87,7 +88,7 @@ module.exports = {
     return res.render("pages/list.html", {
       data: category,
       news: rows,
-      page: Number(page) + 1,
+      page: Number(page) + 1 || 1,
       count,
       limit: 1,
       action: "category",
@@ -95,13 +96,29 @@ module.exports = {
   },
 
   showTag: async (req, res) => {
-    const { page } = req.query;
+    let { page } = req.query;
     const { tag_slug } = req.params;
 
     const tag = await Tag.findOne({
       where: { slug: tag_slug },
     });
 
-    return res.render("pages/list.html", { data: tag, action: "tag" });
+    page = page ? page - 1 : undefined;
+
+    const { count, rows } = await News.findAndCountAll({
+      include: { model: Tag, where: { id: tag.id } },
+      order: [["createdAt", "DESC"]],
+      limit: 1,
+      offset: 1 * page || 0,
+    });
+
+    return res.render("pages/list.html", {
+      data: tag,
+      news: rows,
+      page: Number(page) + 1 || 1,
+      count,
+      limit: 1,
+      action: "tag",
+    });
   },
 };

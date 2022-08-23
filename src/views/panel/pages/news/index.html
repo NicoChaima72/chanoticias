@@ -12,7 +12,6 @@ noticias <%- contentFor('header-title') %> Noticias <% if (action == 'index')
       <div class="card-header">
         <h3 class="card-title">Noticias destacadas</h3>
       </div>
-      <!-- /.card-header -->
       <div class="card-body">
         <table class="data-table table table-bordered table-hover">
           <thead>
@@ -57,11 +56,11 @@ noticias <%- contentFor('header-title') %> Noticias <% if (action == 'index')
           ''%>
         </h3>
       </div>
-      <!-- /.card-header -->
       <div class="card-body">
         <table id="data-table" class="table table-bordered table-hover">
           <thead>
             <tr>
+              <th class="d-none">Creacion</th>
               <th>Creacion</th>
               <th>Titulo</th>
               <th>Imagen</th>
@@ -76,6 +75,7 @@ noticias <%- contentFor('header-title') %> Noticias <% if (action == 'index')
           <tbody>
             <% news.map(newsItem => { %>
             <tr>
+              <td class="d-none"><%= newsItem.createdAt %></td>
               <td><%= _.moment(newsItem.createdAt, 'DD/MM/YY - HH:mm') %></td>
               <td><%= newsItem.title %></td>
               <td>
@@ -174,7 +174,6 @@ noticias <%- contentFor('header-title') %> Noticias <% if (action == 'index')
           </tbody>
         </table>
       </div>
-      <!-- /.card-body -->
     </div>
   </div>
 </div>
@@ -216,6 +215,7 @@ noticias <%- contentFor('header-title') %> Noticias <% if (action == 'index')
       info: true,
       autoWidth: false,
       responsive: true,
+      order: [[1, 'desc']]
     });
     $(".data-table").DataTable({
       language: {

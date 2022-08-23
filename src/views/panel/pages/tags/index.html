@@ -6,7 +6,6 @@ Etiquetas <%- contentFor('body') %>
       <div class="card-header">
         <h3 class="card-title">Mostrando todas las etiquetas</h3>
       </div>
-      <!-- /.card-header -->
       <div class="card-body">
         <table id="data-table" class="table table-bordered table-hover">
           <thead>
@@ -100,6 +99,7 @@ Etiquetas <%- contentFor('body') %>
       info: true,
       autoWidth: false,
       responsive: true,
+      order: [[3, 'desc'], [0, 'asc']]
     });
   });
 </script>
