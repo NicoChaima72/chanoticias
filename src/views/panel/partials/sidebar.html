@@ -212,6 +212,15 @@
             </li>
             <li class="nav-item">
               <a
+                href="/panel/news/me"
+                class="nav-link <%= _.isActiveUrl(current_url, '/panel/news/me') && 'active' %>"
+              >
+                <i class="far fa-circle nav-icon"></i>
+                <p>Ver mis noticias</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
                 href="/panel/news/create"
                 class="nav-link <%= _.isActiveUrl(current_url, '/panel/news/create') && 'active' %>"
               >

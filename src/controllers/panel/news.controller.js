@@ -9,15 +9,23 @@ const { getKeyByUrlS3 } = require("../../helpers/back");
 const Tag = require("../../models/tag.model");
 const { Op } = require("sequelize");
 const Sequelize = require("sequelize");
+const NewsHighlight = require("../../models/news_highlights");
 
 module.exports = {
   index: async (req, res) => {
+    const highlights = await NewsHighlight.findAll({
+      include: { model: News, include: [User, Category] },
+    });
     const news = await News.findAll({
       include: [User, Category],
       where: { status: 1 },
     });
 
-    return res.render("panel/pages/news/index.html", { news, action: "index" });
+    return res.render("panel/pages/news/index.html", {
+      news,
+      action: "index",
+      highlights,
+    });
   },
 
   indexVerify: async (req, res) => {
@@ -78,7 +86,7 @@ module.exports = {
       return res.status(400).json({ ok: false, err });
     }
 
-    let slug = slugify(title, { lower: true });
+    let slug = slugify(title, { lower: true }).substring(0, 45);
 
     const existSlug = await News.findOne({
       where: { slug },
@@ -130,6 +138,7 @@ module.exports = {
       }
     }
 
+    return res.json({ tagsToAdd });
     news.setTags(tagsToAdd);
 
     req.flash("success", "La noticia se ha agregado exitosamente");
@@ -188,7 +197,10 @@ module.exports = {
 
   edit: async (req, res) => {
     const { news_slug } = req.params;
-    const news = await News.findOne({ include: Tag,where: { slug: news_slug } });
+    const news = await News.findOne({
+      include: Tag,
+      where: { slug: news_slug },
+    });
 
     if (!news)
       return res.status(400).json({ ok: false, msg: "Noticia no encontrada" });
@@ -216,7 +228,7 @@ module.exports = {
 
   update: async (req, res) => {
     const { news_slug } = req.params;
-    const { title, excerpt, body, category_id, tags } = req.body;
+    let { title, excerpt, body, category_id, tags } = req.body;
 
     const news = await News.findOne({
       where: { slug: news_slug },
@@ -239,6 +251,8 @@ module.exports = {
       imageUrl: !!result.length ? result[0].Data[0].Location : news.imageUrl,
     });
 
+    if (typeof tags === "string") tags = [tags];
+    
     const tagsToAdd = [];
 
     for (const tag of [...(tags || [])]) {
@@ -256,10 +270,34 @@ module.exports = {
         tagsToAdd.push(tagRegistered.id);
       }
     }
-
     news.setTags(tagsToAdd);
 
     req.flash("success", "La noticia se ha actualizado exitosamente");
+    return res.redirect("/panel/news");
+  },
+
+  highlight: async (req, res) => {
+    const { news_slug } = req.params;
+    const { number } = req.body;
+
+    const news = await News.findOne({ where: { slug: news_slug } });
+
+    if (!news) {
+      return res.status(400).json({ error: "La noticia no existe" });
+    }
+
+    const highlight = await NewsHighlight.findOne({ where: { number } });
+
+    if (!highlight) {
+      return res.status(400).json({ error: "La opcion destacada no existe" });
+    }
+
+    await highlight.update({ NewsId: news.id });
+
+    req.flash(
+      "success",
+      "Se ha asignado la noticia a destacados " + highlight.number
+    );
     return res.redirect("/panel/news");
   },
 

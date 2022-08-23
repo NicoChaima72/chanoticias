@@ -33,6 +33,7 @@ router.put(
   newsRequest.verify,
   news.verify
 );
+router.put('/:news_slug/highlight', news.highlight);
 router.get("/:news_slug/edit", news.edit);
 router.put(
   "/:news_slug",

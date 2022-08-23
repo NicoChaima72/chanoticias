@@ -2,17 +2,17 @@
 <!-- https://stackoverflow.com/questions/29196562/how-to-include-a-template-with-parameters-in-ejs -->
 
 <div class="block sm:hidden">
-  <%- include('./default.html') %>
+  <%- include('./default.html', {highlights}) %>
 </div>
 <div class="hidden sm:block md:hidden">
-  <%- include('./sm.html') %>
+  <%- include('./sm.html', {highlights}) %>
 </div>
 <div class="hidden md:block lg:hidden">
-  <%- include('./md.html') %>
+  <%- include('./md.html', {highlights}) %>
 </div>
 <div class="hidden lg:block xl:hidden">
-  <%- include('./lg.html') %>
+  <%- include('./lg.html', {highlights}) %>
 </div>
 <div class="hidden xl:block">
-  <%- include('./xl.html') %>
+  <%- include('./xl.html', {highlights}) %>
 </div>

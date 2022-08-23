@@ -1,7 +1,7 @@
 <div class="flex flex-col space-y-2">
   <a
-    href="/"
-    class="bg-gray-300 p-6 aspect-video block w-full"
+    href="/news/<%= highlights[0].News.slug %>"
+    class="p-6 aspect-video block w-full border dark:border-gray-800"
     style="
       background: linear-gradient(
           to bottom,
@@ -16,7 +16,7 @@
           rgba(20, 20, 20, 0.8),
           rgba(20, 20, 20, 1)
         ),
-        url('https://imagenes.20minutos.es/files/image_990_v3/uploads/imagenes/2022/07/20/presidente-de-rusia-vladimir-putin.jpeg');
+        url('<%= highlights[0].News.imageUrl %>');
       background-position: center center;
       background-repeat: no-repeat;
       background-size: cover;
@@ -24,80 +24,34 @@
   >
     <div class="flex justify-end flex-col h-full">
       <h3 class="text-white font-bold text-xl">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae rem
-        repellendus dolores esse quis.
+        <%= highlights[0].News.title %>
       </h3>
       <p class="mt-2 text-gray-300 text-sm">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit dolor esse
-        maxime enim! Maiores saepe molestiae magni eligendi?
+        <%= highlights[0].News.excerpt %>
       </p>
     </div>
   </a>
   <div class="divide-y dark:divide-gray-800">
-    <a href="/" class="flex items-center gap-3 py-3">
-      <div class="w-40">
+    <% [...highlights.slice(1, highlights.length)].map(highlight => { %>
+    <a
+      href="/news/<%= highlight.News.slug %>"
+      class="flex items-center gap-3 py-3"
+    >
+      <div class="w-40 shrink-0" style="aspect-ratio: 16/9">
         <img
-          src="https://imagenes.20minutos.es/files/image_990_v3/uploads/imagenes/2022/07/20/presidente-de-rusia-vladimir-putin.jpeg"
-          alt=""
-          class="w-full"
+          src="<%= highlight.News.imageUrl %>"
+          alt="<%= highlight.News.title %>"
           style="aspect-ratio: 16/9"
+          class="w-full border dark:border-gray-800"
         />
       </div>
-      <div class="">
-        <span class="text-gray-400 text-sm font-medium"> Jul 27, 2022 </span>
+      <div class="mt-[-7px]">
+        <span class="text-gray-400 text-sm font-medium"><%= _.moment(highlight.News.createdAt, 'MMM D, YYYY') %></span>
         <p class="text-sm font-semibold leading-4">
-          The top 10 Best Computer Speakers in the Market
+          <%= highlight.News.title %>
         </p>
       </div>
     </a>
-    <a href="/" class="flex items-center gap-3 py-3">
-      <div class="w-40">
-        <img
-          src="https://imagenes.20minutos.es/files/image_990_v3/uploads/imagenes/2022/07/20/presidente-de-rusia-vladimir-putin.jpeg"
-          alt=""
-          class="w-full"
-          style="aspect-ratio: 16/9"
-        />
-      </div>
-      <div class="">
-        <span class="text-gray-400 text-sm font-medium"> Jul 27, 2022 </span>
-        <p class="text-sm font-semibold leading-4">
-          The top 10 Best Computer Speakers in the Market
-        </p>
-      </div>
-    </a>
-    <a href="/" class="flex items-center gap-3 py-3">
-      <div class="w-40">
-        <img
-          src="https://imagenes.20minutos.es/files/image_990_v3/uploads/imagenes/2022/07/20/presidente-de-rusia-vladimir-putin.jpeg"
-          alt=""
-          class="w-full"
-          style="aspect-ratio: 16/9"
-        />
-      </div>
-      <div class="">
-        <span class="text-gray-400 text-sm font-medium"> Jul 27, 2022 </span>
-        <p class="text-sm font-semibold leading-4">
-          The top 10 Best Computer Speakers in the Market
-        </p>
-      </div>
-    </a>
-    <a href="/" class="flex items-center gap-3 py-3">
-      <div class="w-40">
-        <img
-          src="https://imagenes.20minutos.es/files/image_990_v3/uploads/imagenes/2022/07/20/presidente-de-rusia-vladimir-putin.jpeg"
-          alt=""
-          class="w-full"
-          style="aspect-ratio: 16/9"
-        />
-      </div>
-      <div class="">
-        <span class="text-gray-400 text-sm font-medium"> Jul 27, 2022 </span>
-        <p class="text-sm font-semibold leading-4">
-          The top 10 Best Computer Speakers in the Market
-        </p>
-      </div>
-    </a>
- 
+    <% }) %>
   </div>
 </div>

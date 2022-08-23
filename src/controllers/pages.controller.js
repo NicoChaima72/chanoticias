@@ -3,15 +3,23 @@ const News = require("../models/news.model");
 const Tag = require("../models/tag.model");
 const User = require("../models/user.model");
 const { Op } = require("sequelize");
+const NewsHighlight = require("../models/news_highlights");
 
 module.exports = {
   index: async (req, res) => {
+    const highlights = await NewsHighlight.findAll({
+      include: { model: News, include: [User, Category] },
+    });
+
     const newsByCategories = await Category.findAll({
       include: [{ model: News, order: [["createdAt", "DESC"]], limit: 6 }],
       order: [["popularity", "DESC"]],
     });
 
-    return res.render("home.html", { newsByCategories });
+    return res.render("home.html", {
+      newsByCategories,
+      highlights: highlights.sort((a, b) => a.number - b.number),
+    });
   },
   showNews: async (req, res) => {
     const { news_slug } = req.params;
@@ -23,24 +31,77 @@ module.exports = {
     const relatedNews = await News.findAll({
       where: {
         [Op.and]: [
-          { CategoryId: news.CategoryId  },
-          { id: { [Op.ne]: news.id  } },
+          { CategoryId: news.CategoryId },
+          { id: { [Op.ne]: news.id } },
         ],
       },
       order: [["createdAt", "DESC"]],
       limit: 5,
     });
 
-    // return res.json({ok:true, news, relatedNews})
     return res.render("pages/news/show.html", {
       news,
-      relatedNews
+      relatedNews,
     });
   },
-  showCategory: async (req, res) => {
-    return res.render("pages/categories/show.html");
+
+  lastNews: async (req, res) => {
+    let { page } = req.query;
+
+    page = page ? page - 1 : undefined;
+
+    const { count, rows } = await News.findAndCountAll({
+      include: [Category],
+      order: [["createdAt", "DESC"]],
+      limit: 1,
+      offset: 1 * page || 0,
+    });
+
+    return res.render("pages/list.html", {
+      data: { name: "Ultimas noticias" },
+      news: rows,
+      page: Number(page) + 1,
+      count,
+      limit: 1,
+      action: "lastNews",
+    });
   },
+
+  showCategory: async (req, res) => {
+    let { page } = req.query;
+    const { category_slug } = req.params;
+
+    page = page ? page - 1 : undefined;
+
+    const category = await Category.findOne({
+      where: { slug: category_slug },
+    });
+
+    const { count, rows } = await News.findAndCountAll({
+      where: { CategoryId: category.id },
+      order: [["createdAt", "DESC"]],
+      limit: 1,
+      offset: 1 * page || 0,
+    });
+
+    return res.render("pages/list.html", {
+      data: category,
+      news: rows,
+      page: Number(page) + 1,
+      count,
+      limit: 1,
+      action: "category",
+    });
+  },
+
   showTag: async (req, res) => {
-    return res.render("pages/tags/show.html");
+    const { page } = req.query;
+    const { tag_slug } = req.params;
+
+    const tag = await Tag.findOne({
+      where: { slug: tag_slug },
+    });
+
+    return res.render("pages/list.html", { data: tag, action: "tag" });
   },
 };

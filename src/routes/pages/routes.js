@@ -10,7 +10,7 @@ const News = require("../../models/news.model");
 router.use(async (req, res, next) => {
   req.app.set("layout", "layouts/layout.html");
   const categories = await Category.findAll({order: [['popularity', 'DESC']]});
-  const lastNews = await News.findAll({order:[['createdAt', 'DESC']], limit: 5})
+  const lastNews = await News.findAll({order:[['createdAt', 'DESC']], limit: 6})
 
   res.locals._lastNews = lastNews; 
   res.locals._categories = categories; 
@@ -18,6 +18,7 @@ router.use(async (req, res, next) => {
 });
 
 router.get("/", pages.index);
+router.get("/last-news", pages.lastNews);
 router.get("/news/:news_slug", pages.showNews);
 router.get("/categories/:category_slug", pages.showCategory);
 router.get("/tags/:tag_slug", pages.showTag);

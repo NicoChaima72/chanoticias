@@ -1,95 +1,35 @@
 <div class="flex flex-col space-y-2 divide-y dark:divide-gray-800">
   <div class="grid grid-cols-2 gap-4 pb-4">
-    <a href="/" class="pb-6">
-      <img src="https://imagenes.20minutos.es/files/image_990_v3/uploads/imagenes/2022/07/20/presidente-de-rusia-vladimir-putin.jpeg" alt="">
+    <% [...highlights.slice(0, 2)].map(highlight => { %>
+    <a href="/news/<%= highlight.News.slug %>" class="pb-6">
+      <img src="<%= highlight.News.imageUrl%>" alt="<%= highlight.News.title %>" class="border dark:border-gray-800" />
       <div class="mt-2">
-        <h3 class="font-bold text-xl">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae rem
-          repellendus.
-        </h3>
+        <h3 class="font-bold text-xl"><%= highlight.News.title %></h3>
         <p class="mt-2 text-gray-500 dark:text-gray-300 text-sm">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit dolor esse
-          maxime enim! Maiores saepe molestiae magni eligendi?
-        </p>
-      </div>
-    </a><a href="/" class="pb-6">
-      <img src="https://imagenes.20minutos.es/files/image_990_v3/uploads/imagenes/2022/07/20/presidente-de-rusia-vladimir-putin.jpeg" alt="">
-      <div class="mt-2">
-        <h3 class="font-bold text-xl">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae rem
-          repellendus.
-        </h3>
-        <p class="mt-2 text-gray-500 dark:text-gray-300 text-sm">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit dolor esse
-          maxime enim! Maiores saepe molestiae magni eligendi?
+          <%= highlight.News.excerpt %>
         </p>
       </div>
     </a>
+    <% }) %>
   </div>
   <div class="grid grid-cols-2 divide gap-x-4 pt-5 dark:divide-gray-800">
-    <a href="/" class="flex items-center gap-3 py-3">
-      <div class="w-40">
+    <% [...highlights.slice(2, highlights.length)].map(highlight => { %>
+    <a href="/news/<%= highlight.News.slug %>" class="flex items-start gap-3 py-3">
+      <div class="w-40 shrink-0">
         <img
-          src="https://imagenes.20minutos.es/files/image_990_v3/uploads/imagenes/2022/07/20/presidente-de-rusia-vladimir-putin.jpeg"
-          alt=""
-          class="w-full"
+          src="<%= highlight.News.imageUrl%>"
+          alt="<%= highlight.News.title %>"
+          class="w-full border dark:border-gray-800"
           style="aspect-ratio: 16/9"
         />
       </div>
-      <div class="">
-        <span class="text-gray-400 text-sm font-medium"> Jul 27, 2022 </span>
+      <div class="mt-[-5px]">
+        <span class="text-gray-400 text-sm font-medium"> <%= _.moment(highlight.News.createdAt, 'MMM D, YYYY') %> </span>
         <p class="text-sm font-semibold leading-4">
-          The top 10 Best Computer Speakers in the Market
+          <%= highlight.News.title %>
         </p>
       </div>
     </a>
-    <a href="/" class="flex items-center gap-3 py-3">
-      <div class="w-40">
-        <img
-          src="https://imagenes.20minutos.es/files/image_990_v3/uploads/imagenes/2022/07/20/presidente-de-rusia-vladimir-putin.jpeg"
-          alt=""
-          class="w-full"
-          style="aspect-ratio: 16/9"
-        />
-      </div>
-      <div class="">
-        <span class="text-gray-400 text-sm font-medium"> Jul 27, 2022 </span>
-        <p class="text-sm font-semibold leading-4">
-          The top 10 Best Computer Speakers in the Market
-        </p>
-      </div>
-    </a>
-    <a href="/" class="flex items-center gap-3 py-3">
-      <div class="w-40">
-        <img
-          src="https://imagenes.20minutos.es/files/image_990_v3/uploads/imagenes/2022/07/20/presidente-de-rusia-vladimir-putin.jpeg"
-          alt=""
-          class="w-full"
-          style="aspect-ratio: 16/9"
-        />
-      </div>
-      <div class="">
-        <span class="text-gray-400 text-sm font-medium"> Jul 27, 2022 </span>
-        <p class="text-sm font-semibold leading-4">
-          The top 10 Best Computer Speakers in the Market
-        </p>
-      </div>
-    </a>
-    <a href="/" class="flex items-center gap-3 py-3">
-      <div class="w-40">
-        <img
-          src="https://imagenes.20minutos.es/files/image_990_v3/uploads/imagenes/2022/07/20/presidente-de-rusia-vladimir-putin.jpeg"
-          alt=""
-          class="w-full"
-          style="aspect-ratio: 16/9"
-        />
-      </div>
-      <div class="">
-        <span class="text-gray-400 text-sm font-medium"> Jul 27, 2022 </span>
-        <p class="text-sm font-semibold leading-4">
-          The top 10 Best Computer Speakers in the Market
-        </p>
-      </div>
-    </a>
+    <% }) %>
   </div>
 </div>

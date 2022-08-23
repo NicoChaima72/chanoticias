@@ -7,10 +7,54 @@ noticias <%- contentFor('header-title') %> Noticias <% if (action == 'index')
 <% } %> <%- contentFor('body') %>
 <div class="row">
   <div class="col-12">
+    <% if (action == 'index') { %>
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Noticias destacadas</h3>
+      </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <table class="data-table table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>N°</th>
+              <th>Creacion</th>
+              <th>Titulo</th>
+              <th>Imagen</th>
+              <th>Autor</th>
+              <th>Categoria</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% highlights.sort((a,b) => a.number - b.number).map(newsItem => { %>
+            <tr>
+              <td><%= newsItem.number %></td>
+              <td>
+                <%= newsItem.News?.createdAt ? _.moment(newsItem.News.createdAt,
+                'DD/MM/YY - HH:mm') : '' %>
+              </td>
+              <td><%= newsItem.News?.title || ''%></td>
+              <td>
+                <% if (newsItem.News?.imageUrl) { %><img
+                  src="<%= newsItem.News.imageUrl %>"
+                  alt="<%= newsItem.News.title %>"
+                  style="aspect-ratio: 16/9; width: 120px"
+                /><% } %>
+              </td>
+              <td><%= newsItem.News?.User?.name || '' %></td>
+              <td><%= newsItem.News?.Category?.name || '' %></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <% } %>
     <div class="card">
       <div class="card-header">
         <h3 class="card-title">
-          Mostrando todas las noticias <%= action == 'verify' ? 'pendientes': ''%>
+          Mostrando todas las noticias <%= action == 'verify' ? 'pendientes':
+          ''%>
         </h3>
       </div>
       <!-- /.card-header -->
@@ -54,13 +98,46 @@ noticias <%- contentFor('header-title') %> Noticias <% if (action == 'index')
               <td>
                 <div class="d-flex">
                   <% if (action == 'index') { %>
-
                   <a
                     href="/news/<%= newsItem.slug %>"
                     target="_blank"
                     class="btn btn-outline-warning mx-1"
                     ><i class="fas fa-rocket"></i
                   ></a>
+                  <div class="btn-group dropup">
+                    <button
+                      class="btn btn-outline-success"
+                      type="button"
+                      data-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <i class="fas fa-star"></i>
+                    </button>
+                    <div class="dropdown-menu p-2">
+                      <% highlights.map(highlight => { %>
+                      <button
+                        class="btn btn-outline-success d-block w-100 my-2"
+                        onclick="confirm('Seguro que quieres agregar esta noticia a destacados <%= highlight.number %>') ? document.getElementById('form-highlight-<%= highlight.number%>-<%= newsItem.id%>').submit() : ''"
+                      >
+                        Asignar a  <span><i class="fas fa-star text-xs"></i></span> <%=
+                        highlight.number %>
+                      </button>
+                      <form
+                        action="/panel/news/<%= newsItem.slug %>/highlight?_method=PUT"
+                        class="d-none"
+                        method="post"
+                        id="form-highlight-<%= highlight.number%>-<%= newsItem.id%>"
+                      >
+                        <input type="hidden" name="_method" value="PUT" />
+                        <input
+                          type="hidden"
+                          name="number"
+                          value="<%= highlight.number%>"
+                        />
+                      </form>
+                      <% }) %>
+                    </div>
+                  </div>
                   <a
                     href="/panel/news/<%= newsItem.slug %>/edit"
                     class="btn btn-outline-primary mx-1"
@@ -136,6 +213,18 @@ noticias <%- contentFor('header-title') %> Noticias <% if (action == 'index')
       lengthChange: false,
       searching: true,
       ordering: true,
+      info: true,
+      autoWidth: false,
+      responsive: true,
+    });
+    $(".data-table").DataTable({
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json",
+      },
+      paging: false,
+      lengthChange: false,
+      searching: false,
+      ordering: false,
       info: true,
       autoWidth: false,
       responsive: true,

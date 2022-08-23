@@ -1,4 +1,5 @@
 const moment = require("moment");
+moment.locale('es')
 
 module.exports = {
   getPathname: (url) => {
@@ -62,5 +63,5 @@ module.exports = {
     { value: "#f43f5e", name: "Rose" },
   ],
 
-  moment: (time, format) => moment(time).format(format),
+  moment: (time, format) => moment(time).format(format).charAt(0).toUpperCase() + moment(time).format(format).substring(1),
 };
