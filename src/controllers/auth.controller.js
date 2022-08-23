@@ -124,6 +124,7 @@ module.exports = {
       return res.redirect("/auth/login");
     }
 
+    //es un cliente
     if (user.RoleId === 1) await user.update({ status: 1, token: null });
     else await user.update({ status: 3, token: null });
 
@@ -137,11 +138,20 @@ module.exports = {
 
   forgetPassword: async (req, res) => {
     const { email } = req.body;
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({
+      where: { email },
+    });
+
     if (!user) {
       return res
         .status(400)
         .json({ ok: false, msg: "El email no está registrado" });
+    }
+
+    if (user.status === 2) {
+      return res
+        .status(400)
+        .json({ ok: false, msg: "El usuario está dado de baja" });
     }
 
     user.token = uniqid();
@@ -175,6 +185,14 @@ module.exports = {
 
   showUpdatePasswordForm: async (req, res) => {
     const { token } = req.params;
+    // Para cuando el usuario tenga status 3
+    if (!token) {
+      return res.render("auth/update-password.html", {
+        user: req.user,
+        by: "id",
+      });
+    }
+
     const user = await User.scope("withToken").findOne({
       where: { token, expire: { [Op.gte]: Date.now() } },
     });
@@ -183,26 +201,45 @@ module.exports = {
       req.flash("error", "El token ingresado no es valido");
       return res.redirect("/auth/login");
     }
+    if (user.status === 2) 
+    {
+      req.flash("error", "El usuario está dado de baja");
+      return res.redirect("/auth/login");
 
-    return res.render("auth/update-password.html", { user });
+    }
+
+    return res.render("auth/update-password.html", { user, by: "token" });
   },
 
   updatePassword: async (req, res) => {
-    const { token } = req.params;
-    const { password } = req.body;
+    const { param } = req.params;
+    const { password, by } = req.body;
 
-    req.logout(function (err) {
-      if (err) {
-        return next(err);
+    let user;
+
+    if (by == "token") {
+      req.logout(function (err) {
+        if (err) {
+          return next(err);
+        }
+      });
+
+      user = await User.scope("withAllInfo").findOne({
+        where: { token: param, expire: { [Op.gte]: Date.now() } },
+      });
+
+      if (!user) {
+        return res.status(403).json({ ok: false, msg: "Token expirado" });
       }
-    });
+    } else {
+      user = await User.scope("withAllInfo").findOne({
+        where: { id: req.user.id },
+      });
+    }
 
-    const user = await User.scope("withAllInfo").findOne({
-      where: { token, expire: { [Op.gte]: Date.now() } },
-    });
-
-    if (!user) {
-      return res.status(403).json({ ok: false, msg: "Token expirado" });
+    // TODO: VER AQUI Y TODOS LOS CONTROLADORES DE 2
+    if (user.status == 2) {
+      return res.redirect('/');
     }
 
     await user.update({
@@ -210,12 +247,14 @@ module.exports = {
       token: null,
       expire: null,
       isActive: 1,
+      status: 1
     });
-    req.flash(
-      "success",
-      "Contraseña cambiada con exito, puedes iniciar sesion"
-    );
-    return res.redirect("/auth/login");
+
+    req.flash("success", "Contraseña cambiada con exito");
+    if (by === "token") {
+      return res.redirect("/auth/login");
+    }
+    return res.redirect("/");
   },
   logout: async (req, res) => {
     console.log(req.user.Role.description === "USER_ROLE");
@@ -224,7 +263,7 @@ module.exports = {
         return next(err);
       }
       return res.redirect(
-        '/'
+        "/"
         // req.user.Role.description === "USER_ROLE"
         //   ? req.header("Referer") || "/"
         //   : "/"

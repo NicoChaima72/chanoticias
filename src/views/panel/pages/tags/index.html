@@ -28,11 +28,21 @@ Etiquetas <%- contentFor('body') %>
                 <div class="d-flex">
                   <a
                     href="/tags/<%=tag.slug %>"
-                    class="btn btn-outline-warning"
+                    class="btn btn-outline-success"
                   >
                     <i class="fas fa-rocket"></i>
                   </a>
-                  <% if (tag.News_Count == 0) { %>
+                  <% if (_.can(_user, 'listar todas las noticias')) { %>
+                  <a
+                    href="/panel/news/tag/<%= tag.slug %>"
+                    class="btn btn-outline-warning mx-1"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Ver noticias asociadas"
+                    ><i class="fas fa-newspaper"></i
+                  ></a>
+                  <% } %> <% if (_.can(_user, 'eliminar etiqueta')) { %> <% if
+                  (tag.News_Count == 0) { %>
                   <button
                     type="submit"
                     class="btn btn-outline-danger mx-1"
@@ -50,7 +60,7 @@ Etiquetas <%- contentFor('body') %>
                   >
                     <input type="hidden" name="_method" value="DELETE" />
                   </form>
-                  <% } %>
+                  <% } %> <% } %>
                 </div>
               </td>
             </tr>
@@ -99,7 +109,10 @@ Etiquetas <%- contentFor('body') %>
       info: true,
       autoWidth: false,
       responsive: true,
-      order: [[3, 'desc'], [0, 'asc']]
+      order: [
+        [3, "desc"],
+        [0, "asc"],
+      ],
     });
   });
 </script>

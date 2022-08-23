@@ -40,6 +40,56 @@ module.exports = {
     });
   },
 
+  showByUser: async (req, res) => {
+    const { user_id } = req.params;
+
+    const user = await User.findByPk(user_id);
+
+    const news = await News.findAll({
+      include: [User, Category],
+      where: { UserId: user_id },
+    });
+
+    return res.render("panel/pages/news/index.html", {
+      news,
+      action: "showUser",
+      highlights: [],
+      data: user,
+    });
+  },
+
+  showByCategory: async (req, res) => {
+    const { category_slug } = req.params;
+
+    const category = await Category.findOne({ where: { slug: category_slug } });
+    const news = await News.findAll({
+      include: [User, Category],
+      where: { CategoryId: category.id },
+    });
+    return res.render("panel/pages/news/index.html", {
+      news,
+      action: "showUser",
+      highlights: [],
+      data: category,
+    });
+  },
+
+  showByTag: async (req, res) => {
+    const { tag_slug } = req.params;
+
+    const tag = await Tag.findOne({ where: { slug: tag_slug } });
+    const news = await News.findAll({
+      include: [User, Category, { model: Tag, where: { id: tag.id } }],
+    });
+
+    return res.render("panel/pages/news/index.html", {
+      news,
+      action: "showTag",
+      highlights: [],
+      data: tag,
+    });
+  },
+
   create: async (req, res) => {
     const tags = await Tag.findAll({
       group: ["Tag.id"],
@@ -252,7 +302,7 @@ module.exports = {
     });
 
     if (typeof tags === "string") tags = [tags];
-    
+
     const tagsToAdd = [];
 
     for (const tag of [...(tags || [])]) {

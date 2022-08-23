@@ -1,9 +1,17 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
+const permission = require("../../controllers/panel/permissions.controller");
+const permissionsMiddleware = require("../../middlewares/permissions.middleware");
 
-const permission = require('../../controllers/panel/permissions.controller')
+router.get(
+  "/users/:user_id",
+  permissionsMiddleware.can("vincular permiso a usuarios"),
+  permission.editPermissions
+);
+router.post(
+  "/users/:user_id",
+  permissionsMiddleware.can("vincular permiso a usuarios"),
+  permission.updatePermissions
+);
 
-router.get('/users/:user_id', permission.editPermissions)
-router.post('/users/:user_id', permission.updatePermissions)
-
-module.exports = router
+module.exports = router;

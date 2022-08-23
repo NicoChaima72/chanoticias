@@ -37,7 +37,8 @@ Clientes %> <%- contentFor('body') %>
               <td>0</td>
               <td>
                 <div class="d-flex">
-                  <% if (user.status == 1) { %>
+                  <% if (_.can(_user, 'dar de baja a clientes')) { %> <% if
+                  (user.status == 1) { %>
                   <button
                     type="submit"
                     class="btn btn-outline-danger mx-1"
@@ -79,7 +80,7 @@ Clientes %> <%- contentFor('body') %>
                     <input type="hidden" name="_method" value="PUT" />
                     <input type="hidden" name="type" value="clients" />
                   </form>
-                  <% } %>
+                  <% } %> <% } %>
                 </div>
               </td>
             </tr>
@@ -128,7 +129,7 @@ Clientes %> <%- contentFor('body') %>
       info: true,
       autoWidth: false,
       responsive: true,
-      order: [[0, 'desc']]
+      order: [[0, "desc"]],
     });
   });
 </script>

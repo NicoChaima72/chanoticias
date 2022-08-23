@@ -1,22 +1,22 @@
-<%- contentFor('title') %> Ver usuarios %>
-<%- contentFor('header-title') %> Usuarios
-%> <%- contentFor('header-button') %> 
+<%- contentFor('title') %> Ver usuarios %> <%- contentFor('header-title') %>
+Usuarios %> <%- contentFor('header-button') %>
+<% if (_.can(_user, ['agregar usuarios', 'agregar usuarios administradores'])) { %>
 <a href="/panel/users/create" class="btn btn-primary"
   >Agregar usuario <i class="fas fa-plus ml-2"></i
 ></a>
+<% } %>
 <%- contentFor('body') %>
 <div class="row">
   <div class="col-12">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">
-          Mostrando todos los usuarios
-        </h3>
+        <h3 class="card-title">Mostrando todos los usuarios</h3>
       </div>
       <div class="card-body">
         <table id="data-table" class="table table-bordered table-hover">
           <thead>
             <tr>
+              <th class="d-none">Creacion</th>
               <th>Nombre</th>
               <th>Email</th>
               <th>Rol</th>
@@ -29,19 +29,26 @@
           <tbody>
             <% users.map(user => { %>
             <tr>
+              <td class="d-none"><%= user.createdAt %></td>
               <td><%= user.name %></td>
               <td><%= user.email %></td>
               <td><%= user.Role.description %></td>
-              <td><div class="d-flex">
-                <span>
-                  <i class="fas fa-plus text-success text-xs"></i>
-                  <%= user.Permissions.filter(p=>p.Permission_User.action=='add').length %>
-                </span>
-                <span class="ml-1">
-                  <i class="fas fa-arrow-down text-danger text-xs"></i>
-                  <%= user.Permissions.filter(p=>p.Permission_User.action=='remove').length %>
-                </span>
-              </div></td>
+              <td>
+                <div class="d-flex">
+                  <span>
+                    <i class="fas fa-plus text-success text-xs"></i>
+                    <%=
+                    user.Permissions.filter(p=>p.Permission_User.action=='add').length
+                    %>
+                  </span>
+                  <span class="ml-1">
+                    <i class="fas fa-arrow-down text-danger text-xs"></i>
+                    <%=
+                    user.Permissions.filter(p=>p.Permission_User.action=='remove').length
+                    %>
+                  </span>
+                </div>
+              </td>
               <td>
                 <% if (user.status == 0) { %>
                 <span class="badge badge-warning">Sin verificar</span>
@@ -60,15 +67,29 @@
               <td><%= user.News.length %></td>
               <td>
                 <div class="d-flex">
-                  <a href="" class="btn btn-outline-warning mx-1"
-                    ><i class="fas fa-eye"></i
+                  <% if (_.can(_user, 'listar todas las noticias')) { %>
+                  <a
+                    href="/panel/news/user/<%= user.id %>"
+                    class="btn btn-outline-warning mx-1"
+                    ><i class="fas fa-newspaper"></i
                   ></a>
-                  <a href="/panel/permissions/users/<%= user.id%>" class="btn btn-outline-info mx-1" title="Editar permisos"
+                  <% } %>
+                  <% if ((_.can(_user, 'vincular permisos a usuarios') && ![2, 3].includes(user.Role.id)) || _.can(_user, 'vincular permisos a usuarios administradores')) { %>
+                  <a
+                    href="/panel/permissions/users/<%= user.id%>"
+                    class="btn btn-outline-info mx-1"
+                    title="Editar permisos"
                     ><i class="fas fa-key"></i
                   ></a>
-                  <a href="/panel/users/<%= user.id %>/edit" class="btn btn-outline-primary mx-1"
+                  <% } %>
+                  <% if ((_.can(_user, 'editar usuarios') && ![2, 3].includes(user.Role.id)) || _.can(_user, 'editar usuarios administradores')) { %>
+                  <a
+                    href="/panel/users/<%= user.id %>/edit"
+                    class="btn btn-outline-primary mx-1"
                     ><i class="fas fa-pen"></i
                   ></a>
+                  <% } %>
+                  <% if ((_.can(_user, 'dar de baja a usuarios') && ![2, 3].includes(user.Role.id)) || _.can(_user, 'dar de baja a usuarios administradores')) { %>
                   <% if (user.status == 1 || user.status == 3) { %>
                   <button
                     type="submit"
@@ -111,6 +132,7 @@
                     <input type="hidden" name="_method" value="PUT" />
                     <input type="hidden" name="type" value="users" />
                   </form>
+                  <% } %>
                   <% } %>
                 </div>
               </td>
@@ -160,7 +182,7 @@
       info: true,
       autoWidth: false,
       responsive: true,
-      order: [[5, 'desc']]
+      order: [[1, "desc"]],
     });
   });
 </script>

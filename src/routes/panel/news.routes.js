@@ -6,6 +6,7 @@ const News = require("../../models/news.model");
 const Tag = require("../../models/tag.model");
 const newsRequest = require("../../requests/panel/news.request");
 const { uploadFileMiddleware } = require("../../services/images.service");
+const permissionsMiddleware = require("../../middlewares/permissions.middleware");
 
 // router.get("/example",async (req,res) => {
 //   const news = await News.findByPk(8, {include: Tag})
@@ -19,28 +20,85 @@ const { uploadFileMiddleware } = require("../../services/images.service");
 //   res.json({ok:true, result})
 // });
 
-router.get("/", news.index);
-router.get("/verify", news.indexVerify);
-router.get("/create", news.create);
-router.post("/",
- uploadFileMiddleware, 
- newsRequest.store,
-  news.store);
-router.get("/:news_slug", news.showVerify);
+router.get(
+  "/",
+  permissionsMiddleware.can("listar todas las noticias"),
+  news.index
+);
+// TODO: SOLO PARA MIS NOTICIAS
+router.get("/me", permissionsMiddleware.can("listar mis noticias"), news.index);
+
+router.get(
+  "/user/:user_id",
+  permissionsMiddleware.can("listar todas las noticias"),
+  news.showByUser
+);
+router.get(
+  "/category/:category_slug",
+  permissionsMiddleware.can("listar todas las noticias"),
+  news.showByCategory
+);
+
+router.get(
+  "/tag/:tag_slug",
+  permissionsMiddleware.can("listar todas las noticias"),
+  news.showByTag
+);
+router.get(
+  "/verify",
+  permissionsMiddleware.can("verificar noticias"),
+  news.indexVerify
+);
+router.get(
+  "/create",
+  permissionsMiddleware.can("agregar noticia"),
+  news.create
+);
+router.post(
+  "/",
+  permissionsMiddleware.can("agregar noticia"),
+  uploadFileMiddleware,
+  newsRequest.store,
+  news.store
+);
+router.get(
+  "/:news_slug",
+  permissionsMiddleware.can("verificar noticias"),
+  news.showVerify
+);
 router.put(
   "/:news_slug/verify",
+  permissionsMiddleware.can("verificar noticias"),
   uploadFileMiddleware,
   newsRequest.verify,
   news.verify
 );
-router.put('/:news_slug/highlight', news.highlight);
-router.get("/:news_slug/edit", news.edit);
+router.put(
+  "/:news_slug/highlight",
+  permissionsMiddleware.can("editar destacadas"),
+  news.highlight
+);
+router.get(
+  "/:news_slug/edit",
+  permissionsMiddleware.can([
+    "editar todas las noticias",
+    "editar mis noticias",
+  ]),
+  news.edit
+);
 router.put(
   "/:news_slug",
+  permissionsMiddleware.can([
+    "editar todas las noticias",
+    "editar mis noticias",
+  ]),
   uploadFileMiddleware,
   newsRequest.update,
   news.update
 );
-router.delete("/:news_slug", news.destroy);
+router.delete("/:news_slug",permissionsMiddleware.can([
+  "eliminar todas las noticias",
+  "eliminar mis noticias",
+]), news.destroy);
 
 module.exports = router;

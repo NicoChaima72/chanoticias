@@ -1,5 +1,5 @@
 const moment = require("moment");
-moment.locale('es')
+moment.locale("es");
 
 module.exports = {
   getPathname: (url) => {
@@ -24,22 +24,17 @@ module.exports = {
     return "";
   },
   isActiveUrl: (currentUrl, checkUrl) => {
-    // currentUrl = currentUrl.substring("/panel".length);
     currentUrl = currentUrl === "/" ? "" : currentUrl;
-    checkUrl =
-      checkUrl[checkUrl.length - 1] === "/"
-        ? checkUrl.substring(0, checkUrl.length - 1)
-        : checkUrl;
 
-    if (checkUrl.indexOf("*") === -1) return currentUrl === checkUrl;
-
-    checkUrl = checkUrl.substring(0, checkUrl.length - 1);
-    currentUrl = currentUrl.substring(0, checkUrl.length);
-
-    checkUrl = checkUrl.split("/").filter((n) => n);
     currentUrl = currentUrl.split("/").filter((n) => n);
+    checkUrl = checkUrl.split("/").filter((n) => n);
 
-    return JSON.stringify(checkUrl) === JSON.stringify(currentUrl);
+    if (checkUrl[checkUrl.length - 1] === "*") {
+      checkUrl.pop();
+      currentUrl = currentUrl.slice(0, checkUrl.length);
+    }
+
+    return JSON.stringify(currentUrl) === JSON.stringify(checkUrl);
   },
   getColorsCategories: () => [
     { value: "#6b7280", name: "Gray" },
@@ -63,5 +58,33 @@ module.exports = {
     { value: "#f43f5e", name: "Rose" },
   ],
 
-  moment: (time, format) => moment(time).format(format).charAt(0).toUpperCase() + moment(time).format(format).substring(1),
+  moment: (time, format) =>
+    moment(time).format(format).charAt(0).toUpperCase() +
+    moment(time).format(format).substring(1),
+
+  can: (user, verifyPermission) => {
+    const userPermissions = user.AllPermissions.map((userPermission) => {
+      return userPermission.description.toLowerCase();
+    });
+
+    if (typeof verifyPermission === "string")
+      return userPermissions.includes(verifyPermission.toLowerCase());
+
+
+    for (const permission of verifyPermission) {
+      if (userPermissions.includes(permission.toLowerCase())) {
+        return true;
+      }
+    }
+
+    return false;
+  },
+
+  canGroup: (user, verifyGroupPermission) => {
+    const userGroups = user.AllPermissions.map((userPermission) => {
+      return userPermission.group.toLowerCase();
+    });
+
+    return userGroups.includes(verifyGroupPermission.toLowerCase());
+  },
 };

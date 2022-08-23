@@ -1,9 +1,9 @@
 <%- contentFor('title') %> Ver categorias <%- contentFor('header-title') %>
-Categorias <%- contentFor('header-button') %>
+Categorias <%- contentFor('header-button') %> <% if (_.can(_user,'agregar categoria')) { %>
 <a href="/panel/categories/create" class="btn btn-primary"
   >Agregar categoria <i class="fas fa-plus ml-2"></i
 ></a>
-<%- contentFor('body') %>
+<% } %> <%- contentFor('body') %>
 <div class="row">
   <div class="col-12">
     <div class="card">
@@ -55,12 +55,22 @@ Categorias <%- contentFor('header-button') %>
                   <a
                     href="/categories/<%= category.slug %>"
                     target="_blank"
-                    class="btn btn-outline-warning mx-1"
+                    class="btn btn-outline-success mx-1"
                     data-toggle="tooltip"
                     data-placement="top"
                     title="Ver categoria en pagina principal"
                     ><i class="fas fa-rocket"></i
                   ></a>
+                  <% if (_.can(_user, 'listar todas las noticias')) { %>
+                  <a
+                    href="/panel/news/category/<%= category.slug %>"
+                    class="btn btn-outline-warning mx-1"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Ver noticias asociadas"
+                    ><i class="fas fa-newspaper"></i
+                  ></a>
+                  <% } %> <% if (_.can(_user, 'editar categoria')) { %>
                   <a
                     href="/panel/categories/<%= category.slug %>/edit"
                     class="btn btn-outline-primary mx-1"
@@ -69,6 +79,7 @@ Categorias <%- contentFor('header-button') %>
                     title="Editar categoria"
                     ><i class="fas fa-pen"></i
                   ></a>
+                  <% } %> <% if (_.can(_user, 'dar de baja categoria')) { %>
                   <button
                     type="submit"
                     class="btn btn-outline-danger mx-1"
@@ -88,7 +99,8 @@ Categorias <%- contentFor('header-button') %>
                   >
                     <input type="hidden" name="_method" value="PUT" />
                   </form>
-                  <% if (category.NewsCount == 0) { %>
+                  <% } %> <% if (_.can(_user,'eliminar categoria' )) { %> <% if
+                  (category.NewsCount == 0) { %>
                   <button
                     type="submit"
                     class="btn btn-outline-danger mx-1"
@@ -108,7 +120,7 @@ Categorias <%- contentFor('header-button') %>
                   >
                     <input type="hidden" name="_method" value="DELETE" />
                   </form>
-                  <% } %>
+                  <% } %> <% } %>
                 </div>
               </td>
             </tr>
@@ -157,7 +169,10 @@ Categorias <%- contentFor('header-button') %>
       info: true,
       autoWidth: false,
       responsive: true,
-      order: [[5, 'desc'],  [0, 'asc']]
+      order: [
+        [5, "desc"],
+        [0, "asc"],
+      ],
     });
   });
 </script>

@@ -1,13 +1,16 @@
 <%- contentFor('title') %> <%= action == 'index' ? 'Ver': 'Verificar' %>
 noticias <%- contentFor('header-title') %> Noticias <% if (action == 'index')
 {%> <%- contentFor('header-button') %>
+<% if (_.can(_user, 'agregar noticia')) { %>
 <a href="/panel/news/create" class="btn btn-primary"
   >Agregar noticia <i class="fas fa-plus ml-2"></i
 ></a>
+<% } %>
 <% } %> <%- contentFor('body') %>
 <div class="row">
   <div class="col-12">
-    <% if (action == 'index') { %>
+    <% if (action == 'index') { %> <% if (_.can(_user, 'editar destacadas')) {
+    %>
     <div class="card">
       <div class="card-header">
         <h3 class="card-title">Noticias destacadas</h3>
@@ -25,7 +28,8 @@ noticias <%- contentFor('header-title') %> Noticias <% if (action == 'index')
             </tr>
           </thead>
           <tbody>
-            <% highlights.sort((a,b) => a.number - b.number).map(newsItem => { %>
+            <% highlights.sort((a,b) => a.number - b.number).map(newsItem => {
+            %>
             <tr>
               <td><%= newsItem.number %></td>
               <td>
@@ -48,12 +52,13 @@ noticias <%- contentFor('header-title') %> Noticias <% if (action == 'index')
         </table>
       </div>
     </div>
-    <% } %>
+    <% } %> <% } %>
     <div class="card">
       <div class="card-header">
         <h3 class="card-title">
           Mostrando todas las noticias <%= action == 'verify' ? 'pendientes':
-          ''%>
+          action != 'index' ? 'de ' + (action == 'showTag' ? '#': '') +data.name
+          : ''%>
         </h3>
       </div>
       <div class="card-body">
@@ -97,13 +102,14 @@ noticias <%- contentFor('header-title') %> Noticias <% if (action == 'index')
               </td>
               <td>
                 <div class="d-flex">
-                  <% if (action == 'index') { %>
+                  <% if (action != 'verify') { %>
                   <a
                     href="/news/<%= newsItem.slug %>"
                     target="_blank"
                     class="btn btn-outline-warning mx-1"
                     ><i class="fas fa-rocket"></i
                   ></a>
+                  <% if (action == 'index') { %> <% if (_.can(_user, 'editar destacadas')) { %>
                   <div class="btn-group dropup">
                     <button
                       class="btn btn-outline-success"
@@ -119,7 +125,8 @@ noticias <%- contentFor('header-title') %> Noticias <% if (action == 'index')
                         class="btn btn-outline-success d-block w-100 my-2"
                         onclick="confirm('Seguro que quieres agregar esta noticia a destacados <%= highlight.number %>') ? document.getElementById('form-highlight-<%= highlight.number%>-<%= newsItem.id%>').submit() : ''"
                       >
-                        Asignar a  <span><i class="fas fa-star text-xs"></i></span> <%=
+                        Asignar a
+                        <span><i class="fas fa-star text-xs"></i></span> <%=
                         highlight.number %>
                       </button>
                       <form
@@ -138,11 +145,15 @@ noticias <%- contentFor('header-title') %> Noticias <% if (action == 'index')
                       <% }) %>
                     </div>
                   </div>
+                  <% } %> <% } %>
+                  <% if ((newsItem.UserId === _user.id && _.can(_user, 'editar mis noticias')) || _.can(_user, 'editar todas las noticias')) { %>
                   <a
                     href="/panel/news/<%= newsItem.slug %>/edit"
                     class="btn btn-outline-primary mx-1"
                     ><i class="fas fa-pen"></i
                   ></a>
+                  <% } %>
+                  <% if ((newsItem.UserId === _user.id && _.can(_user, 'eliminar mis noticias')) || _.can(_user, 'eliminar todas las noticias')) { %>
                   <button
                     type="submit"
                     class="btn btn-outline-danger mx-1"
@@ -160,6 +171,7 @@ noticias <%- contentFor('header-title') %> Noticias <% if (action == 'index')
                   >
                     <input type="hidden" name="_method" value="DELETE" />
                   </form>
+                  <% } %>
                   <% } else { %>
                   <a
                     href="/panel/news/<%= newsItem.slug %>"
@@ -215,7 +227,7 @@ noticias <%- contentFor('header-title') %> Noticias <% if (action == 'index')
       info: true,
       autoWidth: false,
       responsive: true,
-      order: [[1, 'desc']]
+      order: [[1, "desc"]],
     });
     $(".data-table").DataTable({
       language: {

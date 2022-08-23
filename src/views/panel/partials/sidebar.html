@@ -6,7 +6,9 @@
       class="brand-image elevation-3"
       style="opacity: 0.8; width: 28px; height: 28px; margin-left: 15px"
     />
-    <span class="brand-text font-weight-light text-uppercase"><%= _title %></span>
+    <span class="brand-text font-weight-light text-uppercase"
+      ><%= _title %></span
+    >
   </a>
 
   <div class="sidebar">
@@ -41,61 +43,19 @@
         <li class="nav-item">
           <a
             href="/panel"
-            class="nav-link <%= _.isActiveUrl(current_url, '/panel/') && 'active' %>"
+            class="nav-link <%= _.isActiveUrl(_current_url, '/panel') && 'active' %>"
           >
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>Dashboard</p>
           </a>
         </li>
+        <% if (_.canGroup(_user, 'roles')) { %>
         <li
-          class="nav-item <%= _.isActiveUrl(current_url, '/panel/users/*') && 'menu-open' %>"
+          class="nav-item <%= _.isActiveUrl(_current_url, '/panel/roles/*') && 'menu-open' %>"
         >
           <a
             href="#"
-            class="nav-link <%= _.isActiveUrl(current_url, '/panel/users/*') && 'active' %>"
-          >
-            <i class="nav-icon fas fa-users"></i>
-            <p>
-              Usuarios
-              <i class="right fas fa-angle-left"></i>
-            </p>
-          </a>
-          <ul class="nav nav-treeview">
-            <li class="nav-item">
-              <a
-                href="/panel/users"
-                class="nav-link <%= _.isActiveUrl(current_url, '/panel/users') && 'active' %>"
-              >
-                <i class="far fa-circle nav-icon"></i>
-                <p>Ver usuarios</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a
-                href="/panel/users/create"
-                class="nav-link <%= _.isActiveUrl(current_url, '/panel/users/create') && 'active' %>"
-              >
-                <i class="far fa-circle nav-icon"></i>
-                <p>Agregar usuario</p>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a
-                href="/panel/users/clients"
-                class="nav-link <%= _.isActiveUrl(current_url, '/panel/users/clients') && 'active' %>"
-              >
-                <i class="far fa-circle nav-icon"></i>
-                <p>Ver clientes</p>
-              </a>
-            </li>
-          </ul>
-        </li>
-        <li
-          class="nav-item <%= _.isActiveUrl(current_url, '/panel/roles/*') && 'menu-open' %>"
-        >
-          <a
-            href="#"
-            class="nav-link <%= _.isActiveUrl(current_url, '/panel/roles/*') && 'active' %>"
+            class="nav-link <%= _.isActiveUrl(_current_url, '/panel/roles/*') && 'active' %>"
           >
             <i class="nav-icon fas fa-user-tag"></i>
             <p>
@@ -104,32 +64,89 @@
             </p>
           </a>
           <ul class="nav nav-treeview">
+            <% if (_.can(_user, 'listar roles')) { %>
             <li class="nav-item">
               <a
                 href="/panel/roles/"
-                class="nav-link <%= _.isActiveUrl(current_url, '/panel/roles') && 'active' %>"
+                class="nav-link <%= _.isActiveUrl(_current_url, '/panel/roles') && 'active' %>"
               >
                 <i class="far fa-circle nav-icon"></i>
                 <p>Ver roles</p>
               </a>
             </li>
+            <% } %> <% if (_.can(_user, 'agregar rol')) { %>
             <li class="nav-item">
               <a
                 href="/panel/roles/create"
-                class="nav-link <%= _.isActiveUrl(current_url, '/panel/roles/create') && 'active' %>"
+                class="nav-link <%= _.isActiveUrl(_current_url, '/panel/roles/create') && 'active' %>"
               >
                 <i class="far fa-circle nav-icon"></i>
                 <p>Agregar rol</p>
               </a>
             </li>
+            <% } %>
           </ul>
         </li>
+        <% } %>
+        <% if (_.canGroup(_user, 'usuarios')) { %>
         <li
-          class="nav-item <%= _.isActiveUrl(current_url, '/panel/categories/*') && 'menu-open' %>"
+          class="nav-item <%= _.isActiveUrl(_current_url, '/panel/users/*') && 'menu-open' %>"
         >
           <a
             href="#"
-            class="nav-link <%= _.isActiveUrl(current_url, '/panel/categories/*') && 'active' %>"
+            class="nav-link <%= _.isActiveUrl(_current_url, '/panel/users/*') && 'active' %>"
+          >
+            <i class="nav-icon fas fa-users"></i>
+            <p>
+              Usuarios
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <% if (_.can(_user, 'listar usuarios') || _.can(_user, 'listar usuarios administradores')) { %>
+            <li class="nav-item">
+              <a
+                href="/panel/users"
+                class="nav-link <%= _.isActiveUrl(_current_url, '/panel/users') && 'active' %>"
+              >
+                <i class="far fa-circle nav-icon"></i>
+                <p>Ver usuarios</p>
+              </a>
+            </li>
+            <% } %>
+
+            <!-- TODO: Obtener de la bd segun administradores/normal -->
+            <% if (_.can(_user, 'agregar usuarios') || _.can(_user, 'agregar usuarios administradores')) { %>
+            <li class="nav-item">
+              <a
+                href="/panel/users/create"
+                class="nav-link <%= _.isActiveUrl(_current_url, '/panel/users/create') && 'active' %>"
+              >
+                <i class="far fa-circle nav-icon"></i>
+                <p>Agregar usuario</p>
+              </a>
+            </li>
+            <% } %> <% if (_.can(_user, 'listar clientes')) { %>
+            <li class="nav-item">
+              <a
+                href="/panel/users/clients"
+                class="nav-link <%= _.isActiveUrl(_current_url, '/panel/users/clients') && 'active' %>"
+              >
+                <i class="far fa-circle nav-icon"></i>
+                <p>Ver clientes</p>
+              </a>
+            </li>
+            <% } %>
+          </ul>
+        </li>
+        <% } %>
+        <% if (_.canGroup(_user, 'categorias')) { %>
+        <li
+          class="nav-item <%= _.isActiveUrl(_current_url, '/panel/categories/*') && 'menu-open' %>"
+        >
+          <a
+            href="#"
+            class="nav-link <%= _.isActiveUrl(_current_url, '/panel/categories/*') && 'active' %>"
           >
             <i class="nav-icon fas fa-copy"></i>
             <p>
@@ -138,32 +155,37 @@
             </p>
           </a>
           <ul class="nav nav-treeview">
+            <% if (_.can(_user, 'listar categorias')) { %>
             <li class="nav-item">
               <a
                 href="/panel/categories"
-                class="nav-link <%= _.isActiveUrl(current_url, '/panel/categories') && 'active' %>"
+                class="nav-link <%= _.isActiveUrl(_current_url, '/panel/categories') && 'active' %>"
               >
                 <i class="far fa-circle nav-icon"></i>
                 <p>Ver categorias</p>
               </a>
             </li>
+            <% } %> <% if (_.can(_user, 'listar categorias')) { %>
             <li class="nav-item">
               <a
                 href="/panel/categories/create"
-                class="nav-link <%= _.isActiveUrl(current_url, '/panel/categories/create') && 'active' %>"
+                class="nav-link <%= _.isActiveUrl(_current_url, '/panel/categories/create') && 'active' %>"
               >
                 <i class="far fa-circle nav-icon"></i>
                 <p>Agregar categoria</p>
               </a>
             </li>
+            <% } %>
           </ul>
         </li>
+        <% } %>
+        <% if (_.canGroup(_user, 'etiquetas')) { %>
         <li
-          class="nav-item <%= _.isActiveUrl(current_url, '/panel/tags/*') && 'menu-open' %>"
+          class="nav-item <%= _.isActiveUrl(_current_url, '/panel/tags/*') && 'menu-open' %>"
         >
           <a
             href="#"
-            class="nav-link <%= _.isActiveUrl(current_url, '/panel/tags/*') && 'active' %>"
+            class="nav-link <%= _.isActiveUrl(_current_url, '/panel/tags/*') && 'active' %>"
           >
             <i class="nav-icon fas fa-tags"></i>
             <p>
@@ -172,23 +194,27 @@
             </p>
           </a>
           <ul class="nav nav-treeview">
+            <% if (_.can(_user, 'listar etiquetas')) { %>
             <li class="nav-item">
               <a
                 href="/panel/tags"
-                class="nav-link <%= _.isActiveUrl(current_url, '/panel/tags') && 'active' %>"
+                class="nav-link <%= _.isActiveUrl(_current_url, '/panel/tags') && 'active' %>"
               >
                 <i class="far fa-circle nav-icon"></i>
                 <p>Ver etiquetas</p>
               </a>
             </li>
+            <% } %>
           </ul>
         </li>
+        <% } %>
+        <% if (_.canGroup(_user, 'noticias')) { %>
         <li
-          class="nav-item <%= _.isActiveUrl(current_url, '/panel/news/*') && 'menu-open' %>"
+          class="nav-item <%= _.isActiveUrl(_current_url, '/panel/news/*') && 'menu-open' %>"
         >
           <a
             href="#"
-            class="nav-link <%= _.isActiveUrl(current_url, '/panel/news/*') && 'active' %>"
+            class="nav-link <%= _.isActiveUrl(_current_url, '/panel/news/*') && 'active' %>"
           >
             <i class="nav-icon fas fa-newspaper"></i>
             <p>
@@ -197,44 +223,50 @@
             </p>
           </a>
           <ul class="nav nav-treeview">
+            <% if (_.can(_user, 'listar todas las noticias')) { %>
             <li class="nav-item">
               <a
                 href="/panel/news"
-                class="nav-link <%= _.isActiveUrl(current_url, '/panel/news') && 'active' %>"
+                class="nav-link <%= _.isActiveUrl(_current_url, '/panel/news') && 'active' %>"
               >
                 <i class="far fa-circle nav-icon"></i>
                 <p>Ver noticias</p>
               </a>
             </li>
+            <% } %> <% if (_.can(_user, 'listar mis noticias')) { %>
             <li class="nav-item">
               <a
                 href="/panel/news/me"
-                class="nav-link <%= _.isActiveUrl(current_url, '/panel/news/me') && 'active' %>"
+                class="nav-link <%= _.isActiveUrl(_current_url, '/panel/news/me') && 'active' %>"
               >
                 <i class="far fa-circle nav-icon"></i>
                 <p>Ver mis noticias</p>
               </a>
             </li>
+            <% } %> <% if (_.can(_user, 'agregar noticia')) { %>
             <li class="nav-item">
               <a
                 href="/panel/news/create"
-                class="nav-link <%= _.isActiveUrl(current_url, '/panel/news/create') && 'active' %>"
+                class="nav-link <%= _.isActiveUrl(_current_url, '/panel/news/create') && 'active' %>"
               >
                 <i class="far fa-circle nav-icon"></i>
                 <p>Agregar noticia</p>
               </a>
             </li>
+            <% } %> <% if (_.can(_user, 'verificar noticias')) { %>
             <li class="nav-item">
               <a
                 href="/panel/news/verify"
-                class="nav-link <%= _.isActiveUrl(current_url, '/panel/news/verify') && 'active' %>"
+                class="nav-link <%= _.isActiveUrl(_current_url, '/panel/news/verify') && 'active' %>"
               >
                 <i class="far fa-circle nav-icon"></i>
                 <p>Verificar noticias</p>
               </a>
             </li>
+            <% } %>
           </ul>
         </li>
+        <% } %>
       </ul>
     </nav>
   </div>

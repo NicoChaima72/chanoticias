@@ -144,8 +144,8 @@ module.exports = {
     // Actualizar los usuarios con los permisos personalizados segun corresponda
     // ----------------------------------------------------------------
 
-    const previousPermissions = role.Permissions.map((p) => p.id);
-    const newPermissions = permissions.map((p) => Number(p));
+    const previousPermissions = [...role.Permissions].map((p) => p.id);
+    const newPermissions = [...permissions].map((p) => Number(p));
 
     const permissionsToAdd = newPermissions.filter(
       (p) => !previousPermissions.includes(p)
