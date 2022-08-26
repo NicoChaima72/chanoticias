@@ -5,12 +5,12 @@ const permissionsMiddleware = require("../../middlewares/permissions.middleware"
 
 router.get(
   "/users/:user_id",
-  permissionsMiddleware.can("vincular permiso a usuarios"),
+  permissionsMiddleware.can("vincular permisos a usuarios"),
   permission.editPermissions
 );
 router.post(
   "/users/:user_id",
-  permissionsMiddleware.can("vincular permiso a usuarios"),
+  permissionsMiddleware.can("vincular permisos a usuarios"),
   permission.updatePermissions
 );
 

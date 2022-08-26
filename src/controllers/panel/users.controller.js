@@ -44,8 +44,21 @@ module.exports = {
 
   create: async (req, res) => {
     const roles = await Role.findAll({
-      where: { slug: { [Op.ne]: "cliente" } },
+      where: {
+        slug: {
+          [Op.notIn]: [
+            "cliente",
+            req.user.Role.slug !== "super-administrador"
+              ? "super-administrador"
+              : "",
+            !helpers.can(req.user, "agregar usuarios administradores")
+              ? "administrador"
+              : "",
+          ],
+        },
+      },
     });
+
     return res.render("panel/pages/users/form.html", {
       user: {},
       action: "create",
@@ -59,6 +72,18 @@ module.exports = {
 
     if (!existRole)
       return res.status(400).json({ ok: false, msg: "El rol no existe" });
+
+    if (
+      (existRole.slug === "super-administrador" &&
+        req.user.Role.slug !== "super-administrador") ||
+      (existRole.slug === "administrador" &&
+        !helpers.can(req.user, "gregar usuarios administradores"))
+    ) {
+      return res.status(400).json({
+        ok: false,
+        msg: "No tienes permisos para realizar esta accion",
+      });
+    }
 
     const existUser = await User.findOne({ where: { email } });
 

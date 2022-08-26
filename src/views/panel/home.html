@@ -1,64 +1,29 @@
 <%- contentFor('title') %> Inicio <%- contentFor('header-title') %> Dashboard
 <%- contentFor('body') %>
 <div class="row">
-  <div class="col-lg-3 col-6">
-    <div class="small-box bg-info">
-      <div class="inner">
-        <h3>150</h3>
-
-        <p>New Orders</p>
-      </div>
-      <div class="icon">
-        <i class="ion ion-bag"></i>
-      </div>
-      <a href="#" class="small-box-footer"
-        >More info <i class="fas fa-arrow-circle-right"></i
-      ></a>
-    </div>
-  </div>
-  <div class="col-lg-3 col-6">
-    <div class="small-box bg-success">
-      <div class="inner">
-        <h3>53<sup style="font-size: 20px">%</sup></h3>
-
-        <p>Bounce Rate</p>
-      </div>
-      <div class="icon">
-        <i class="ion ion-stats-bars"></i>
-      </div>
-      <a href="#" class="small-box-footer"
-        >More info <i class="fas fa-arrow-circle-right"></i
-      ></a>
-    </div>
-  </div>
-  <div class="col-lg-3 col-6">
-    <div class="small-box bg-warning">
-      <div class="inner">
-        <h3>44</h3>
-
-        <p>User Registrations</p>
-      </div>
-      <div class="icon">
-        <i class="ion ion-person-add"></i>
-      </div>
-      <a href="#" class="small-box-footer"
-        >More info <i class="fas fa-arrow-circle-right"></i
-      ></a>
-    </div>
-  </div>
-  <div class="col-lg-3 col-6">
-    <div class="small-box bg-danger">
-      <div class="inner">
-        <h3>65</h3>
-
-        <p>Unique Visitors</p>
-      </div>
-      <div class="icon">
-        <i class="ion ion-pie-graph"></i>
-      </div>
-      <a href="#" class="small-box-footer"
-        >More info <i class="fas fa-arrow-circle-right"></i
-      ></a>
-    </div>
-  </div>
+  <% if (_.can(_user, 'listar todas las noticias')) { %>
+    <%- include('./partials/smallbox.html', {type: 'info', message: 'Todas las noticias', value: allNews.count, icon: 'newspaper', url: 'news '}) %>
+    <% } else if (_.can(_user, 'listar mis noticias')) { %>
+      <%- include('./partials/smallbox.html', {type: 'info', message: 'Mis noticias', value: myNews.count, icon: 'newspaper', url: 'news/me'}) %>
+  <% } %>
+  <% if (_.can(_user, 'verificar noticias')) { %>
+  <%- include('./partials/smallbox.html', {type: 'warning', message: 'Noticias sin verificar', value: unverifiedNews.count, icon: 'newspaper', url: 'news/verify '}) %>
+  <% } else if (_.can(_user, 'agregar noticia')) { %>
+  <%- include('./partials/smallbox.html', {type: 'warning', message: 'Noticias sin aprobar', value: myUnverifiedNews.count, icon: 'newspaper', url: 'news/me '}) %>
+  <% } %>
+  <% if (_.can(_user, 'listar clientes')) { %>
+  <%- include('./partials/smallbox.html', {type: 'success', message: 'Clientes registrados', value: clients.count, icon: 'users', url: 'users/clients '}) %>
+  <% } %>
+  <% if (_.can(_user, 'listar roles')) { %>
+  <%- include('./partials/smallbox.html', {type: 'secondary', message: 'Roles', value: roles.count, icon: 'newspaper', url: 'roles '}) %>
+  <% } %>
+  <% if (_.can(_user, 'agregar usuarios')) { %>
+  <%- include('./partials/smallbox.html', {type: 'success', message: 'Usuarios registrados', value: users.count, icon: 'users', url: 'users '}) %>
+  <% } %>
+  <% if (_.can(_user, 'listar categorias')) { %>
+  <%- include('./partials/smallbox.html', {type: 'danger', message: 'Categorias', value: categories.count, icon: 'copy', url: 'categories '}) %>
+  <% } %>
+  <% if (_.can(_user, 'listar etiquetas')) { %>
+  <%- include('./partials/smallbox.html', {type: 'primary', message: 'Etiquetas', value: tags.count, icon: 'newspaper', url: 'tags '}) %>
+  <% } %>
 </div>

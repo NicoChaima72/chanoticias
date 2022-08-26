@@ -16,7 +16,7 @@
       <div class="d-flex align-items-center">
         <div class="image">
           <i
-            class="fas fa-user text-white pl-2 pr-1"
+            class="fas fa-user text-white_unverifiedNews.count > 0 pl-2 pr-1"
             style="font-size: 20px"
           ></i>
         </div>
@@ -214,12 +214,15 @@
         >
           <a
             href="#"
-            class="nav-link <%= _.isActiveUrl(_current_url, '/panel/news/*') && 'active' %>"
+            class="nav-link <%= _.isActiveUrl(_current_url, '/panel/news/*') && 'active' %> d-flex align-items-center"
           >
             <i class="nav-icon fas fa-newspaper"></i>
-            <p>
+            <p class="d-flex align-items-center">
               Noticias
               <i class="fas fa-angle-left right"></i>
+              <% if (_.can(_user, 'verificar noticias') && _unverifiedNews.count > 0) { %>
+              <span class="right p-1 bg-warning rounded-circle mt-1"></span>
+              <% } %>
             </p>
           </a>
           <ul class="nav nav-treeview">
@@ -260,7 +263,7 @@
                 class="nav-link <%= _.isActiveUrl(_current_url, '/panel/news/verify') && 'active' %>"
               >
                 <i class="far fa-circle nav-icon"></i>
-                <p>Verificar noticias</p>
+                <p>Verificar noticias  <% if (_unverifiedNews.count > 0) { %><span class="badge badge-warning right"><%= _unverifiedNews.count %></span><% } %></p>
               </a>
             </li>
             <% } %>

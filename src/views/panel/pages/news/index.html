@@ -56,8 +56,8 @@ noticias <%- contentFor('header-title') %> Noticias <% if (action == 'index')
     <div class="card">
       <div class="card-header">
         <h3 class="card-title">
-          Mostrando todas las noticias <%= action == 'verify' ? 'pendientes':
-          action != 'index' ? 'de ' + (action == 'showTag' ? '#': '') +data.name
+          Mostrando todas <%= action == 'indexMe' ? 'mis' : 'las' %> noticias <%= action == 'verify' ? 'pendientes':
+          (action != 'index' && action != 'indexMe') ? 'de ' + (action == 'showTag' ? '#': '') +data.name
           : ''%>
         </h3>
       </div>
@@ -71,7 +71,7 @@ noticias <%- contentFor('header-title') %> Noticias <% if (action == 'index')
               <th>Imagen</th>
               <th>Autor</th>
               <th>Categoria</th>
-              <% if (action == 'verify') { %>
+              <% if (action == 'verify' || action == 'indexMe') { %>
               <th>Estado</th>
               <% } %>
               <th>Acciones</th>
@@ -92,13 +92,16 @@ noticias <%- contentFor('header-title') %> Noticias <% if (action == 'index')
               </td>
               <td><%= newsItem.User.name %></td>
               <td><%= newsItem.Category.name %></td>
-              <% if (action == 'verify') { %>
+              <% if (action == 'verify' || action == 'indexMe') { %>
               <td>
                 <% if (newsItem.status == 0) { %>
                 <span class="badge badge-primary">Sin verificar</span>
+                <% } else if (newsItem.status == 1) { %>
+                <span class="badge badge-success">Verificado</span>
                 <% } else { %>
                 <span class="badge badge-danger">Rechazado</span>
-                <% } %> <% } %>
+                <% } %>
+                <% } %>
               </td>
               <td>
                 <div class="d-flex">

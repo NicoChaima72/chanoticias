@@ -28,6 +28,18 @@ module.exports = {
     });
   },
 
+  indexMe: async (req, res) => {
+    const news = await News.findAll({
+      include: [User, Category],
+      where: {  UserId: req.user.id  },
+    });
+
+    return res.render("panel/pages/news/index.html", {
+      news,
+      action: "indexMe",
+    });
+  },
+
   indexVerify: async (req, res) => {
     const news = await News.findAll({
       include: [User, Category],
@@ -156,8 +168,7 @@ module.exports = {
           UserId: res.locals._user.id,
           imageUrl: image.Data[0].Location,
           popularity: popularity || null,
-          // TODO: Checar por permiso en especifico,
-          status: popularity ? 1 : 0,
+          status: helpers.can(req.user, "verificar noticias") ? 1 : 0,
         },
         { include: [User, Category] }
       );
@@ -188,7 +199,6 @@ module.exports = {
       }
     }
 
-    return res.json({ tagsToAdd });
     news.setTags(tagsToAdd);
 
     req.flash("success", "La noticia se ha agregado exitosamente");
@@ -231,7 +241,7 @@ module.exports = {
       CategoryId: category_id,
       imageUrl: !!result.length ? result[0].Data[0].Location : news.imageUrl,
       status: action === "aceptar" ? 1 : 2,
-      popularity,
+      popularity: popularity || 0,
     });
 
     await news.setTags(tags || []);
@@ -254,6 +264,14 @@ module.exports = {
 
     if (!news)
       return res.status(400).json({ ok: false, msg: "Noticia no encontrada" });
+
+    if (
+      !helpers.can(req.user, "editar todas las noticias") &&
+      req.user.id != news.UserId
+    ) {
+      req.flash("warning", "No tienes permisos para acceder a este apartado");
+      return res.redirect("/panel/news");
+    }
 
     const tags = await Tag.findAll({
       group: ["Tag.id"],

@@ -2,7 +2,7 @@ const Permission = require("../../models/permission.model");
 const Role = require("../../models/role.model");
 const helpers = require("../../helpers/back");
 const slugify = require("slugify");
-const Sequelize = require("sequelize");
+const { Op } = require("sequelize");
 const User = require("../../models/user.model");
 const { separateByValue } = require("../../helpers/back");
 
@@ -22,7 +22,10 @@ module.exports = {
     //   logging: console.log,
     // });
 
-    const roles = await Role.findAll({ include: [Permission, User] });
+    const roles = await Role.findAll({
+      include: [Permission, User],
+      where: { slug: { [Op.ne]: "cliente" } },
+    });
 
     return res.render("panel/pages/roles/index.html", { roles });
     return res.render("panel/pages/roles/index.html", {
@@ -31,7 +34,9 @@ module.exports = {
   },
 
   create: async (req, res) => {
-    const permissions = await Permission.findAll();
+    const permissions = await Permission.findAll({
+      where: { protected: false },
+    });
 
     return res.render("panel/pages/roles/form.html", {
       action: "create",
@@ -64,6 +69,17 @@ module.exports = {
     }
 
     try {
+      const thereAreProtectedPermissions = await Permission.findAll({
+        where: {
+          [Op.and]: [{ protected: true }, { id: { [Op.in]: permissions } }],
+        },
+      });
+      if (thereAreProtectedPermissions.length > 0) {
+        req.flash("error", "No se pueden agregar permisos protegidos");
+        req.flash("data", req.body);
+        return res.redirect(req.header("Referer") || "/");
+      }
+
       await role.addPermissions(permissions);
     } catch (err) {
       await role.destroy();
@@ -89,7 +105,13 @@ module.exports = {
       return res.redirect("/panel/roles");
     }
 
-    const permissions = await Permission.findAll();
+    if (role.slug === "super-administrador" || role.slug === "cliente") {
+      return res.redirect("/panel/roles");
+    }
+
+    const permissions = await Permission.findAll({
+      where: { protected: false },
+    });
 
     return res.render("panel/pages/roles/form.html", {
       action: "show",
@@ -111,7 +133,18 @@ module.exports = {
       return res.redirect("/panel/roles");
     }
 
-    const permissions = await Permission.findAll();
+    if (
+      role.slug === "super-administrador" ||
+      role.slug === "cliente" ||
+      (role.slug === "administrador" &&
+        req.user.Role.slug !== "super-administrador")
+    ) {
+      return res.redirect("/panel/roles");
+    }
+
+    const permissions = await Permission.findAll({
+      where: { protected: false },
+    });
 
     return res.render("panel/pages/roles/form.html", {
       action: "edit",
@@ -133,6 +166,15 @@ module.exports = {
       return res.status(400).json({ ok: false, msg: "Rol no encontrado" });
     }
 
+    if (
+      role.slug === "super-administrador" ||
+      role_slug === "cliente" ||
+      (role.slug === "administrador" &&
+        req.user.Role.slug !== "super-administrador")
+    ) {
+      return res.redirect("/panel/roles");
+    }
+
     try {
       await role.update({ description });
     } catch (err) {
@@ -143,6 +185,18 @@ module.exports = {
 
     // Actualizar los usuarios con los permisos personalizados segun corresponda
     // ----------------------------------------------------------------
+
+    const thereAreProtectedPermissions = await Permission.findAll({
+      where: {
+        [Op.and]: [{ protected: true }, { id: { [Op.in]: permissions } }],
+      },
+    });
+
+    if (thereAreProtectedPermissions.length > 0) {
+      req.flash("error", "No se pueden agregar permisos protegidos");
+      req.flash("data", req.body);
+      return res.redirect(req.header("Referer") || "/");
+    }
 
     const previousPermissions = [...role.Permissions].map((p) => p.id);
     const newPermissions = [...permissions].map((p) => Number(p));
@@ -200,6 +254,14 @@ module.exports = {
 
     if (!role) {
       req.flash("warning", "El rol no existe.");
+      return res.redirect("/panel/roles");
+    }
+
+    if (
+      role.slug === "super-administrador" ||
+      (role.slug === "administrador" &&
+        req.user.Role.slug !== "super-administrador")
+    ) {
       return res.redirect("/panel/roles");
     }
 

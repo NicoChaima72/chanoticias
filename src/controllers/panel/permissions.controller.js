@@ -1,7 +1,7 @@
 const Role = require("../../models/role.model");
 const Permission = require("../../models/permission.model");
 const User = require("../../models/user.model");
-const sequelize = require("sequelize");
+const { Op } = require("sequelize");
 const News = require("../../models/news.model");
 const Tag = require("../../models/tag.model");
 const { separateByValue } = require("../../helpers/back");
@@ -20,7 +20,9 @@ module.exports = {
 
     const permissionsByRole = user.Role.Permissions.map((p) => p.id);
 
-    const permissions = await Permission.findAll();
+    const permissions = await Permission.findAll({
+      where: { protected: false },
+    });
 
     return res.render("panel/pages/permissions/form.html", {
       user,
@@ -37,6 +39,17 @@ module.exports = {
     const user = await User.findByPk(user_id, {
       include: [{ model: Role, include: Permission }, Permission],
     });
+
+    const thereAreProtectedPermissions = await Permission.findAll({
+      where: {
+        [Op.and]: [{ protected: true }, { id: { [Op.in]: permissionsSendByBody } }],
+      },
+    });
+    if (thereAreProtectedPermissions.length > 0) {
+      req.flash("error", "No se pueden agregar permisos protegidos");
+      req.flash("data", req.body);
+      return res.redirect(req.header("Referer") || "/");
+    }
 
     permissionsSendByBody = permissionsSendByBody.map((permission) =>
       Number(permission)

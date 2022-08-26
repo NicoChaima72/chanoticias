@@ -38,7 +38,7 @@ module.exports = {
       excerpt: "required",
       body: "required",
       category_id: "required",
-      popularity: "required",
+      // popularity: "required",
       action: 'required'
     };
 

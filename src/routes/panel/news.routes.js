@@ -26,7 +26,7 @@ router.get(
   news.index
 );
 // TODO: SOLO PARA MIS NOTICIAS
-router.get("/me", permissionsMiddleware.can("listar mis noticias"), news.index);
+router.get("/me", permissionsMiddleware.can("listar mis noticias"), news.indexMe);
 
 router.get(
   "/user/:user_id",

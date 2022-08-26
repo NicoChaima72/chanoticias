@@ -7,13 +7,22 @@ const NewsHighlight = require("../models/news_highlights");
 
 module.exports = {
   index: async (req, res) => {
-    const highlights = await NewsHighlight.findAll({
+    let highlights = await NewsHighlight.findAll({
       include: { model: News, include: [User, Category] },
     });
 
     const newsByCategories = await Category.findAll({
       include: [{ model: News, order: [["createdAt", "DESC"]], limit: 6 }],
       order: [["popularity", "DESC"]],
+    });
+
+    // console.log({ newsByCategories: newsByCategories[0].News[index] });
+
+    highlights = highlights.map((highlight, index) => {
+      if (!highlight.NewsId) {
+        return {News: newsByCategories[0].News[index]};
+      }
+      return highlight;
     });
 
     return res.render("home.html", {
@@ -25,7 +34,7 @@ module.exports = {
     const { news_slug } = req.params;
     const news = await News.findOne({
       include: [User, Category, Tag],
-      where: { slug: news_slug },
+      where: { [Op.and]: [{ slug: news_slug }, { status: 1 }] },
     });
 
     const relatedNews = await News.findAll({
@@ -33,6 +42,7 @@ module.exports = {
         [Op.and]: [
           { CategoryId: news.CategoryId },
           { id: { [Op.ne]: news.id } },
+          { status: 1 },
         ],
       },
       order: [["createdAt", "DESC"]],
@@ -49,12 +59,13 @@ module.exports = {
     let { page } = req.query;
 
     page = page ? page - 1 : undefined;
-    
+
     const { count, rows } = await News.findAndCountAll({
       include: [Category],
       order: [["createdAt", "DESC"]],
       limit: 4,
       offset: 4 * page || 0,
+      where: { status: 1 },
     });
 
     return res.render("pages/list.html", {
@@ -71,15 +82,14 @@ module.exports = {
     let { page } = req.query;
     const { category_slug } = req.params;
 
-    
     const category = await Category.findOne({
       where: { slug: category_slug },
     });
-    
+
     page = page ? page - 1 : undefined;
 
     const { count, rows } = await News.findAndCountAll({
-      where: { CategoryId: category.id },
+      where: { [Op.and]: [{ CategoryId: category.id }, { status: 1 }] },
       order: [["createdAt", "DESC"]],
       limit: 1,
       offset: 1 * page || 0,
@@ -106,7 +116,10 @@ module.exports = {
     page = page ? page - 1 : undefined;
 
     const { count, rows } = await News.findAndCountAll({
-      include: { model: Tag, where: { id: tag.id } },
+      include: {
+        model: Tag,
+        where: { [Op.and]: [{ id: tag.id }, { status: 1 }] },
+      },
       order: [["createdAt", "DESC"]],
       limit: 1,
       offset: 1 * page || 0,

@@ -77,12 +77,27 @@ module.exports = {
 
   separateByValue: (list, separate) => {
     const arr = list.reduce((groups, item) => {
-      const group = (groups[item[separate]] || []);
+      const group = groups[item[separate]] || [];
       group.push(item);
       groups[item.group] = group;
       return groups;
     }, {});
 
-    return arr
-  }
+    return arr;
+  },
+
+  can: (user, verifyPermission) => {
+    const userPermissions = user.AllPermissions.map((userPermission) => {
+      return userPermission.description.toLowerCase();
+    });
+
+    if (typeof verifyPermission === "string")
+      return userPermissions.includes(verifyPermission.toLowerCase());
+
+    for (const permission of verifyPermission) {
+      if (userPermissions.includes(permission.toLowerCase())) {
+        return true;
+      }
+    }
+  },
 };

@@ -1,11 +1,8 @@
-<%- contentFor('title') %> Ver usuarios %> <%- contentFor('header-title') %>
-Usuarios %> <%- contentFor('header-button') %>
-<% if (_.can(_user, ['agregar usuarios', 'agregar usuarios administradores'])) { %>
+<%- contentFor('title') %> Ver usuarios %> <%- contentFor('header-title') %> Usuarios %> <%- contentFor('header-button') %> <% if (_.can(_user, ['agregar usuarios', 'agregar usuarios administradores'])) { %>
 <a href="/panel/users/create" class="btn btn-primary"
   >Agregar usuario <i class="fas fa-plus ml-2"></i
 ></a>
-<% } %>
-<%- contentFor('body') %>
+<% } %> <%- contentFor('body') %>
 <div class="row">
   <div class="col-12">
     <div class="card">
@@ -37,15 +34,11 @@ Usuarios %> <%- contentFor('header-button') %>
                 <div class="d-flex">
                   <span>
                     <i class="fas fa-plus text-success text-xs"></i>
-                    <%=
-                    user.Permissions.filter(p=>p.Permission_User.action=='add').length
-                    %>
+                    <%= user.Permissions.filter(p=>p.Permission_User.action=='add').length %>
                   </span>
                   <span class="ml-1">
                     <i class="fas fa-arrow-down text-danger text-xs"></i>
-                    <%=
-                    user.Permissions.filter(p=>p.Permission_User.action=='remove').length
-                    %>
+                    <%= user.Permissions.filter(p=>p.Permission_User.action=='remove').length %>
                   </span>
                 </div>
               </td>
@@ -74,7 +67,7 @@ Usuarios %> <%- contentFor('header-button') %>
                     ><i class="fas fa-newspaper"></i
                   ></a>
                   <% } %>
-                  <% if ((_.can(_user, 'vincular permisos a usuarios') && ![2, 3].includes(user.Role.id)) || _.can(_user, 'vincular permisos a usuarios administradores')) { %>
+                  <% if (((_.can(_user, 'vincular permisos a usuarios') && ![2, 3].includes(user.Role.id)) || _.can(_user, 'vincular permisos a usuarios administradores')) && user.Role.slug !== 'super-administrador') { %>
                   <a
                     href="/panel/permissions/users/<%= user.id%>"
                     class="btn btn-outline-info mx-1"
@@ -82,14 +75,14 @@ Usuarios %> <%- contentFor('header-button') %>
                     ><i class="fas fa-key"></i
                   ></a>
                   <% } %>
-                  <% if ((_.can(_user, 'editar usuarios') && ![2, 3].includes(user.Role.id)) || _.can(_user, 'editar usuarios administradores')) { %>
+                  <% if (((_.can(_user, 'editar usuarios') && ![2, 3].includes(user.Role.id)) || _.can(_user, 'editar usuarios administradores')) && user.Role.slug !== 'super-administrador') { %>
                   <a
                     href="/panel/users/<%= user.id %>/edit"
                     class="btn btn-outline-primary mx-1"
                     ><i class="fas fa-pen"></i
                   ></a>
                   <% } %>
-                  <% if ((_.can(_user, 'dar de baja a usuarios') && ![2, 3].includes(user.Role.id)) || _.can(_user, 'dar de baja a usuarios administradores')) { %>
+                  <% if (((_.can(_user, 'dar de baja a usuarios') && ![2, 3].includes(user.Role.id)) || _.can(_user, 'dar de baja a usuarios administradores')) && user.Role.slug !== 'super-administrador') { %>
                   <% if (user.status == 1 || user.status == 3) { %>
                   <button
                     type="submit"

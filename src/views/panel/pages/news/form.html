@@ -43,6 +43,7 @@
         >
         <% } %>
       </div>
+      <% if(_.can(_user, 'verificar noticias')) { %>
       <div class="form-group">
         <label for="popularity">Popularidad</label>
         <input
@@ -60,6 +61,7 @@
         >
         <% } %>
       </div>
+      <% } %>
       <div class="form-group">
         <div class="d-flex">
           <label>Categoria</label>

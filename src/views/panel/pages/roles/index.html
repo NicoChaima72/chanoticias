@@ -30,7 +30,8 @@ contentFor('header-button') %> <% if (_.can(_user, 'agregar rol')) { %>
               <td><%= role.Permissions.length %></td>
               <td>
                 <div class="d-flex gap-2">
-                  <% if(_.can(_user, 'ver rol')) { %>
+                  <% if (role.slug !== 'super-administrador') { %> <%
+                  if(_.can(_user, 'ver rol')) { %>
                   <a
                     href="/panel/roles/<%= role.slug %>"
                     class="btn btn-outline-warning mx-1"
@@ -38,8 +39,10 @@ contentFor('header-button') %> <% if (_.can(_user, 'agregar rol')) { %>
                     ><i class="fas fa-eye"></i
                   ></a>
                   <!-- TODO: Yo no puedo editar ni modificar mi mismo rol -->
-                  <% } %> <% if(_.can(_user, 'editar rol')) {%> <% if
-                  (role.canUpdate) { %>
+                  <% } %> <% } %> <% if (role.slug != 'super-administrador' &&
+                  !(role.slug == 'administrador' && _user.Role.slug !=
+                  'super-administrador')) { %> <% if(_.can(_user, 'editar rol'))
+                  {%> <% if (role.canUpdate) { %>
                   <a
                     href="/panel/roles/<%= role.slug %>/edit"
                     class="btn btn-outline-primary mx-1"
@@ -47,8 +50,8 @@ contentFor('header-button') %> <% if (_.can(_user, 'agregar rol')) { %>
                     ><i class="fas fa-pen"></i
                   ></a>
                   <!-- TODO: Probar con una canUpdate false -->
-                  <% } %> <% } %> <% if (_.can(_user, 'eliminar rol')) {%> <% if
-                  (role.Users.length == 0) { %>
+                  <% } %> <% } %> <% } %> <% if (_.can(_user, 'eliminar rol'))
+                  {%> <% if (role.Users.length == 0) { %>
                   <button
                     type="submit"
                     class="btn btn-outline-danger mx-1"
@@ -116,8 +119,7 @@ contentFor('header-button') %> <% if (_.can(_user, 'agregar rol')) { %>
       autoWidth: false,
       responsive: true,
       order: [
-        [3, "desc"],
-        [2, "desc"],
+        [0, "asc"],
       ],
     });
   });

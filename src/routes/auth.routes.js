@@ -13,12 +13,7 @@ router.use(async (req, res, next) => {
   const categories = await Category.findAll({
     order: [["popularity", "DESC"]],
   });
-  const lastNews = await News.findAll({
-    order: [["createdAt", "DESC"]],
-    limit: 5,
-  });
-
-  res.locals._lastNews = lastNews;
+  
   res.locals._categories = categories;
   next();
 });
