@@ -1,0 +1,61 @@
+<%- contentFor('body') %>
+<form action="" method="get">
+  <label
+    for="default-search"
+    class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-300"
+    >Search</label
+  >
+  <div class="relative">
+    <div
+      class="flex absolute inset-y-0 left-0 items-center pl-4 text-gray-500 pointer-events-none"
+    >
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </div>
+    <input type="search" id="default-search" minlength="3" class="block p-4 pl-10 w-full
+    text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300
+    focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700
+    dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
+    dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Buscar noticias, etiquetas, etc" required name="search" value="<%= search %>" <%=
+    !search ? 'autofocus' : ''%>/>
+    <button
+      type="submit"
+      class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+    >
+      Buscar
+    </button>
+  </div>
+</form>
+<% if (search) { %>
+<% if (tags.length > 0) { %>
+<p class="mt-6 text-sm text-gray-400 dark:text-gray-500">Etiquetas</p>
+<div class="mt-2 flex space-x-3 pb-2 overflow-x-auto">
+  <% tags.map(tag => { %>
+  <a
+    href="/tags/<%= tag.slug %>"
+    class="px-3 py-1 rounded border text-lg flex-none"
+  >
+    <%= tag.name %>
+  </a>
+  <% }) %>
+</div>
+<% } %>
+<% if (news.length > 0) { %>
+<p class="mt-6 text-sm text-gray-400 dark:text-gray-500">Noticias</p>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-x-7 gap-y-10 mt-2">
+  <% news.map(news => { %>
+  <a href="/news/<%= news.slug %>" class="max-w-xs">
+    <div class="">
+      <img src="<%= news.imageUrl %>" alt="" class="w-full aspect-video" />
+    </div>
+    <div class="mt-2">
+      <p class="text-sm font-semibold leading-4"><%= news.title %></p>
+    </div>
+  </a>
+  <% }) %>
+</div>
+<% } else { %>
+<p class="text-center mt-10 text-sm text-gray-500">No hay noticias que coincidan con la busqueda</p>
+<% } %>
+<% if (count / limit >= 1) {%>
+<%- include('../partials/pagination.html', {page, count}) %> <% } %>
+<% } %>

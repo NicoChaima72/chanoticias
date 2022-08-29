@@ -3,6 +3,7 @@ const News = require("../models/news.model");
 const Tag = require("../models/tag.model");
 const User = require("../models/user.model");
 const { Op } = require("sequelize");
+const Sequelize = require("sequelize");
 const NewsHighlight = require("../models/news_highlights");
 
 module.exports = {
@@ -20,7 +21,7 @@ module.exports = {
 
     highlights = highlights.map((highlight, index) => {
       if (!highlight.NewsId) {
-        return {News: newsByCategories[0].News[index]};
+        return { News: newsByCategories[0].News[index] };
       }
       return highlight;
     });
@@ -30,31 +31,6 @@ module.exports = {
       highlights: highlights.sort((a, b) => a.number - b.number),
     });
   },
-  showNews: async (req, res) => {
-    const { news_slug } = req.params;
-    const news = await News.findOne({
-      include: [User, Category, Tag],
-      where: { [Op.and]: [{ slug: news_slug }, { status: 1 }] },
-    });
-
-    const relatedNews = await News.findAll({
-      where: {
-        [Op.and]: [
-          { CategoryId: news.CategoryId },
-          { id: { [Op.ne]: news.id } },
-          { status: 1 },
-        ],
-      },
-      order: [["createdAt", "DESC"]],
-      limit: 5,
-    });
-
-    return res.render("pages/news/show.html", {
-      news,
-      relatedNews,
-    });
-  },
-
   lastNews: async (req, res) => {
     let { page } = req.query;
 
@@ -118,11 +94,12 @@ module.exports = {
     const { count, rows } = await News.findAndCountAll({
       include: {
         model: Tag,
-        where: { [Op.and]: [{ id: tag.id }, { status: 1 }] },
+        where: { id: tag.id },
       },
       order: [["createdAt", "DESC"]],
       limit: 1,
       offset: 1 * page || 0,
+      where: { status: 1 },
     });
 
     return res.render("pages/list.html", {
@@ -132,6 +109,79 @@ module.exports = {
       count,
       limit: 1,
       action: "tag",
+    });
+  },
+  showNews: async (req, res) => {
+    const { news_slug } = req.params;
+    const news = await News.findOne({
+      include: [User, Category, Tag],
+      where: { [Op.and]: [{ slug: news_slug }, { status: 1 }] },
+    });
+
+    const relatedNews = await News.findAll({
+      where: {
+        [Op.and]: [
+          { CategoryId: news.CategoryId },
+          { id: { [Op.ne]: news.id } },
+          { status: 1 },
+        ],
+      },
+      order: [["createdAt", "DESC"]],
+      limit: 5,
+    });
+
+    return res.render("pages/news/show.html", {
+      news,
+      relatedNews,
+    });
+  },
+
+  search: async (req, res) => {
+    let { search, page } = req.query;
+
+    if (!search) return res.render("pages/search.html", { search });
+
+    page = page ? page - 1 : undefined;
+    search = search.trim();
+
+    console.log({search});
+
+    let news = News.findAndCountAll({
+      include: [Category, Tag],
+      order: [["createdAt", "DESC"]],
+      limit: 1,
+      offset: 1 * page || 0,
+      where: {
+        [Op.and]: [{ status: 1 }, {title: {[Op.substring]: search}}],
+      },
+    });
+
+    let tags = await Tag.findAll({
+      group: ["Tag.id"],
+      includeIgnoreAttributes: false,
+      include: [News],
+      attributes: {
+        include: [
+          [Sequelize.fn("COUNT", Sequelize.col("News.id")), "News_Count"],
+        ],
+      },
+      order: [[Sequelize.literal("News_Count"), "DESC"]],
+      where: { name: { [Op.substring]: search } },
+    });
+
+    [news, tags] = await Promise.all([news, tags]);
+
+
+    // return res.json({ news });
+
+    
+    return res.render("pages/search.html", {
+      search,
+      news: news.rows,
+      count: news.count,
+      tags: JSON.parse(JSON.stringify(tags)).filter(t => t.News_Count > 0),
+      page: Number(page) + 1 || 1,
+      limit: 1,
     });
   },
 };

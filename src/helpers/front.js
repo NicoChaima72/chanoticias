@@ -25,6 +25,10 @@ module.exports = {
   },
   isActiveUrl: (currentUrl, checkUrl) => {
     currentUrl = currentUrl === "/" ? "" : currentUrl;
+    currentUrl =
+      currentUrl.indexOf("?") !== -1
+        ? currentUrl.substring(0, currentUrl.indexOf("?"))
+        : currentUrl;
 
     currentUrl = currentUrl.split("/").filter((n) => n);
     checkUrl = checkUrl.split("/").filter((n) => n);
@@ -70,7 +74,6 @@ module.exports = {
     if (typeof verifyPermission === "string")
       return userPermissions.includes(verifyPermission.toLowerCase());
 
-
     for (const permission of verifyPermission) {
       if (userPermissions.includes(permission.toLowerCase())) {
         return true;
@@ -86,5 +89,49 @@ module.exports = {
     });
 
     return userGroups.includes(verifyGroupPermission.toLowerCase());
+  },
+
+  addQueryString: (currentUrl, queryString) => {
+    if (currentUrl.indexOf("?") === -1) return `${currentUrl}?${queryString}`;
+
+    let queryStringsUrl = currentUrl.substring(currentUrl.indexOf("?"));
+    let queryStringWithoutValue = queryString.substring(
+      0,
+      queryString.indexOf("=") + 1
+    );
+    let valueOfQueryString = queryString.substring(
+      queryString.indexOf("=") + 1
+    );
+
+    if (queryStringsUrl.indexOf(queryStringWithoutValue) === -1)
+      return `${currentUrl}&${queryString}`;
+
+    queryStringsUrl = queryStringsUrl.substring(
+      queryStringsUrl.indexOf(queryStringWithoutValue)
+    );
+
+    // si el query string es el ultimo parametro que se envia www.example.com?any=10&any=10&queryString=value
+    if (queryStringsUrl.indexOf("&") === -1) {
+      // queryStringsUrl = queryStringsUrl.substring(0, queryStringWithoutValue.length);
+      currentUrl = currentUrl.substring(
+        0,
+        currentUrl.indexOf(queryStringWithoutValue)
+      );
+      return `${currentUrl}${queryString}`;
+    }
+
+    return (
+      currentUrl.substring(0, currentUrl.indexOf(queryStringWithoutValue)) +
+        queryString +
+        currentUrl
+          .substring(currentUrl.indexOf(queryStringWithoutValue))
+          .substring(
+            currentUrl
+              .substring(currentUrl.indexOf(queryStringWithoutValue))
+              .indexOf("&")
+          )
+    );
+
+    return true;
   },
 };

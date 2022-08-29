@@ -1,4 +1,6 @@
 <%- contentFor('body') %>
+<input type="hidden" id="news" value="<%= news.id %>">
+<input type="hidden" id="user" value="<%= _user ? _user.id : '' %>">
 <div class="grid grid-cols-12 gap-5 mb-5">
   <div class="col-span-12 lg:col-span-8 border dark:border-gray-800 rounded">
     <div class="relative">
@@ -19,6 +21,10 @@
           style="background-color: <%= news.Category.color %>"
           ><a href="/categories/<%= news.Category.slug%>"><%= news.Category.name %></a></span
         >
+        <button id="btnSave" class="absolute w-10 h-10 bg-white dark:bg-gray-900 rounded-full top-1 right-1">
+          <i class="fa-regular fa-heart absolute text-lg" style="top: 50%; left: 50%; transform: translate(-50%, -50%);"></i>
+        </button>
+        
       </div>
       <div
         class="sm:mt-[-130px] z-50 relative sm:mx-8 bg-white dark:bg-transparent"
@@ -85,8 +91,28 @@
   </div>
 </div>
 
+<div id="alert-login" class="hidden fixed bottom-2 right-2 p-4 mb-4 border border-red-300 rounded-lg bg-red-50 dark:bg-red-200 z-50" role="alert">
+  <div class="flex items-center">
+    <svg aria-hidden="true" class="w-5 h-5 mr-2 text-red-900 dark:text-red-800" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+    <span class="sr-only">Info</span>
+    <h3 class="text-lg font-medium text-red-900 dark:text-red-800">No has iniciado sesion</h3>
+  </div>
+  <div class="mt-2 mb-4 text-sm text-red-900 dark:text-red-800">
+    Para poder guardar noticias tienes que estar logueado en la aplicacion.
+  </div>
+  <div class="flex justify-end">
+    <a href="/auth/login<%= _.getPathname(_current_url) %>" class="text-white bg-red-900 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-xs px-3 py-1.5 mr-2 text-center inline-flex items-center dark:bg-red-800 dark:hover:bg-red-900">
+      Iniciar sesion
+      <i class="fa-solid fa-arrow-right ml-2"></i>
+    </a>
+  </div>
+</div>
+
 <div class="pb-4"></div>
 <%- include('../../partials/newsList.html', {category: {name: 'Ultimas noticias', News: _lastNews}}) %>
+
+
+
 
 <%- contentFor('styles') %>
 <link rel="stylesheet" href="/css/ckeditor.css" />
@@ -147,6 +173,41 @@
   const codes = document.querySelectorAll("#editor code");
   codes.forEach((code) => {
     code.parentNode.innerHTML = code.innerText;
+  });
+
+  document.getElementById('btnSave').addEventListener('click', () => {
+    const user = document.getElementById('user');
+    if (!user.value) {
+      const alert = document.querySelector('#alert-login');
+      alert.classList.remove('hidden');
+      setTimeout(() => {
+        alert.classList.add('hidden');
+      }, 5000);
+    } else {
+      const news = document.getElementById('news').value;
+      const icon = document.getElementById('btnSave').children[0];
+      let action;
+      if (icon.classList.contains('fa-regular')) {
+        icon.classList.remove('fa-regular')
+        icon.classList.add('fa-solid')
+        action = 1;
+      } else {
+        icon.classList.remove('fa-solid')
+        icon.classList.add('fa-regular')
+        action = 0;
+      }
+
+      const url = `/api/news/${news}/saved`;
+      // console.log({url});
+
+      fetch(url, {
+        method: 'POST',
+        body: JSON.stringify({action}),
+        headers:{ 'Content-Type': 'application/json'}
+      })
+        .then(data=> data.json())
+        .then(data => console.log({data}))
+    }
   });
 </script>
 <script
