@@ -9,7 +9,7 @@ const { getKeyByUrlS3 } = require("../../helpers/back");
 const Tag = require("../../models/tag.model");
 const { Op } = require("sequelize");
 const Sequelize = require("sequelize");
-const NewsHighlight = require("../../models/news_highlights");
+const NewsHighlight = require("../../models/news_highlights.model");
 
 module.exports = {
   index: async (req, res) => {

@@ -4,7 +4,8 @@ const Tag = require("../models/tag.model");
 const User = require("../models/user.model");
 const { Op } = require("sequelize");
 const Sequelize = require("sequelize");
-const NewsHighlight = require("../models/news_highlights");
+const NewsHighlight = require("../models/news_highlights.model");
+const Saved_News = require("../models/saved_news.model");
 
 module.exports = {
   index: async (req, res) => {
@@ -130,9 +131,16 @@ module.exports = {
       limit: 5,
     });
 
+    let isSaved = null;
+    if (req.user)
+      isSaved = await Saved_News.findOne({
+        where: { [Op.and]: [{ NewsId: news.id }, { UserId: req.user.id }] },
+      });
+
     return res.render("pages/news/show.html", {
       news,
       relatedNews,
+      isSaved: !!isSaved,
     });
   },
 
@@ -144,7 +152,7 @@ module.exports = {
     page = page ? page - 1 : undefined;
     search = search.trim();
 
-    console.log({search});
+    console.log({ search });
 
     let news = News.findAndCountAll({
       include: [Category, Tag],
@@ -152,7 +160,7 @@ module.exports = {
       limit: 1,
       offset: 1 * page || 0,
       where: {
-        [Op.and]: [{ status: 1 }, {title: {[Op.substring]: search}}],
+        [Op.and]: [{ status: 1 }, { title: { [Op.substring]: search } }],
       },
     });
 
@@ -171,17 +179,43 @@ module.exports = {
 
     [news, tags] = await Promise.all([news, tags]);
 
-
     // return res.json({ news });
 
-    
     return res.render("pages/search.html", {
       search,
       news: news.rows,
       count: news.count,
-      tags: JSON.parse(JSON.stringify(tags)).filter(t => t.News_Count > 0),
+      tags: JSON.parse(JSON.stringify(tags)).filter((t) => t.News_Count > 0),
       page: Number(page) + 1 || 1,
       limit: 1,
+    });
+  },
+
+  savedNews: async (req, res) => {
+    let { page } = req.query;
+    page = page ? page - 1 : undefined;
+
+    const { count, rows } = await Saved_News.findAndCountAll({
+      include: [{ model: News, where: { status: 1 } }],
+      where: { UserId: req.user.id },
+      limit: 1,
+      offset: 1 * page || 0,
+    });
+
+    // return res.json({ ok: true, msg: "Saved news", count, rows });
+    // return res.json({data: {name: 'Noticias guardados'},
+    //   news: rows.map(r => r.News),
+    //   page: Number(page) + 1 || 1,
+    //   count,
+    //   limit: 1,
+    //   action: "category",})
+    return res.render("pages/list.html", {
+      data: {name: 'Noticias guardadas'},
+      news: rows.map(r => r.News),
+      page: Number(page) + 1 || 1,
+      count,
+      limit: 1,
+      action: "saved-news",
     });
   },
 };

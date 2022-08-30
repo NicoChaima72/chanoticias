@@ -29,6 +29,7 @@ router.get("/news/:news_slug", pages.showNews);
 router.get("/categories/:category_slug", pages.showCategory);
 router.get("/tags/:tag_slug", pages.showTag);
 router.get('/search', pages.search);
+router.get('/saved-news', pages.savedNews);
 
 // TODO: Agregar 404
 // router.all('*', (req, res) => {

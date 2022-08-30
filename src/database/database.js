@@ -8,7 +8,8 @@ require("../models/news.model");
 require("../models/news_tag.model");
 require("../models/permission_role.model");
 require("../models/permission_user.model");
-require("../models/news_highlights");
+require("../models/news_highlights.model");
+require("../models/saved_news.model");
 
 
 db.sync({ alter: true })

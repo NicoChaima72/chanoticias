@@ -22,7 +22,7 @@
           ><a href="/categories/<%= news.Category.slug%>"><%= news.Category.name %></a></span
         >
         <button id="btnSave" class="absolute w-10 h-10 bg-white dark:bg-gray-900 rounded-full top-1 right-1">
-          <i class="fa-regular fa-heart absolute text-lg" style="top: 50%; left: 50%; transform: translate(-50%, -50%);"></i>
+          <i class="<%= isSaved ? 'fa-solid' : 'fa-regular' %> fa-heart absolute text-lg" style="top: 50%; left: 50%; transform: translate(-50%, -50%);"></i>
         </button>
         
       </div>
