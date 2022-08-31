@@ -1,3 +1,4 @@
+<%- contentFor('title')%> <%= !search ? 'Buscar' : 'Buscando ' + search  %>
 <%- contentFor('body') %>
 <form action="" method="get">
   <label
@@ -59,3 +60,36 @@
 <% if (count / limit > 1) {%>
 <%- include('../partials/pagination.html', {page, count}) %> <% } %>
 <% } %>
+
+
+
+<%- contentFor('head') %>
+<meta
+  name="description"
+  content="<%= !search ? 'Busca tus noticias de interes o temas relacionados': 'Buscando noticias relacionadas con' + search %>"
+/>
+
+<meta property="og:title" content="Chaimanoticias - Buscar" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://nch-chaimanoticias.com/search" />
+<meta
+  property="og:image"
+  itemprop="image"
+  content="/favicon/favicon-32x32.png"
+/>
+<meta
+  property="og:description"
+  content="<%= !search ? 'Busca tus noticias de interes o temas relacionados': 'Buscando noticias relacionadas con' + search %>"
+/>
+<meta property="og:site_name" content="Chaimanoticias" />
+<meta property="og:image:width" content="300" />
+<meta property="og:image:height" content="300" />
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Chaimanoticias - Buscar" />
+<meta
+  name="twitter:description"
+  content="<%= !search ? 'Busca tus noticias de interes o temas relacionados': 'Buscando noticias relacionadas con' + search %>"
+/>
+<meta name="twitter:creator" content="Chaimanoticias" />
+<meta name="twitter:image" content="/favicon/favicon-32x32.png" />

@@ -53,6 +53,7 @@ module.exports = {
       count,
       limit: 4,
       action: "lastNews",
+      title: 'Ultimas noticias'
     });
   },
 
@@ -82,6 +83,7 @@ module.exports = {
       count,
       limit: 8,
       action: "category",
+      title: 'Categoria ' + category.name
     });
   },
 
@@ -115,6 +117,7 @@ module.exports = {
       count,
       limit: 8,
       action: "tag",
+      title: 'Etiqueta ' + tag.name
     });
   },
   showNews: async (req, res) => {
@@ -224,6 +227,7 @@ module.exports = {
       count,
       limit: 8,
       action: "saved-news",
+      title: 'Noticias guardadas'
     });
   },
 };

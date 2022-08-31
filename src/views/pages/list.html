@@ -1,3 +1,5 @@
+<%- contentFor('title')%> <%= title %>
+
 <%- contentFor('body') %>
 <h1 class="text-3xl pb-2 font-bold">
   <%= action === 'tag' ? '#' : '' %><%= data.name %>
@@ -25,3 +27,36 @@
 <% if (count / limit > 1 ) {  %>
 <%- include('../partials/pagination.html', {page, count, limit}) %>
 <% } %>
+
+
+<%- contentFor('head') %>
+<meta
+  name="description"
+  content="<%= title %>"
+/>
+
+<meta property="og:title" content="Chaimanoticias - Listar <%= title %>" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://nch-chaimanoticias.com/" />
+<meta
+  property="og:image"
+  itemprop="image"
+  content="<%= news.imageUrl %>"
+/>
+<meta
+  property="og:description"
+  content="<%= title %>"
+/>
+<meta property="og:site_name" content="Chaimanoticias" />
+<meta property="og:image:width" content="300" />
+<meta property="og:image:height" content="300" />
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Chaimanoticias - Listar <%= title %>" />
+<meta
+  name="twitter:description"
+  content="<%= title %>"
+/>
+<meta name="twitter:creator" content="Chaimanoticias" />
+<meta name="twitter:image" content="<%= news.imageUrl %>" />
+
