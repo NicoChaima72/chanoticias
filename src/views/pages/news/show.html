@@ -1,6 +1,9 @@
 <%- contentFor('body') %>
 <input type="hidden" id="news" value="<%= news.id %>">
 <input type="hidden" id="user" value="<%= _user ? _user.id : '' %>">
+<% if (_.can(_user, 'editar todas las noticias') || (news.UserId == _user.id && _.can(_user, 'editar mis noticias'))) { %>
+<a href="/panel/news/<%= news.slug %>/edit" class="fixed z-40 bottom-5 right-5 shadow w-10 h-10 rounded-full border"><i class="fa-solid fa-pen absolute" style="top: 50%; left:50%; transform: translate(-50%, -50%)"></i></a>
+<% } %>
 <div class="grid grid-cols-12 gap-5 mb-5">
   <div class="col-span-12 lg:col-span-8 border dark:border-gray-800 rounded">
     <div class="relative">
@@ -27,7 +30,7 @@
         
       </div>
       <div
-        class="sm:mt-[-130px] z-50 relative sm:mx-8 bg-white dark:bg-transparent"
+        class="sm:mt-[-130px] z-30 relative sm:mx-8 bg-white dark:bg-transparent"
       >
         <div class="p-2 sm:p-6 sm:pt-3 mt-3 sm:mt-0">
           <h1 class="font-bold text-3xl mt-3 leading-8 sm:leading-7">
@@ -91,7 +94,7 @@
   </div>
 </div>
 
-<div id="alert-login" class="hidden fixed bottom-2 right-2 p-4 mb-4 border border-red-300 rounded-lg bg-red-50 dark:bg-red-200 z-50" role="alert">
+<div id="alert-login" class="hidden fixed bottom-2 right-2 p-4 mb-4 border border-red-300 rounded-lg bg-red-50 dark:bg-red-200 z-40" role="alert">
   <div class="flex items-center">
     <svg aria-hidden="true" class="w-5 h-5 mr-2 text-red-900 dark:text-red-800" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
     <span class="sr-only">Info</span>

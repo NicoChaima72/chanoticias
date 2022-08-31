@@ -31,7 +31,7 @@ module.exports = {
   indexMe: async (req, res) => {
     const news = await News.findAll({
       include: [User, Category],
-      where: {  UserId: req.user.id  },
+      where: { UserId: req.user.id },
     });
 
     return res.render("panel/pages/news/index.html", {
@@ -57,6 +57,11 @@ module.exports = {
 
     const user = await User.findByPk(user_id);
 
+    if (!user) {
+      req.flash("warning", "El usuario no existe.");
+      return res.redirect("/panel/users");
+    }
+
     const news = await News.findAll({
       include: [User, Category],
       where: { UserId: user_id },
@@ -74,6 +79,10 @@ module.exports = {
     const { category_slug } = req.params;
 
     const category = await Category.findOne({ where: { slug: category_slug } });
+    if (!category) {
+      req.flash("warning", "La categoria no existe.");
+      return res.redirect("/panel/categories");
+    }
     const news = await News.findAll({
       include: [User, Category],
       where: { CategoryId: category.id },
@@ -90,6 +99,10 @@ module.exports = {
     const { tag_slug } = req.params;
 
     const tag = await Tag.findOne({ where: { slug: tag_slug } });
+    if (!tag) {
+      req.flash("warning", "La etiqueta no existe.");
+      return res.redirect("/panel/tags");
+    }
     const news = await News.findAll({
       include: [User, Category, { model: Tag, where: { id: tag.id } }],
     });
@@ -210,8 +223,10 @@ module.exports = {
 
     const news = await News.findOne({ where: { slug: news_slug } });
 
-    if (!news)
-      return res.status(400).json({ ok: false, msg: "Noticia no encontrada" });
+    if (!news) {
+      req.flash("warning", "La noticia no existe.");
+      return res.redirect("/panel/news/verify");
+    }
 
     const categories = await Category.findAll({ where: { isActive: true } });
     return res.render("panel/pages/news/verify.html", {
@@ -226,6 +241,10 @@ module.exports = {
       req.body;
 
     const news = await News.findOne({ where: { slug: news_slug } });
+    if (!news) {
+      req.flash("warning", "La noticia no existe.");
+      return res.redirect("/panel/news/verify");
+    }
 
     let result = [];
     if (req.files.length)
@@ -262,8 +281,10 @@ module.exports = {
       where: { slug: news_slug },
     });
 
-    if (!news)
-      return res.status(400).json({ ok: false, msg: "Noticia no encontrada" });
+    if (!news) {
+      req.flash("warning", "La noticia no existe.");
+      return res.redirect("/panel/news");
+    }
 
     if (
       !helpers.can(req.user, "editar todas las noticias") &&
@@ -301,9 +322,10 @@ module.exports = {
     const news = await News.findOne({
       where: { slug: news_slug },
     });
-    if (!news)
-      return res.status(400).json({ ok: false, msg: "Noticia no encontrada" });
-
+    if (!news) {
+      req.flash("warning", "La noticia no existe.");
+      return res.redirect("/panel/news/");
+    }
     let result = [];
     if (req.files.length)
       result = await Promise.all([
@@ -351,7 +373,8 @@ module.exports = {
     const news = await News.findOne({ where: { slug: news_slug } });
 
     if (!news) {
-      return res.status(400).json({ error: "La noticia no existe" });
+      req.flash("warning", "La noticia no existe.");
+      return res.redirect("/panel/news");
     }
 
     const highlight = await NewsHighlight.findOne({ where: { number } });
@@ -373,9 +396,11 @@ module.exports = {
     const { news_slug } = req.params;
 
     const news = await News.findOne({ where: { slug: news_slug } });
-    if (!news)
-      return res.status(400).json({ ok: false, msg: "Noticia no encontrada" });
 
+    if (!news) {
+      req.flash("warning", "La noticia no existe.");
+      return res.redirect("/panel/news");
+    }
     await Promise.all([
       news.destroy(),
       deleteImage(getKeyByUrlS3(news.imageUrl)),

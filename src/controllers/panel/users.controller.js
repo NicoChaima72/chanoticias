@@ -6,6 +6,7 @@ const helpers = require("../../helpers/back");
 const emailService = require("../../services/email.service");
 const Permission = require("../../models/permission.model");
 const News = require("../../models/news.model");
+const Saved_News = require("../../models/saved_news.model");
 
 module.exports = {
   index: async (req, res) => {
@@ -34,6 +35,7 @@ module.exports = {
           where: { slug: "cliente" },
         },
         Permission,
+        Saved_News
       ],
     });
 
@@ -145,7 +147,8 @@ module.exports = {
       include: { model: Role, include: Permission },
     });
     if (!user) {
-      return res.status(400).json({ ok: false, msg: "Usuario no encontrado" });
+      req.flash("warning", "El usuario no existe.");
+      return res.redirect("/panel/users");
     }
 
     return res.json({ ok: true, user });
@@ -153,8 +156,10 @@ module.exports = {
   edit: async (req, res) => {
     const { user_id } = req.params;
     const user = await User.findByPk(user_id, { include: Role });
+
     if (!user) {
-      return res.status(400).json({ ok: false, msg: "Usuario no encontrado" });
+      req.flash("warning", "El usuario no existe.");
+      return res.redirect("/panel/users");
     }
 
     const roles = await Role.findAll({
@@ -172,7 +177,8 @@ module.exports = {
     const user = await User.findByPk(user_id, { include: [Role, Permission] });
 
     if (!user) {
-      return res.status(400).json({ ok: false, msg: "Usuario no encontrado" });
+      req.flash("warning", "El usuario no existe.");
+      return res.redirect("/panel/users");
     }
 
     // Verificamos si existe ese email pero en otro usuario con otro id
@@ -219,7 +225,8 @@ module.exports = {
     const { user_id } = req.params;
     const user = await User.findByPk(user_id, { include: Role });
     if (!user) {
-      return res.status(400).json({ ok: false, msg: "Usuario no encontrado" });
+      req.flash("warning", "El usuario no existe.");
+      return res.redirect("/panel/users");
     }
 
     await user.update({ status: 2 });
@@ -234,8 +241,10 @@ module.exports = {
     const user = await User.scope("withStatus").findByPk(user_id, {
       include: [Role, News],
     });
+    
     if (!user) {
-      return res.status(400).json({ ok: false, msg: "Usuario no encontrado" });
+      req.flash("warning", "El usuario no existe.");
+      return res.redirect("/panel/users");
     }
 
     if (user.status === 2) await user.update({ status: 1 });

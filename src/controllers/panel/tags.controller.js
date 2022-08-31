@@ -19,15 +19,14 @@ module.exports = {
       order: [[Sequelize.literal("News_Count"), "DESC"]],
     });
 
-    const user = await Tag.findAll({include: User});
+    const users = await Tag.findAll({include: User});
 
     tags = tags.map(tag => {
-      const userTag = user.filter(t=> t.id == tag.id)[0];
+      const userTag = users.filter(t=> t.id == tag.id)[0];
       return {...JSON.parse(JSON.stringify(tag)), User: JSON.parse(JSON.stringify(userTag.User))}
     })
 
     return res.render('panel/pages/tags/index.html', {tags })
-    // return res.json({ ok: true, tags });
   },
 
   create: async (req, res) => {

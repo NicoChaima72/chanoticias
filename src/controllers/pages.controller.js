@@ -6,6 +6,7 @@ const { Op } = require("sequelize");
 const Sequelize = require("sequelize");
 const NewsHighlight = require("../models/news_highlights.model");
 const Saved_News = require("../models/saved_news.model");
+const slugify = require("slugify");
 
 module.exports = {
   index: async (req, res) => {
@@ -63,13 +64,15 @@ module.exports = {
       where: { slug: category_slug },
     });
 
+    if (!category) return res.render("404/404.html");
+
     page = page ? page - 1 : undefined;
 
     const { count, rows } = await News.findAndCountAll({
       where: { [Op.and]: [{ CategoryId: category.id }, { status: 1 }] },
       order: [["createdAt", "DESC"]],
-      limit: 1,
-      offset: 1 * page || 0,
+      limit: 8,
+      offset: 8 * page || 0,
     });
 
     return res.render("pages/list.html", {
@@ -77,7 +80,7 @@ module.exports = {
       news: rows,
       page: Number(page) + 1 || 1,
       count,
-      limit: 1,
+      limit: 8,
       action: "category",
     });
   },
@@ -89,6 +92,8 @@ module.exports = {
     const tag = await Tag.findOne({
       where: { slug: tag_slug },
     });
+    if (!tag) return res.render("404/404.html");
+
 
     page = page ? page - 1 : undefined;
 
@@ -98,8 +103,8 @@ module.exports = {
         where: { id: tag.id },
       },
       order: [["createdAt", "DESC"]],
-      limit: 1,
-      offset: 1 * page || 0,
+      limit: 8,
+      offset: 8 * page || 0,
       where: { status: 1 },
     });
 
@@ -108,7 +113,7 @@ module.exports = {
       news: rows,
       page: Number(page) + 1 || 1,
       count,
-      limit: 1,
+      limit: 8,
       action: "tag",
     });
   },
@@ -118,6 +123,9 @@ module.exports = {
       include: [User, Category, Tag],
       where: { [Op.and]: [{ slug: news_slug }, { status: 1 }] },
     });
+    if (!news) {
+      return res.render("404/news.show.404.html");
+    }
 
     const relatedNews = await News.findAll({
       where: {
@@ -157,8 +165,8 @@ module.exports = {
     let news = News.findAndCountAll({
       include: [Category, Tag],
       order: [["createdAt", "DESC"]],
-      limit: 1,
-      offset: 1 * page || 0,
+      limit: 8,
+      offset: 8 * page || 0,
       where: {
         [Op.and]: [{ status: 1 }, { title: { [Op.substring]: search } }],
       },
@@ -174,7 +182,7 @@ module.exports = {
         ],
       },
       order: [[Sequelize.literal("News_Count"), "DESC"]],
-      where: { name: { [Op.substring]: search } },
+      where: { name: { [Op.substring]: slugify(search, { lower: true }) } },
     });
 
     [news, tags] = await Promise.all([news, tags]);
@@ -187,7 +195,7 @@ module.exports = {
       count: news.count,
       tags: JSON.parse(JSON.stringify(tags)).filter((t) => t.News_Count > 0),
       page: Number(page) + 1 || 1,
-      limit: 1,
+      limit: 8,
     });
   },
 
@@ -198,8 +206,8 @@ module.exports = {
     const { count, rows } = await Saved_News.findAndCountAll({
       include: [{ model: News, where: { status: 1 } }],
       where: { UserId: req.user.id },
-      limit: 1,
-      offset: 1 * page || 0,
+      limit: 8,
+      offset: 8 * page || 0,
     });
 
     // return res.json({ ok: true, msg: "Saved news", count, rows });
@@ -207,14 +215,14 @@ module.exports = {
     //   news: rows.map(r => r.News),
     //   page: Number(page) + 1 || 1,
     //   count,
-    //   limit: 1,
+    //   limit: 8,
     //   action: "category",})
     return res.render("pages/list.html", {
-      data: {name: 'Noticias guardadas'},
-      news: rows.map(r => r.News),
+      data: { name: "Noticias guardadas" },
+      news: rows.map((r) => r.News),
       page: Number(page) + 1 || 1,
       count,
-      limit: 1,
+      limit: 8,
       action: "saved-news",
     });
   },

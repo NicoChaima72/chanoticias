@@ -31,9 +31,8 @@ router.get("/tags/:tag_slug", pages.showTag);
 router.get('/search', pages.search);
 router.get('/saved-news', pages.savedNews);
 
-// TODO: Agregar 404
-// router.all('*', (req, res) => {
-//   res.status(404).send('<h1>404! Pagina no encontrada en pagesRouter</h1>');
-// });
+router.all('*', (req, res) => {
+  return res.render('404/404.html');
+});
 
 module.exports = router;

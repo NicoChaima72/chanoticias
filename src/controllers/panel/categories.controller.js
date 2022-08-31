@@ -76,9 +76,8 @@ module.exports = {
       include: User,
     });
     if (!category) {
-      return res
-        .status(400)
-        .json({ ok: false, msg: "Categoria no encontrada" });
+      req.flash("warning", "La categoria no existe.");
+      return res.redirect("/panel/categories");
     }
 
     return res.json({ ok: true, category });

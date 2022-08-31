@@ -9,7 +9,7 @@ const path = require("path");
 // const passport = require("../config/passport.config");
 const passport = require("passport");
 const mysqlSession = require("express-mysql-session");
-const routes = require("../routes/index.routes");
+const routes = require("../routes/routes");
 
 module.exports = (app) => {
   // database

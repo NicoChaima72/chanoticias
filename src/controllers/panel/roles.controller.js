@@ -163,7 +163,8 @@ module.exports = {
     });
 
     if (!role) {
-      return res.status(400).json({ ok: false, msg: "Rol no encontrado" });
+      req.flash("warning", "El rol no existe.");
+      return res.redirect("/panel/roles");
     }
 
     if (

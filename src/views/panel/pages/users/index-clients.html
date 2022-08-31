@@ -34,7 +34,7 @@ Clientes %> <%- contentFor('body') %>
                 <span class="badge badge-danger">Inactivo</span>
                 <% } %>
               </td>
-              <td>0</td>
+              <td><%= user.Saved_News.length %></td>
               <td>
                 <div class="d-flex">
                   <% if (_.can(_user, 'dar de baja a clientes')) { %> <% if

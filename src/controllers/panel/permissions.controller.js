@@ -14,6 +14,11 @@ module.exports = {
       include: [Permission, { model: Role, include: Permission }],
     });
 
+    if (!user) {
+      req.flash("warning", "El usuario no existe.");
+      return res.redirect("/panel/users");
+    }
+
     const permissionsByUser = user
       .getWithAllPermissions()
       .AllPermissions.map((p) => p.id);
@@ -39,6 +44,11 @@ module.exports = {
     const user = await User.findByPk(user_id, {
       include: [{ model: Role, include: Permission }, Permission],
     });
+
+    if (!user) {
+      req.flash("warning", "El usuario no existe.");
+      return res.redirect("/panel/users");
+    }
 
     const thereAreProtectedPermissions = await Permission.findAll({
       where: {

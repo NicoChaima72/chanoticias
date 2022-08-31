@@ -22,7 +22,6 @@ router.use(async (req, res, next) => {
     where: { status: 0 },
   });
 
-  console.log({unverifiedNews})
   res.locals._unverifiedNews = unverifiedNews;
 
   next();
@@ -105,8 +104,8 @@ router.use(
   permissionsRouter
 );
 
-// router.all('*', (req, res) => {
-//   res.status(404).send('<h1>404! Pagina no encontrada en PanelRouter</h1>');
-// });
+router.all('*', (req, res) => {
+  res.render('panel/404/404.html');
+});
 
 module.exports = router;

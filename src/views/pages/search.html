@@ -56,6 +56,6 @@
 <% } else { %>
 <p class="text-center mt-10 text-sm text-gray-500">No hay noticias que coincidan con la busqueda</p>
 <% } %>
-<% if (count / limit >= 1) {%>
+<% if (count / limit > 1) {%>
 <%- include('../partials/pagination.html', {page, count}) %> <% } %>
 <% } %>
