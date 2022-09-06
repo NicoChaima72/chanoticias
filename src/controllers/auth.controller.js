@@ -68,7 +68,7 @@ module.exports = {
           name,
           email,
           password,
-          RoleId: role_id ? role_id : 3,
+          RoleId: 1,
           token: uniqid(),
         },
         { include: Role }
@@ -79,18 +79,22 @@ module.exports = {
 
     const confirmUrl = `${getHostname(req)}/auth/activate/${user.token}`;
 
-    emailService
+    let error = false;
+    await emailService
       .sendEmail({
         user,
-        subject: "Confirma tu cuenta",
-        body: `Confirma tu cuenta: ${confirmUrl}`,
+        subject: `Confirma tu cuenta`,
+        archive: "auth/confirmAccount",
+        data: { confirmUrl },
       })
       .catch(async (err) => {
+        console.log({ err });
+        error = true;
         await user.destroy();
         req.flash("data", req.body);
         req.flash("error", "Ha ocurrido un error, intenta más tarde");
-        return res.redirect(req.header("Referer") || "/");
       });
+    if (error) return res.redirect("/auth/login");
 
     req.flash(
       "success",
@@ -117,7 +121,7 @@ module.exports = {
       }
     });
 
-    if (!user.status === 0) {
+    if (user.status !== 0) {
       req.flash("warning", "Lo sentimos, no puedes ingresar a este recurso");
       return res.redirect("/auth/login");
     }
@@ -141,9 +145,11 @@ module.exports = {
     });
 
     if (!user) {
-      return res
-        .status(400)
-        .json({ ok: false, msg: "El email no está registrado" });
+      req.flash("data", req.body);
+      req.flash("errors", {
+        email: { message: "El email no está registrado" },
+      });
+      return res.redirect(req.header("Referer") || "/");
     }
 
     if (user.status === 2) {
@@ -159,17 +165,21 @@ module.exports = {
 
     const confirmUrl = `${getHostname(req)}/auth/forget-password/${user.token}`;
 
-    emailService
+    let error = false;
+    await emailService
       .sendEmail({
         user,
-        subject: "Recuperar contraseña",
-        body: `Has solicitado recuperar contraseña, sigue el siguiente link: ${confirmUrl}, este tendrá un tiempo de expiracion de 2 horas`,
+        subject: `Recuperar contraseña`,
+        archive: "auth/forgetPassword",
+        data: { confirmUrl },
       })
       .catch((err) => {
+        console.log(err);
+        error = true;
         req.flash("data", req.body);
         req.flash("error", "Ha ocurrido un error, intenta más tarde");
-        return res.redirect(req.header("Referer") || "/");
       });
+    if (error) return res.redirect(req.header("Referer") || "/");
 
     req.flash(
       "success",
@@ -181,8 +191,11 @@ module.exports = {
 
   showUpdatePasswordForm: async (req, res) => {
     const { token } = req.params;
+    const { by } = req.body;
+
     // Para cuando el usuario tenga status 3
     if (!token) {
+      console.log("ENTRAAAA");
       return res.render("auth/update-password.html", {
         user: req.user,
         by: "id",

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .body {
+        font-family: "Inter", sans-serif;
+        color: #27272a;
+        background-color: #f9fafb;
+      }
+      a {
+        text-decoration: none;
+        font-weight: 600;
+        color: #27272a;
+      }
+      .container {
+        text-align: center;
+        padding: 2rem 1.5rem 0.5rem 1.5rem;
+        border-radius: 1rem;
+      }
+      h2 {
+        font-size: 1.7rem;
+      }
+      h1 {
+        font-size: 1.3rem;
+        padding: 20px 0 0 20px;
+      }
+      .btn {
+        background-color: #1d4ed8;
+        color: white;
+        padding: 0.6rem 4rem;
+        display: inline-block;
+        border-radius: 0.5rem;
+        margin-top: 30px;
+      }
+      .footer {
+        font-size: 0.7rem;
+        margin-top: 3rem;
+      }
+
+      p a {
+        display: block;
+        word-wrap: break-word;
+      }
+      .label {
+        font-size: 10px;
+        padding: 0;
+        margin: 0;
+        margin-right: 5px;
+      }
+
+      .info {
+        margin-top: 10px;
+        display: inline-block;
+        text-align: left;
+      }
+
+      .info p {
+        margin: 0;
+        margin-top: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="body">
+      <h1>Chaimanoticias</h1>
+      <div class="container">
+        <h2>Confirma tu cuenta</h2>
+        <p class="description">
+          Sigue el siguiente link para activar tu cuenta
+        </p>
+        <% if (typeof email !== 'undefined') { %>
+        <div class="info">
+          <p>
+            <span class="label">Email:</span>
+            <%= email %>
+          </p>
+
+          <p><span class="label">Contraseña:</span><%= password %></p>
+        </div>
+        <div></div>
+        <%} %>
+        <a href="<%= confirmUrl %>" class="btn">Activar</a>
+        <p class="footer">
+          Si no funciona el link, copia esta url
+          <a><%= confirmUrl %></a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

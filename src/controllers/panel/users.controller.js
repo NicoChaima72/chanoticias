@@ -115,12 +115,14 @@ module.exports = {
     const confirmUrl = `${req.protocol}://${req.hostname}${
       req.hostname === "localhost" && ":" + process.env.PORT
     }/auth/activate/${user.token}`;
+    
 
     emailService
       .sendEmail({
         user,
-        subject: "Confirma tu cuenta",
-        body: `Confirma tu cuenta: ${confirmUrl} \n\nEmail: ${user.email}\nContraseña: ${password}`,
+        subject: `Confirma tu cuenta`,
+        archive: "auth/confirmAccount",
+        data: { confirmUrl, email: user.email, password: password },
       })
       .then((info) => {
         req.flash(
@@ -157,6 +159,31 @@ module.exports = {
       return res.redirect("/panel/users");
     }
 
+    if (user.id === req.user.id) {
+      req.flash("warning", "No te puedes editar a ti mismo.");
+      return res.redirect("/panel/users");
+    }
+
+    // return res.json({ ok: true, user });
+    if (user.RoleId === 2) {
+      // SUPER ADMINISTRADOR
+      req.flash("warning", "No puedes editar a super administradores.");
+      return res.redirect("/panel/users");
+    }
+    if (user.RoleId === 1) {
+      // SUPER ADMINISTRADOR
+      req.flash("warning", "No puedes editar a clientes.");
+      return res.redirect("/panel/users");
+    }
+
+    // Solo los super administradores pueden editar administradores
+    if (user.RoleId === 3 && req.user.RoleId !== 2) {
+      req.flash("warning", "No puedes editar a administradores.");
+      return res.redirect("/panel/users");
+    }
+
+    // return res.json({ ok: true, user });
+
     const roles = await Role.findAll({
       where: { slug: { [Op.ne]: "cliente" } },
     });
@@ -173,6 +200,28 @@ module.exports = {
 
     if (!user) {
       req.flash("warning", "El usuario no existe.");
+      return res.redirect("/panel/users");
+    }
+
+    if (user.id === req.user.id) {
+      req.flash("warning", "No te puedes editar a ti mismo.");
+      return res.redirect("/panel/users");
+    }
+
+    if (user.RoleId === 2) {
+      // SUPER ADMINISTRADOR
+      req.flash("warning", "No puedes editar a super administradores.");
+      return res.redirect("/panel/users");
+    }
+    if (user.RoleId === 1) {
+      // SUPER ADMINISTRADOR
+      req.flash("warning", "No puedes editar a clientes.");
+      return res.redirect("/panel/users");
+    }
+
+    // Solo los super administradores pueden editar administradores
+    if (user.RoleId === 3 && req.user.RoleId !== 2) {
+      req.flash("warning", "No puedes editar a administradores.");
       return res.redirect("/panel/users");
     }
 

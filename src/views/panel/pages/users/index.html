@@ -17,6 +17,7 @@
               <th>Nombre</th>
               <th>Email</th>
               <th>Rol</th>
+              <th class="d-none">RolId</th>
               <th title="Permisos adicionales">P. A.</th>
               <th>Estado</th>
               <th>n° Noticias</th>
@@ -30,6 +31,7 @@
               <td><%= user.name %></td>
               <td><%= user.email %></td>
               <td><%= user.Role.description %></td>
+              <td class="d-none"><%= user.Role.id %></td>
               <td>
                 <div class="d-flex">
                   <span>
@@ -83,7 +85,7 @@
                   ></a>
                   <% } %>
                   <% if (((_.can(_user, 'dar de baja a usuarios') && ![2, 3].includes(user.Role.id)) || _.can(_user, 'dar de baja a usuarios administradores')) && user.Role.slug !== 'super-administrador') { %>
-                  <% if (user.status == 1 || user.status == 3) { %>
+                  <% if (user.status != 2) { %>
                   <button
                     type="submit"
                     class="btn btn-outline-danger mx-1"
@@ -175,7 +177,7 @@
       info: true,
       autoWidth: false,
       responsive: true,
-      order: [[1, "desc"]],
+      order: [[4, "asc"]],
     });
   });
 </script>

@@ -55,7 +55,7 @@ router.post(
   auth.updatePassword
 );
 
-router.get("/change-password", auth.showUpdatePasswordForm);
+router.get("/change-password", authMiddleware.authenticated, auth.showUpdatePasswordForm);
 
 router.post("/logout", authMiddleware.authenticated, auth.logout);
 
