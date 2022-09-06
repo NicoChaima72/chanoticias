@@ -146,19 +146,20 @@ module.exports = {
       where: { isActive: 1 },
     });
 
-    if (!category)
-      return res.status(400).json({
-        ok: false,
-        msg: "La categoria no existe",
-      });
+    if (!category) {
+    req.flash("data", req.body);
+      req.flash("error", "La categoría no existe");
+      return res.redirect(req.header("Referer") || "/");
+    }
 
     let image;
     try {
       image = await uploadImage(file);
     } catch (err) {
       await news.destroy();
-
-      return res.status(400).json({ ok: false, err });
+      req.flash("data", req.body);
+      req.flash("error", "Ha ocurrido un error, intenta más tarde");
+      return res.redirect(req.header("Referer") || "/");
     }
 
     let slug = slugify(title, { lower: true }).substring(0, 45);
@@ -380,7 +381,8 @@ module.exports = {
     const highlight = await NewsHighlight.findOne({ where: { number } });
 
     if (!highlight) {
-      return res.status(400).json({ error: "La opcion destacada no existe" });
+      req.flash("error", "No se puede asignar a este numero");
+      return res.redirect(req.header("Referer") || "/");
     }
 
     await highlight.update({ NewsId: news.id });

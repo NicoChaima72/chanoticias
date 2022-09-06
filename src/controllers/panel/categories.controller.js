@@ -68,20 +68,20 @@ module.exports = {
     req.flash("success", "Se ha agregado la categoria exitosamente.");
     return res.redirect("/panel/categories");
   },
-  show: async (req, res) => {
-    const { category_slug } = req.params;
+  // show: async (req, res) => {
+  //   const { category_slug } = req.params;
 
-    const category = await Category.findOne({
-      where: { slug: category_slug },
-      include: User,
-    });
-    if (!category) {
-      req.flash("warning", "La categoria no existe.");
-      return res.redirect("/panel/categories");
-    }
+  //   const category = await Category.findOne({
+  //     where: { slug: category_slug },
+  //     include: User,
+  //   });
+  //   if (!category) {
+  //     req.flash("warning", "La categoria no existe.");
+  //     return res.redirect("/panel/categories");
+  //   }
 
-    return res.json({ ok: true, category });
-  },
+  //   return res.json({ ok: true, category });
+  // },
   edit: async (req, res) => {
     const { category_slug } = req.params;
 

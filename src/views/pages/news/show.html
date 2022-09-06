@@ -3,8 +3,10 @@
 <%- contentFor('body') %>
 <input type="hidden" id="news" value="<%= news.id %>">
 <input type="hidden" id="user" value="<%= _user ? _user.id : '' %>">
+<% if (_user) { %>
 <% if (_.can(_user, 'editar todas las noticias') || (news.UserId == _user.id && _.can(_user, 'editar mis noticias'))) { %>
 <a href="/panel/news/<%= news.slug %>/edit" class="fixed z-40 bottom-5 right-5 shadow w-10 h-10 rounded-full border"><i class="fa-solid fa-pen absolute" style="top: 50%; left:50%; transform: translate(-50%, -50%)"></i></a>
+<% } %>
 <% } %>
 <div class="grid grid-cols-12 gap-5 mb-5">
   <div class="col-span-12 lg:col-span-8 border dark:border-gray-800 rounded">

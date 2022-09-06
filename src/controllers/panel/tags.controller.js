@@ -29,9 +29,9 @@ module.exports = {
     return res.render('panel/pages/tags/index.html', {tags })
   },
 
-  create: async (req, res) => {
-    return res.json({ ok: true, msg: "Mostrando el formulario create tag" });
-  },
+  // create: async (req, res) => {
+  //   return res.json({ ok: true, msg: "Mostrando el formulario create tag" });
+  // },
 
   store: async (req, res) => {
     const { name } = req.body;
@@ -59,51 +59,52 @@ module.exports = {
     return res.json({ ok: true, tag });
   },
 
-  show: async (req, res) => {
-    const { tag_slug } = req.params;
-    const tag = await Tag.findOne({ where: { slug: tag_slug } });
+  // show: async (req, res) => {
+  //   const { tag_slug } = req.params;
+  //   const tag = await Tag.findOne({ where: { slug: tag_slug } });
 
-    if (!tag)
-      return res.status(400).json({ ok: false, msg: "Tag no encontrado" });
+  //   if (!tag)
+  //     return res.status(400).json({ ok: false, msg: "Tag no encontrado" });
 
-    return res.json({ ok: true, tag });
-  },
+  //   return res.json({ ok: true, tag });
+  // },
 
-  edit: async (req, res) => {
-    const { tag_slug } = req.params;
-    const tag = await Tag.findOne({ where: { slug: tag_slug } });
+  // edit: async (req, res) => {
+  //   const { tag_slug } = req.params;
+  //   const tag = await Tag.findOne({ where: { slug: tag_slug } });
 
-    if (!tag)
-      return res.status(400).json({ ok: false, msg: "Tag no encontrado" });
+  //   if (!tag)
+  //     return res.status(400).json({ ok: false, msg: "Tag no encontrado" });
 
-    return res.json({ ok: true, msg: "Mostrando el formulario edit tag" });
-  },
+  //   return res.json({ ok: true, msg: "Mostrando el formulario edit tag" });
+  // },
 
-  update: async (req, res) => {
-    const { tag_slug } = req.params;
-    const { name } = req.body;
+  // update: async (req, res) => {
+  //   const { tag_slug } = req.params;
+  //   const { name } = req.body;
 
-    const tag = await Tag.findOne({ where: { slug: tag_slug } });
+  //   const tag = await Tag.findOne({ where: { slug: tag_slug } });
 
-    if (!tag)
-      return res.status(400).json({ ok: false, msg: "Tag no encontrado" });
+  //   if (!tag)
+  //     return res.status(400).json({ ok: false, msg: "Tag no encontrado" });
 
-    await tag.update({ name });
+  //   await tag.update({ name });
 
-    return res.json({ ok: true, tag });
-  },
+  //   return res.json({ ok: true, tag });
+  // },
 
   destroy: async (req, res) => {
     const { tag_slug } = req.params;
     const tag = await Tag.findOne({ where: { slug: tag_slug } });
 
-    if (!tag)
-      return res.status(400).json({ ok: false, msg: "Tag no encontrado" });
+    if (!tag) {
+      req.flash("error", "Tag no encontrado");
+      return res.redirect(req.header("Referer") || "/");
+    }
 
     await tag.destroy();
 
     req.flash('success', 'La etiqueta se ha borrado exitosamente');
     return res.redirect('/panel/tags');
-    return res.json({ ok: true, tag });
   },
 };

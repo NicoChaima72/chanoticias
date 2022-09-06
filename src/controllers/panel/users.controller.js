@@ -10,7 +10,6 @@ const Saved_News = require("../../models/saved_news.model");
 
 module.exports = {
   index: async (req, res) => {
-    // TODO: Cambiar por su respectivo rol
     const users = await User.scope("withStatus").findAll({
       include: [
         {
@@ -35,7 +34,7 @@ module.exports = {
           where: { slug: "cliente" },
         },
         Permission,
-        Saved_News
+        Saved_News,
       ],
     });
 
@@ -72,28 +71,31 @@ module.exports = {
 
     const existRole = await Role.findByPk(role_id);
 
-    if (!existRole)
-      return res.status(400).json({ ok: false, msg: "El rol no existe" });
+    if (!existRole) {
+      req.flash("data", req.body);
+      req.flash("error", "El rol no existe");
+      return res.redirect(req.header("Referer") || "/");
+    }
 
     if (
       (existRole.slug === "super-administrador" &&
         req.user.Role.slug !== "super-administrador") ||
       (existRole.slug === "administrador" &&
-        !helpers.can(req.user, "gregar usuarios administradores"))
+        !helpers.can(req.user, "agregar usuarios administradores"))
     ) {
-      return res.status(400).json({
-        ok: false,
-        msg: "No tienes permisos para realizar esta accion",
-      });
+      req.flash("error", "No tienes permisos para realizar esta accion");
+      return res.redirect(req.header("Referer") || "/");
     }
 
     const existUser = await User.findOne({ where: { email } });
 
-    if (existUser)
-      return res.status(400).json({
-        ok: false,
-        msg: "El usuario con este email ya existe",
+    if (existUser) {
+      req.flash("data", req.body);
+      req.flash("errors", {
+        email: { message: "El email ya está registrado" },
       });
+      return res.redirect(req.header("Referer") || "/");
+    }
 
     let user;
 
@@ -126,33 +128,26 @@ module.exports = {
           "Usuario creado, Se ha enviado un correo a el nuevo usuario con su informacion."
         );
         return res.redirect("/panel/users");
-
-        return res.json({
-          ok: true,
-          msg: "Se ha enviado un correo a el nuevo usuario con su informacion",
-        });
       })
       .catch(async (err) => {
         await user.destroy();
-        return res.status(408).json({
-          ok: false,
-          msg: "Ha ocurrido un error, intenta más tarde",
-          err,
-        });
+        req.flash("data", req.body);
+        req.flash("error", "Ha ocurrido un error, intenta más tarde");
+        return res.redirect(req.header("Referer") || "/");
       });
   },
-  show: async (req, res) => {
-    const { user_id } = req.params;
-    const user = await User.findByPk(user_id, {
-      include: { model: Role, include: Permission },
-    });
-    if (!user) {
-      req.flash("warning", "El usuario no existe.");
-      return res.redirect("/panel/users");
-    }
+  // show: async (req, res) => {
+  //   const { user_id } = req.params;
+  //   const user = await User.findByPk(user_id, {
+  //     include: { model: Role, include: Permission },
+  //   });
+  //   if (!user) {
+  //     req.flash("warning", "El usuario no existe.");
+  //     return res.redirect("/panel/users");
+  //   }
 
-    return res.json({ ok: true, user });
-  },
+  //   return res.json({ ok: true, user });
+  // },
   edit: async (req, res) => {
     const { user_id } = req.params;
     const user = await User.findByPk(user_id, { include: Role });
@@ -221,18 +216,18 @@ module.exports = {
     return res.redirect("/panel/users");
   },
 
-  destroy: async (req, res) => {
-    const { user_id } = req.params;
-    const user = await User.findByPk(user_id, { include: Role });
-    if (!user) {
-      req.flash("warning", "El usuario no existe.");
-      return res.redirect("/panel/users");
-    }
+  // destroy: async (req, res) => {
+  //   const { user_id } = req.params;
+  //   const user = await User.findByPk(user_id, { include: Role });
+  //   if (!user) {
+  //     req.flash("warning", "El usuario no existe.");
+  //     return res.redirect("/panel/users");
+  //   }
 
-    await user.update({ status: 2 });
+  //   await user.update({ status: 2 });
 
-    return res.json({ ok: true, user });
-  },
+  //   return res.json({ ok: true, user });
+  // },
 
   changeStatus: async (req, res) => {
     const { user_id } = req.params;
@@ -241,7 +236,7 @@ module.exports = {
     const user = await User.scope("withStatus").findByPk(user_id, {
       include: [Role, News],
     });
-    
+
     if (!user) {
       req.flash("warning", "El usuario no existe.");
       return res.redirect("/panel/users");
@@ -257,6 +252,8 @@ module.exports = {
         " ha sido dado de " +
         (user.status === 1 ? "alta." : "baja.")
     );
-    return res.redirect("/panel/users" + (type === "clients" && "/clients"));
+    return res.redirect(
+      "/panel/users" + (type === "clients" ? "/clients" : "")
+    );
   },
 };

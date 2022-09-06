@@ -48,7 +48,7 @@ module.exports = {
 
   register: async (req, res) => {
     const { redirect } = req.query;
-    // TODO: Solo role cliente normal ya que loscon rol especial los creara automaticamente el administrador
+
     const { name, email, password, role_id } = req.body;
     let user;
 
@@ -87,11 +87,9 @@ module.exports = {
       })
       .catch(async (err) => {
         await user.destroy();
-        return res.status(408).json({
-          ok: false,
-          msg: "Ha ocurrido un error, intenta más tarde",
-          err,
-        });
+        req.flash("data", req.body);
+        req.flash("error", "Ha ocurrido un error, intenta más tarde");
+        return res.redirect(req.header("Referer") || "/");
       });
 
     req.flash(
@@ -168,11 +166,9 @@ module.exports = {
         body: `Has solicitado recuperar contraseña, sigue el siguiente link: ${confirmUrl}, este tendrá un tiempo de expiracion de 2 horas`,
       })
       .catch((err) => {
-        return res.status(408).json({
-          ok: false,
-          msg: "Ha ocurrido un error, intenta más tarde",
-          err,
-        });
+        req.flash("data", req.body);
+        req.flash("error", "Ha ocurrido un error, intenta más tarde");
+        return res.redirect(req.header("Referer") || "/");
       });
 
     req.flash(
@@ -201,11 +197,9 @@ module.exports = {
       req.flash("error", "El token ingresado no es valido");
       return res.redirect("/auth/login");
     }
-    if (user.status === 2) 
-    {
+    if (user.status === 2) {
       req.flash("error", "El usuario está dado de baja");
       return res.redirect("/auth/login");
-
     }
 
     return res.render("auth/update-password.html", { user, by: "token" });
@@ -229,7 +223,8 @@ module.exports = {
       });
 
       if (!user) {
-        return res.status(403).json({ ok: false, msg: "Token expirado" });
+        req.flash("error", "El token ha expirado");
+        return res.redirect(req.header("Referer") || "/");
       }
     } else {
       user = await User.scope("withAllInfo").findOne({
@@ -237,9 +232,12 @@ module.exports = {
       });
     }
 
-    // TODO: VER AQUI Y TODOS LOS CONTROLADORES DE 2
     if (user.status == 2) {
-      return res.redirect('/');
+      req.flash(
+        "danger",
+        "El usuario está dado de baja y no se puede actualizar"
+      );
+      return res.redirect(req.header("Referer"));
     }
 
     await user.update({
@@ -247,7 +245,7 @@ module.exports = {
       token: null,
       expire: null,
       isActive: 1,
-      status: 1
+      status: 1,
     });
 
     req.flash("success", "Contraseña cambiada con exito");

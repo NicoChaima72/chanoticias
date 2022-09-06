@@ -41,8 +41,8 @@ module.exports = {
     const { count, rows } = await News.findAndCountAll({
       include: [Category],
       order: [["createdAt", "DESC"]],
-      limit: 4,
-      offset: 4 * page || 0,
+      limit: 8,
+      offset: 8 * page || 0,
       where: { status: 1 },
     });
 
@@ -51,7 +51,7 @@ module.exports = {
       news: rows,
       page: Number(page) + 1 || 1,
       count,
-      limit: 4,
+      limit: 8,
       action: "lastNews",
       title: 'Ultimas noticias'
     });
