@@ -4,7 +4,7 @@
   "description": "World news app",
   "main": "index.js",
   "scripts": {
-    "start": "node ./src/index.js",
+    "start": "concurrently \"node ./src/index.js\" \"npx tailwindcss -i public/css/tailwind.css -o public/css/style.css\"",
     "dev": "nodemon ./src/index.js -e ejs,js,css,html",
     "build:tailwind": "npx tailwindcss -i public/css/tailwind.css -o public/css/style.css --watch",
     "dev-example": "concurrently \"nodemon ./src/index.js -e ejs,js,css,html,jpg,png,scss\" \"npx tailwindcss -i public/css/tailwind.css -o public/css/style.css --watch\"",
@@ -28,7 +28,7 @@
     "aws-sdk": "^2.1180.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.0",
-    "concurrently": "^7.3.0",
+    "concurrently": "^7.4.0",
     "connect-flash": "^0.1.1",
     "cookie-session": "^2.0.0",
     "dotenv": "^16.0.1",
