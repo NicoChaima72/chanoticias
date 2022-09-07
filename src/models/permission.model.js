@@ -16,7 +16,6 @@ const Permission = sequelize.define(
         notEmpty: { msg: "La descripcion del permiso es requerido" },
         notNull: { msg: "La descripcion del permiso es requerido" },
       },
-      unique: { args: true, msg: "Rol ya registrado" },
     },
     group: {
       type: DataTypes.STRING,
@@ -26,8 +25,6 @@ const Permission = sequelize.define(
         notNull: { msg: "El grupo es requerido" },
       },
     },
-    // Todo lo que tenga que ver con administradores será protegido y no se podrán dar permisos a nuevos roles
-    // TODO: Probar crear otro rol con los mismos permisos que administrador y actualizar los permisos a si mismo u otros creados
     protected: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,

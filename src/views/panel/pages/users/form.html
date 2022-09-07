@@ -23,7 +23,7 @@ action == 'show' ? 'Ver usuario' : action == 'create' ? 'Agregar usuario' :
         <label for="name">Nombre</label>
         <input type="text" class="form-control <%= errors.name && 'is-invalid'
         %>" id="name" name="name" value="<%= _.getValue(data.name, user.name)
-        %>" autocomplete="off" <%= action == 'show' && 'disabled' %> /> <% if
+        %>" maxlength="100" autocomplete="off" <%= action == 'show' && 'disabled' %> /> <% if
         (errors.name) { %>
         <span class="text-xs text-danger"><%- errors.name.message %></span>
         <% } %>
@@ -32,7 +32,7 @@ action == 'show' ? 'Ver usuario' : action == 'create' ? 'Agregar usuario' :
         <label for="email">Email</label>
         <input type="text" class="form-control <%= errors.email && 'is-invalid'
         %>" id="email" name="email" value="<%= _.getValue(data.email,
-        user.email) %>" autocomplete="off" <%= action == 'show' && 'disabled' %>
+        user.email) %>" maxlength="50" autocomplete="off" <%= action == 'show' && 'disabled' %>
         /> <% if (errors.email) { %>
         <span class="text-xs text-danger"><%- errors.email.message %></span>
         <% } %>

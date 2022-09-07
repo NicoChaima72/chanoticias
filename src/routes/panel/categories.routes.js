@@ -18,7 +18,7 @@ router.get(
 
 router.post(
   "/",
-  permissionsMiddleware.can("agregar categorias"),
+  permissionsMiddleware.can("agregar categoria"),
   categoriesRequest.store,
   categories.store
 );

@@ -38,7 +38,6 @@ contentFor('header-button') %> <% if (_.can(_user, 'agregar rol')) { %>
                     title="Ver rol"
                     ><i class="fas fa-eye"></i
                   ></a>
-                  <!-- TODO: Yo no puedo editar ni modificar mi mismo rol -->
                   <% } %> <% } %> <% if (role.slug != 'super-administrador' &&
                   !(role.slug == 'administrador' && _user.Role.slug !=
                   'super-administrador')) { %> <% if(_.can(_user, 'editar rol'))
@@ -49,7 +48,6 @@ contentFor('header-button') %> <% if (_.can(_user, 'agregar rol')) { %>
                     title="Editar rol"
                     ><i class="fas fa-pen"></i
                   ></a>
-                  <!-- TODO: Probar con una canUpdate false -->
                   <% } %> <% } %> <% } %> <% if (_.can(_user, 'eliminar rol'))
                   {%> <% if (role.Users.length == 0) { %>
                   <button

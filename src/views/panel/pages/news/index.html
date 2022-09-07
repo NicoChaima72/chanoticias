@@ -11,47 +11,56 @@ noticias <%- contentFor('header-title') %> Noticias <% if (action == 'index')
   <div class="col-12">
     <% if (action == 'index') { %> <% if (_.can(_user, 'editar destacadas')) {
     %>
-    <div class="card">
-      <div class="card-header">
-        <h3 class="card-title">Noticias destacadas</h3>
+    <div class="accordion" id="accordionExample">
+      <div class="card">
+        <div class="card-header" id="headingOne">
+          <h2 class="mb-0">
+            <button class="btn btn-link text-dark btn-block text-left p-0 card-title" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              Noticias destacadas
+              <i class="fas fa-angle-down ml-1"></i>
+            </button>
+          </h2>
+        </div>
+        <div  id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+          <div class="card-body">
+            <table class="data-table table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th>N°</th>
+                  <th>Creacion</th>
+                  <th>Titulo</th>
+                  <th>Imagen</th>
+                  <th>Autor</th>
+                  <th>Categoria</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% highlights.sort((a,b) => a.number - b.number).map(newsItem => {
+                %>
+                <tr>
+                  <td><%= newsItem.number %></td>
+                  <td>
+                    <%= newsItem.News?.createdAt ? _.moment(newsItem.News.createdAt,
+                    'DD/MM/YY - HH:mm') : '' %>
+                  </td>
+                  <td><%= newsItem.News?.title || ''%></td>
+                  <td>
+                    <% if (newsItem.News?.imageUrl) { %><img
+                      src="<%= newsItem.News.imageUrl %>"
+                      alt="<%= newsItem.News.title %>"
+                      style="aspect-ratio: 16/9; width: 120px"
+                    /><% } %>
+                  </td>
+                  <td><%= newsItem.News?.User?.name || '' %></td>
+                  <td><%= newsItem.News?.Category?.name || '' %></td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+    
       </div>
-      <div class="card-body">
-        <table class="data-table table table-bordered table-hover">
-          <thead>
-            <tr>
-              <th>N°</th>
-              <th>Creacion</th>
-              <th>Titulo</th>
-              <th>Imagen</th>
-              <th>Autor</th>
-              <th>Categoria</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% highlights.sort((a,b) => a.number - b.number).map(newsItem => {
-            %>
-            <tr>
-              <td><%= newsItem.number %></td>
-              <td>
-                <%= newsItem.News?.createdAt ? _.moment(newsItem.News.createdAt,
-                'DD/MM/YY - HH:mm') : '' %>
-              </td>
-              <td><%= newsItem.News?.title || ''%></td>
-              <td>
-                <% if (newsItem.News?.imageUrl) { %><img
-                  src="<%= newsItem.News.imageUrl %>"
-                  alt="<%= newsItem.News.title %>"
-                  style="aspect-ratio: 16/9; width: 120px"
-                /><% } %>
-              </td>
-              <td><%= newsItem.News?.User?.name || '' %></td>
-              <td><%= newsItem.News?.Category?.name || '' %></td>
-            </tr>
-            <% }) %>
-          </tbody>
-        </table>
-      </div>
-    </div>
     <% } %> <% } %>
     <div class="card">
       <div class="card-header">
@@ -80,7 +89,7 @@ noticias <%- contentFor('header-title') %> Noticias <% if (action == 'index')
           <tbody>
             <% news.map(newsItem => { %>
             <tr>
-              <td class="d-none"><%= newsItem.createdAt %></td>
+              <td class="d-none"><%= newsItem.id %></td>
               <td><%= _.moment(newsItem.createdAt, 'DD/MM/YY - HH:mm') %></td>
               <td><%= newsItem.title %></td>
               <td>
@@ -230,7 +239,7 @@ noticias <%- contentFor('header-title') %> Noticias <% if (action == 'index')
       info: true,
       autoWidth: false,
       responsive: true,
-      order: [[1, "desc"]],
+      order: [[0, "desc"]],
     });
     $(".data-table").DataTable({
       language: {

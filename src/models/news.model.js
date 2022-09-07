@@ -52,10 +52,6 @@ const News = sequelize.define(
       },
       defaultValue: 0, // 0-> Sin revision | 1-> Verificado | 2-> Rechazado
     },
-    popularity: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
-    },
   },
   {
     // PARA LOS EMOJIS

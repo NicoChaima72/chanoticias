@@ -87,7 +87,7 @@ Categorias <%- contentFor('header-button') %> <% if (_.can(_user,'agregar catego
                     data-placement="top"
                     title="Dar de baja la categoria"
                     onclick="confirm('¿Cambiar de estado a la categoria <%= category.name %>? <%= category.NewsCount != 0 ? `No se puede eliminar porque contiene noticias asociadas` : ``%>') ?
-                    document.getElementById('form-delete-<%= category.id %>').submit() : null"
+                    document.getElementById('form-down-<%= category.id %>').submit() : null"
                   >
                     <i class="fas fa-arrow-down"></i>
                   </button>
@@ -95,7 +95,7 @@ Categorias <%- contentFor('header-button') %> <% if (_.can(_user,'agregar catego
                     action="/panel/categories/<%= category.slug %>/active?_method=PUT"
                     method="post"
                     class="d-none"
-                    id="form-delete-<%= category.id %>"
+                    id="form-down-<%= category.id %>"
                   >
                     <input type="hidden" name="_method" value="PUT" />
                   </form>
@@ -170,8 +170,8 @@ Categorias <%- contentFor('header-button') %> <% if (_.can(_user,'agregar catego
       autoWidth: false,
       responsive: true,
       order: [
+        [2, "desc"],
         [5, "desc"],
-        [0, "asc"],
       ],
     });
   });

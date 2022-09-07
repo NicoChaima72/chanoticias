@@ -19,14 +19,17 @@ module.exports = {
       order: [[Sequelize.literal("News_Count"), "DESC"]],
     });
 
-    const users = await Tag.findAll({include: User});
+    const users = await Tag.findAll({ include: User });
 
-    tags = tags.map(tag => {
-      const userTag = users.filter(t=> t.id == tag.id)[0];
-      return {...JSON.parse(JSON.stringify(tag)), User: JSON.parse(JSON.stringify(userTag.User))}
-    })
+    tags = tags.map((tag) => {
+      const userTag = users.filter((t) => t.id == tag.id)[0];
+      return {
+        ...JSON.parse(JSON.stringify(tag)),
+        User: JSON.parse(JSON.stringify(userTag.User)),
+      };
+    });
 
-    return res.render('panel/pages/tags/index.html', {tags })
+    return res.render("panel/pages/tags/index.html", { tags });
   },
 
   // create: async (req, res) => {
@@ -36,11 +39,8 @@ module.exports = {
   store: async (req, res) => {
     const { name } = req.body;
     const existTag = await Tag.findOne({ where: { name } });
-    if (existTag)
-      return res.status(400).json({
-        ok: false,
-        msg: "El nombre del tag ya está registrado",
-      });
+    if (existTag) return res.json({ ok: false });
+    if (name.length > 40) return res.json({ ok: false });
 
     const user = await User.findByPk(1);
     let tag;
@@ -104,7 +104,7 @@ module.exports = {
 
     await tag.destroy();
 
-    req.flash('success', 'La etiqueta se ha borrado exitosamente');
-    return res.redirect('/panel/tags');
+    req.flash("success", "La etiqueta se ha borrado exitosamente");
+    return res.redirect("/panel/tags");
   },
 };

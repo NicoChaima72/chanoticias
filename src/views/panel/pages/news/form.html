@@ -22,6 +22,7 @@
           name="title"
           value="<%= _.getValue(data.title, news.title) %>"
           autocomplete="off"
+          maxlength="255"
         />
         <% if (errors.title) { %>
         <span class="text-xs text-danger"><%- errors.title.message %></span>
@@ -34,6 +35,7 @@
           id="excerpt"
           class="form-control <%= errors.excerpt && 'is-invalid' %>"
           rows="2"
+          maxlength="255"
         >
 <%= _.getValue(data.excerpt, news.excerpt) %></textarea
         >
@@ -43,25 +45,6 @@
         >
         <% } %>
       </div>
-      <% if(_.can(_user, 'verificar noticias')) { %>
-      <div class="form-group">
-        <label for="popularity">Popularidad</label>
-        <input
-          type="number"
-          name="popularity"
-          id="popularity"
-          class="form-control <%= errors.popularity && 'is-invalid' %>"
-          min="0"
-          max="100"
-          value="<%= _.getValue(data.popularity, news.popularity) %>"
-        />
-        <% if (errors.popularity) { %>
-        <span class="text-xs text-danger"
-          ><%- errors.popularity.message %></span
-        >
-        <% } %>
-      </div>
-      <% } %>
       <div class="form-group">
         <div class="d-flex">
           <label>Categoria</label>

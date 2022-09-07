@@ -128,7 +128,10 @@ module.exports = {
       order: [[Sequelize.literal("News_Count"), "DESC"]],
     });
 
-    const categories = await Category.findAll({ where: { isActive: true } });
+    const categories = await Category.findAll({
+      where: { isActive: true },
+      order: [["popularity", "desc"]],
+    });
     return res.render("panel/pages/news/form.html", {
       news: {},
       categories,
@@ -138,7 +141,7 @@ module.exports = {
   },
 
   store: async (req, res) => {
-    let { title, excerpt, body, category_id, tags, popularity } = req.body;
+    let { title, excerpt, body, category_id, tags } = req.body;
     const file = req.files;
 
     const user = await User.findByPk();
@@ -147,7 +150,7 @@ module.exports = {
     });
 
     if (!category) {
-    req.flash("data", req.body);
+      req.flash("data", req.body);
       req.flash("error", "La categoría no existe");
       return res.redirect(req.header("Referer") || "/");
     }
@@ -181,7 +184,6 @@ module.exports = {
           CategoryId: category.id,
           UserId: res.locals._user.id,
           imageUrl: image.Data[0].Location,
-          popularity: popularity || null,
           status: helpers.can(req.user, "verificar noticias") ? 1 : 0,
         },
         { include: [User, Category] }
@@ -238,8 +240,7 @@ module.exports = {
 
   verify: async (req, res) => {
     const { news_slug } = req.params;
-    const { title, excerpt, body, category_id, tags, action, popularity } =
-      req.body;
+    const { title, excerpt, body, category_id, tags, action } = req.body;
 
     const news = await News.findOne({ where: { slug: news_slug } });
     if (!news) {
@@ -261,7 +262,6 @@ module.exports = {
       CategoryId: category_id,
       imageUrl: !!result.length ? result[0].Data[0].Location : news.imageUrl,
       status: action === "aceptar" ? 1 : 2,
-      popularity: popularity || 0,
     });
 
     await news.setTags(tags || []);
@@ -306,7 +306,10 @@ module.exports = {
       },
       order: [[Sequelize.literal("News_Count"), "DESC"]],
     });
-    const categories = await Category.findAll({ where: { isActive: true } });
+    const categories = await Category.findAll({
+      where: { isActive: true },
+      order: [["popularity", "desc"]],
+    });
 
     return res.render("panel/pages/news/form.html", {
       news,

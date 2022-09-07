@@ -28,6 +28,7 @@ contentFor('body') %>
           name="description"
           value="<%= _.getValue(data.description, role.description) %>"
           autocomplete="off"
+          maxlength="30"
           <%= action == 'show' && 'disabled' %>
         />
         <% if (errors.description) { %>

@@ -24,7 +24,6 @@ const User = sequelize.define(
         notEmpty: { msg: "El email es requerido" },
         notNull: { msg: "El email es requerido" },
       },
-      unique: { args: true, msg: "Email ya registrado" },
     },
     password: {
       type: DataTypes.STRING(60),

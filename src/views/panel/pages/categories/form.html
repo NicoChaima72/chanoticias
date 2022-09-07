@@ -22,6 +22,7 @@
           name="name"
           value="<%= _.getValue(data.name, category.name) %>"
           autocomplete="off"
+          maxlength="20"
         />
         <% if (errors.name) { %>
         <span class="text-xs text-danger"><%- errors.name.message %></span>

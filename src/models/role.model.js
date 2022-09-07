@@ -14,7 +14,6 @@ const Role = sequelize.define(
         notEmpty: { msg: "La descripcion del rol es requerida" },
         notNull: { msg: "La descripcion del rol es requerida" },
       },
-      unique: { args: true, msg: "Rol ya registrado" },
     },
     description: {
       type: DataTypes.STRING,
@@ -23,7 +22,6 @@ const Role = sequelize.define(
         notEmpty: { msg: "La descripcion del rol es requerida" },
         notNull: { msg: "La descripcion del rol es requerida" },
       },
-      unique: { args: true, msg: "Rol ya registrado" },
     },
     canUpdate: {
       type: DataTypes.BOOLEAN,
