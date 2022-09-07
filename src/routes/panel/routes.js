@@ -47,7 +47,7 @@ router.get("/", async (req, res) => {
   let roles = Role.findAndCountAll();
 
   let users = User.findAndCountAll({
-    where: { status: { [Op.ne]: 1 } },
+    where: { [Op.and]: [{ status: 1 }, { roleId: { [Op.ne]: 1 } }] },
   });
   let categories = Category.findAndCountAll({
     where: { isActive: 1 },
@@ -104,8 +104,8 @@ router.use(
   permissionsRouter
 );
 
-router.all('*', (req, res) => {
-  res.render('panel/404/404.html');
+router.all("*", (req, res) => {
+  res.render("panel/404/404.html");
 });
 
 module.exports = router;

@@ -37,17 +37,17 @@
         class="sm:mt-[-130px] z-30 relative sm:mx-8 bg-white dark:bg-transparent"
       >
         <div class="p-2 sm:p-6 sm:pt-3 mt-3 sm:mt-0">
-          <h1 class="font-bold text-3xl mt-3 leading-8 sm:leading-7">
+          <h1 class="font-bold text-3xl mt-3 leading-8 sm:leading-8">
             <%= news.title %>
           </h1>
           <% if (news.Tags.length > 0) { %>
           <div class="flex flex-nowrap text-sm space-x-2 mt-3 overflow-x-auto">
             <% news.Tags.map(tag => { %>
-            <span class="px-2 rounded border flex-none"><a href="/tags/<%= tag.slug %>"><%= tag.name %></a></span>
+            <span class="px-2 rounded border flex-none"><a href="/tags/<%= tag.slug %>">#<%= tag.name %></a></span>
             <% }) %>
           </div>
           <% } %>
-          <div class="py-3"><%= news.excerpt %></div>
+          <div class="py-3 text-lg font-semibold"><%= news.excerpt %></div>
           <div class="text-gray-500 dark:text-gray-200 py-2">
             <div class="flex space-x-2 items-center text-sm">
               <i class="fa-solid fa-user"></i>
@@ -223,6 +223,7 @@
   charset="utf-8"
 ></script>
 <script async src="//www.instagram.com/embed.js"></script>
+<script async src="https://www.tiktok.com/embed.js"></script>
 <!-- <script src="/panel/js/ckeditor.js"></script>
 <script>
   DecoupledDocumentEditor.create(document.querySelector("#editor"))

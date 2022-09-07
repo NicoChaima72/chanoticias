@@ -195,7 +195,6 @@ module.exports = {
 
     // Para cuando el usuario tenga status 3
     if (!token) {
-      console.log("ENTRAAAA");
       return res.render("auth/update-password.html", {
         user: req.user,
         by: "id",

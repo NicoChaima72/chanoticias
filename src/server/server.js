@@ -35,12 +35,12 @@ module.exports = (app) => {
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: true,
-      store: new mysqlSession({
-        host: process.env.DB_HOST,
-        port: process.env.DB_PORT,
-        user: process.env.DB_USER,
-        database: process.env.DB_DATABASE,
-      }),
+      // store: new mysqlSession({
+      //   host: process.env.DB_HOST,
+      //   port: process.env.DB_PORT,
+      //   user: process.env.DB_USER,
+      //   database: process.env.DB_DATABASE,
+      // }),
     })
   );
   app.use(passport.initialize());

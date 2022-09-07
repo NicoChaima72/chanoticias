@@ -174,6 +174,7 @@ module.exports = {
     if (existSlug) slug = slug + "-" + uniqid.time();
 
     let news;
+    let error = false;
     try {
       news = await News.create(
         {
@@ -190,11 +191,11 @@ module.exports = {
       );
     } catch (err) {
       console.log({ err });
-      return res
-        .status(400)
-        .json({ ok: false, error: helpers.handleErrorSequelize(err) });
+      error = true;
+      req.flash("error", "Ha ocurrido un error, intenta más tarde");
     }
-
+    if (error) return res.redirect("/panel/news");
+    
     if (typeof tags === "string") tags = [tags];
 
     const tagsToAdd = [];

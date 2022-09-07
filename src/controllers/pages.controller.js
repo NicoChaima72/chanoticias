@@ -163,8 +163,6 @@ module.exports = {
     page = page ? page - 1 : undefined;
     search = search.trim();
 
-    console.log({ search });
-
     let news = News.findAndCountAll({
       include: [Category, Tag],
       order: [["createdAt", "DESC"]],

@@ -215,7 +215,6 @@ module.exports = {
       const permissionsUserToRemove = [];
       user.Permissions.forEach((permission) => {
         if (newPermissions.includes(permission.id)) {
-          console.log(permission.id);
           if (
             permission.Permission_User.action == "add" &&
             permissionsToAdd.includes(permission.id)
