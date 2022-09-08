@@ -4,7 +4,7 @@
   "description": "World news app",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"node ./src/index.js\" \"npx tailwindcss -i public/css/tailwind.css -o public/css/style.css\"",
+    "start": "concurrently \"npx tailwindcss -i public/css/tailwind.css -o public/css/style.css\" \"node ./src/index.js\"",
     "dev": "nodemon ./src/index.js -e ejs,js,css,html",
     "build:tailwind": "npx tailwindcss -i public/css/tailwind.css -o public/css/style.css --watch",
     "dev-example": "concurrently \"nodemon ./src/index.js -e ejs,js,css,html,jpg,png,scss\" \"npx tailwindcss -i public/css/tailwind.css -o public/css/style.css --watch\"",
