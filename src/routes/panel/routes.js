@@ -17,7 +17,7 @@ const router = express.Router();
 
 router.use(async (req, res, next) => {
   // changing layout for my admin panel
-  req.app.set("layout", "panel/layouts/layout.html");
+  req.app.set("layout", "panel/layouts/layout.ejs");
   const unverifiedNews = await News.findAndCountAll({
     where: { status: 0 },
   });
@@ -76,7 +76,7 @@ router.get("/", async (req, res) => {
     tags,
   ]);
 
-  return res.render("panel/home.html", {
+  return res.render("panel/home.ejs", {
     allNews,
     myNews,
     clients,
@@ -105,7 +105,7 @@ router.use(
 );
 
 router.all("*", (req, res) => {
-  res.render("panel/404/404.html");
+  res.render("panel/404/404.ejs");
 });
 
 module.exports = router;

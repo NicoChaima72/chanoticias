@@ -21,7 +21,7 @@ module.exports = {
       where: { status: 1 },
     });
 
-    return res.render("panel/pages/news/index.html", {
+    return res.render("panel/pages/news/index.ejs", {
       news,
       action: "index",
       highlights,
@@ -34,7 +34,7 @@ module.exports = {
       where: { UserId: req.user.id },
     });
 
-    return res.render("panel/pages/news/index.html", {
+    return res.render("panel/pages/news/index.ejs", {
       news,
       action: "indexMe",
     });
@@ -46,7 +46,7 @@ module.exports = {
       where: { status: { [Op.in]: [0, 2] } },
     });
 
-    return res.render("panel/pages/news/index.html", {
+    return res.render("panel/pages/news/index.ejs", {
       news,
       action: "verify",
     });
@@ -67,7 +67,7 @@ module.exports = {
       where: { UserId: user_id },
     });
 
-    return res.render("panel/pages/news/index.html", {
+    return res.render("panel/pages/news/index.ejs", {
       news,
       action: "showUser",
       highlights: [],
@@ -87,7 +87,7 @@ module.exports = {
       include: [User, Category],
       where: { CategoryId: category.id },
     });
-    return res.render("panel/pages/news/index.html", {
+    return res.render("panel/pages/news/index.ejs", {
       news,
       action: "showUser",
       highlights: [],
@@ -107,7 +107,7 @@ module.exports = {
       include: [User, Category, { model: Tag, where: { id: tag.id } }],
     });
 
-    return res.render("panel/pages/news/index.html", {
+    return res.render("panel/pages/news/index.ejs", {
       news,
       action: "showTag",
       highlights: [],
@@ -132,7 +132,7 @@ module.exports = {
       where: { isActive: true },
       order: [["popularity", "desc"]],
     });
-    return res.render("panel/pages/news/form.html", {
+    return res.render("panel/pages/news/form.ejs", {
       news: {},
       categories,
       action: "create",
@@ -233,7 +233,7 @@ module.exports = {
     }
 
     const categories = await Category.findAll({ where: { isActive: true } });
-    return res.render("panel/pages/news/verify.html", {
+    return res.render("panel/pages/news/verify.ejs", {
       news,
       categories,
     });
@@ -312,7 +312,7 @@ module.exports = {
       order: [["popularity", "desc"]],
     });
 
-    return res.render("panel/pages/news/form.html", {
+    return res.render("panel/pages/news/form.ejs", {
       news,
       categories,
       action: "edit",

@@ -53,7 +53,7 @@ module.exports = {
       where: { protected: false },
     });
 
-    return res.render("panel/pages/permissions/form.html", {
+    return res.render("panel/pages/permissions/form.ejs", {
       user,
       permissions: separateByValue(permissions, "group"),
       permissionsByRole,

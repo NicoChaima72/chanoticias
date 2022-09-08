@@ -27,8 +27,8 @@ module.exports = {
       where: { slug: { [Op.ne]: "cliente" } },
     });
 
-    return res.render("panel/pages/roles/index.html", { roles });
-    return res.render("panel/pages/roles/index.html", {
+    return res.render("panel/pages/roles/index.ejs", { roles });
+    return res.render("panel/pages/roles/index.ejs", {
       roles: JSON.parse(JSON.stringify(roles)),
     });
   },
@@ -38,7 +38,7 @@ module.exports = {
       where: { protected: false },
     });
 
-    return res.render("panel/pages/roles/form.html", {
+    return res.render("panel/pages/roles/form.ejs", {
       action: "create",
       role: {},
       permissions: separateByValue(permissions, "group"),
@@ -113,7 +113,7 @@ module.exports = {
       where: { protected: false },
     });
 
-    return res.render("panel/pages/roles/form.html", {
+    return res.render("panel/pages/roles/form.ejs", {
       action: "show",
       role,
       permissions: separateByValue(permissions, "group"),
@@ -146,7 +146,7 @@ module.exports = {
       where: { protected: false },
     });
 
-    return res.render("panel/pages/roles/form.html", {
+    return res.render("panel/pages/roles/form.ejs", {
       action: "edit",
       role,
       permissions: separateByValue(permissions, "group"),

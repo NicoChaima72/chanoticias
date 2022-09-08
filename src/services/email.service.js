@@ -7,7 +7,7 @@ const emailConfig = require("../config/email.config");
 
 const generateHTML = async (options) => {
   let html = new Promise((resolve, reject) => {
-    const archive = `${__dirname}/../views/emails/${options.archive}.html`;
+    const archive = `${__dirname}/../views/emails/${options.archive}.ejs`;
 
     ejs.renderFile(archive, { ...options.data }, {}, (err, str) => {
       if (err) reject(err);

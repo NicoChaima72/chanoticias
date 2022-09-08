@@ -18,14 +18,13 @@ module.exports = (app) => {
   // settings
   app.set("port", process.env.PORT);
   app.set("views", path.join(path.dirname(__dirname), "views"));
-  app.engine("html", ejs.renderFile);
-  app.set("view engine", "ejs");
-  app.use(expressLayouts);
+  app.set('view engine', 'ejs');
   // app.set("layout extractScripts", true);
   // configurando en cada una de las rutas principales ver: panel/routes.js
   // app.set("layout", "layouts/layout.html");
-
+  
   // middlewares
+  app.use(expressLayouts);
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
   app.use(methodOverride("_method"));

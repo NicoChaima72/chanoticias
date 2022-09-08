@@ -1,12 +1,12 @@
 <%- contentFor('title')%> Inicio <%- contentFor('body') %> <%-
-include('./partials/header/header.html', {highlights}) %>
+include('./partials/header/header.ejs', {highlights}) %>
 
 <div class="p-2 border-b dark:border-gray-700"></div>
 
 <div class="divide-y dark:divide-gray-700">
-  <%- include('./partials/newsList.html', {category: {name: 'Ultimas noticias',
+  <%- include('./partials/newsList.ejs', {category: {name: 'Ultimas noticias',
   News: _lastNews}}) %> <% newsByCategories.map(category => { %> <%-
-  include('./partials/newsList.html', {category: category}) %> <% }) %>
+  include('./partials/newsList.ejs', {category: category}) %> <% }) %>
 </div>
 
 <%- contentFor('head') %>

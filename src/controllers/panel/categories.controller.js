@@ -19,12 +19,12 @@ module.exports = {
     });
 
     // return res.json({ok: true, categories});
-    return res.render("panel/pages/categories/index.html", {
+    return res.render("panel/pages/categories/index.ejs", {
       categories: JSON.parse(JSON.stringify(categories)),
     });
   },
   create: async (req, res) => {
-    return res.render("panel/pages/categories/form.html", {
+    return res.render("panel/pages/categories/form.ejs", {
       category: {},
       action: "create",
     });
@@ -95,7 +95,7 @@ module.exports = {
       return res.redirect("/panel/categories");
     }
 
-    return res.render("panel/pages/categories/form.html", {
+    return res.render("panel/pages/categories/form.ejs", {
       category,
       action: "edit",
     });

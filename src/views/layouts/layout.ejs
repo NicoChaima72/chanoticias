@@ -26,13 +26,13 @@
   </script>
   </head>
   <body class="bg-white dark:bg-gray-900 dark:text-white text-gray-700 min-h-screen relative pb-32">
-    <%- include('../partials/navbar.html') %>
-    <%- include('../partials/messages.html') %>
+    <%- include('../partials/navbar.ejs') %>
+    <%- include('../partials/messages.ejs') %>
     <div class="container max-w-none mt-5 pb-32">
       <%- body %>
     </div>
     
-    <%- include('../partials/footer.html') %>
+    <%- include('../partials/footer.ejs') %>
     <script src="/flowbite/flowbite.js"></script>
     <%- defineContent('scripts') %>
     <!-- <script src="/reload/reload.js"></script> -->

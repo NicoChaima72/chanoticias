@@ -9,7 +9,7 @@ const News = require("../models/news.model");
 const router = express.Router();
 
 router.use(async (req, res, next) => {
-  req.app.set("layout", "layouts/layout.html");
+  req.app.set("layout", "layouts/layout.ejs");
   const categories = await Category.findAll({
     order: [["popularity", "DESC"]],
   });

@@ -28,7 +28,7 @@ module.exports = {
       return highlight;
     });
 
-    return res.render("home.html", {
+    return res.render("home.ejs", {
       newsByCategories,
       highlights: highlights.sort((a, b) => a.number - b.number),
     });
@@ -46,7 +46,7 @@ module.exports = {
       where: { status: 1 },
     });
 
-    return res.render("pages/list.html", {
+    return res.render("pages/list.ejs", {
       data: { name: "Ultimas noticias" },
       news: rows,
       page: Number(page) + 1 || 1,
@@ -65,7 +65,7 @@ module.exports = {
       where: { slug: category_slug },
     });
 
-    if (!category) return res.render("404/404.html");
+    if (!category) return res.render("404/404.ejs");
 
     page = page ? page - 1 : undefined;
 
@@ -76,7 +76,7 @@ module.exports = {
       offset: 8 * page || 0,
     });
 
-    return res.render("pages/list.html", {
+    return res.render("pages/list.ejs", {
       data: category,
       news: rows,
       page: Number(page) + 1 || 1,
@@ -94,7 +94,7 @@ module.exports = {
     const tag = await Tag.findOne({
       where: { slug: tag_slug },
     });
-    if (!tag) return res.render("404/404.html");
+    if (!tag) return res.render("404/404.ejs");
 
 
     page = page ? page - 1 : undefined;
@@ -110,7 +110,7 @@ module.exports = {
       where: { status: 1 },
     });
 
-    return res.render("pages/list.html", {
+    return res.render("pages/list.ejs", {
       data: tag,
       news: rows,
       page: Number(page) + 1 || 1,
@@ -127,7 +127,7 @@ module.exports = {
       where: { [Op.and]: [{ slug: news_slug }, { status: 1 }] },
     });
     if (!news) {
-      return res.render("404/news.show.404.html");
+      return res.render("404/news.show.404.ejs");
     }
 
     const relatedNews = await News.findAll({
@@ -148,7 +148,7 @@ module.exports = {
         where: { [Op.and]: [{ NewsId: news.id }, { UserId: req.user.id }] },
       });
 
-    return res.render("pages/news/show.html", {
+    return res.render("pages/news/show.ejs", {
       news,
       relatedNews,
       isSaved: !!isSaved,
@@ -158,7 +158,7 @@ module.exports = {
   search: async (req, res) => {
     let { search, page } = req.query;
 
-    if (!search) return res.render("pages/search.html", { search });
+    if (!search) return res.render("pages/search.ejs", { search });
 
     page = page ? page - 1 : undefined;
     search = search.trim();
@@ -190,7 +190,7 @@ module.exports = {
 
     // return res.json({ news });
 
-    return res.render("pages/search.html", {
+    return res.render("pages/search.ejs", {
       search,
       news: news.rows,
       count: news.count,
@@ -218,7 +218,7 @@ module.exports = {
     //   count,
     //   limit: 8,
     //   action: "category",})
-    return res.render("pages/list.html", {
+    return res.render("pages/list.ejs", {
       data: { name: "Noticias guardadas" },
       news: rows.map((r) => r.News),
       page: Number(page) + 1 || 1,

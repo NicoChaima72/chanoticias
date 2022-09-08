@@ -7,7 +7,7 @@ const News = require("../../models/news.model");
 // const newsApi = require("../../controllers/api/news.controller");
 
 router.use(async (req, res, next) => {
-  req.app.set("layout", "layouts/layout.html");
+  req.app.set("layout", "layouts/layout.ejs");
   const categories = await Category.findAll({
     order: [["popularity", "DESC"]],
   });
@@ -32,7 +32,7 @@ router.get('/search', pages.search);
 router.get('/saved-news', pages.savedNews);
 
 router.all('*', (req, res) => {
-  return res.render('404/404.html');
+  return res.render('404/404.ejs');
 });
 
 module.exports = router;

@@ -12,7 +12,7 @@ const { getHostname } = require("../helpers/back");
 
 module.exports = {
   showLoginForm: (req, res) => {
-    return res.render("auth/login.html");
+    return res.render("auth/login.ejs");
   },
 
   // login: (req, res, next) => {
@@ -43,7 +43,7 @@ module.exports = {
   },
 
   showRegisterForm: (req, res) => {
-    return res.render("auth/register.html");
+    return res.render("auth/register.ejs");
   },
 
   register: async (req, res) => {
@@ -135,7 +135,7 @@ module.exports = {
   },
 
   showForgetPasswordForm: (req, res) => {
-    return res.render("auth/forget-password.html");
+    return res.render("auth/forget-password.ejs");
   },
 
   forgetPassword: async (req, res) => {
@@ -195,7 +195,7 @@ module.exports = {
 
     // Para cuando el usuario tenga status 3
     if (!token) {
-      return res.render("auth/update-password.html", {
+      return res.render("auth/update-password.ejs", {
         user: req.user,
         by: "id",
       });
@@ -214,7 +214,7 @@ module.exports = {
       return res.redirect("/auth/login");
     }
 
-    return res.render("auth/update-password.html", { user, by: "token" });
+    return res.render("auth/update-password.ejs", { user, by: "token" });
   },
 
   updatePassword: async (req, res) => {

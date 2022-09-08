@@ -29,7 +29,7 @@ module.exports = {
       };
     });
 
-    return res.render("panel/pages/tags/index.html", { tags });
+    return res.render("panel/pages/tags/index.ejs", { tags });
   },
 
   // create: async (req, res) => {

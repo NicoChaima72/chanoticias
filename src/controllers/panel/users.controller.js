@@ -21,7 +21,7 @@ module.exports = {
       ],
     });
 
-    return res.render("panel/pages/users/index.html", {
+    return res.render("panel/pages/users/index.ejs", {
       users,
     });
   },
@@ -38,7 +38,7 @@ module.exports = {
       ],
     });
 
-    return res.render("panel/pages/users/index-clients.html", {
+    return res.render("panel/pages/users/index-clients.ejs", {
       users,
     });
   },
@@ -60,7 +60,7 @@ module.exports = {
       },
     });
 
-    return res.render("panel/pages/users/form.html", {
+    return res.render("panel/pages/users/form.ejs", {
       user: {},
       action: "create",
       roles,
@@ -187,7 +187,7 @@ module.exports = {
     const roles = await Role.findAll({
       where: { slug: { [Op.ne]: "cliente" } },
     });
-    return res.render("panel/pages/users/form.html", {
+    return res.render("panel/pages/users/form.ejs", {
       user,
       action: "edit",
       roles,
