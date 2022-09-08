@@ -35,12 +35,12 @@ module.exports = (app) => {
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: true,
-      // store: new mysqlSession({
-      //   host: process.env.DB_HOST,
-      //   port: process.env.DB_PORT,
-      //   user: process.env.DB_USER,
-      //   database: process.env.DB_DATABASE,
-      // }),
+      store: new mysqlSession({
+        host: process.env.DB_HOST,
+        port: process.env.DB_PORT,
+        user: process.env.DB_USER,
+        database: process.env.DB_DATABASE,
+      }),
     })
   );
   app.use(passport.initialize());
@@ -67,6 +67,8 @@ module.exports = (app) => {
 
   // config extra
   app.use(express.static(path.join(__dirname, "../../public")));
+  app.use('/adminlte/dist', express.static(path.join(__dirname, "../../node_modules/admin-lte/dist")));
+  app.use('/adminlte/plugins', express.static(path.join(__dirname, "../../node_modules/admin-lte/plugins")));
   app.use(
     "/flowbite",
     express.static(path.join(__dirname, "../../node_modules/flowbite/dist"))
