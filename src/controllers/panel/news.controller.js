@@ -5,7 +5,7 @@ const Category = require("../../models/category.model");
 const uniqid = require("uniqid");
 const helpers = require("../../helpers/back");
 const { uploadImage, deleteImage } = require("../../services/images.service");
-const { getKeyByUrlS3 } = require("../../helpers/back");
+const { getKeyByUrlS3, can } = require("../../helpers/back");
 const Tag = require("../../models/tag.model");
 const { Op } = require("sequelize");
 const Sequelize = require("sequelize");
@@ -195,7 +195,7 @@ module.exports = {
       req.flash("error", "Ha ocurrido un error, intenta más tarde");
     }
     if (error) return res.redirect("/panel/news");
-    
+
     if (typeof tags === "string") tags = [tags];
 
     const tagsToAdd = [];
@@ -219,7 +219,10 @@ module.exports = {
     news.setTags(tagsToAdd);
 
     req.flash("success", "La noticia se ha agregado exitosamente");
-    return res.redirect("/panel/news");
+    if (can(req.user, "Listar todas las noticias"))
+      return res.redirect("/panel/news");
+      
+    return res.redirect("/panel/news/me");
   },
 
   showVerify: async (req, res) => {

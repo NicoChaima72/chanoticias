@@ -131,30 +131,32 @@ noticias <%- contentFor('header-title') %> Noticias <% if (action == 'index')
                     >
                       <i class="fas fa-star"></i>
                     </button>
-                    <div class="dropdown-menu p-2">
-                      <% highlights.map(highlight => { %>
-                      <button
-                        class="btn btn-outline-success d-block w-100 my-2"
-                        onclick="confirm('Seguro que quieres agregar esta noticia a destacados <%= highlight.number %>') ? document.getElementById('form-highlight-<%= highlight.number%>-<%= newsItem.id%>').submit() : ''"
-                      >
-                        Asignar a
-                        <span><i class="fas fa-star text-xs"></i></span> <%=
-                        highlight.number %>
-                      </button>
-                      <form
-                        action="/panel/news/<%= newsItem.slug %>/highlight?_method=PUT"
-                        class="d-none"
-                        method="post"
-                        id="form-highlight-<%= highlight.number%>-<%= newsItem.id%>"
-                      >
-                        <input type="hidden" name="_method" value="PUT" />
-                        <input
-                          type="hidden"
-                          name="number"
-                          value="<%= highlight.number%>"
-                        />
-                      </form>
-                      <% }) %>
+                    <div class="dropdown-menu p-2 text-success border" style="z-index: 999;">
+                      Asignar a
+                      <div class="row p-2">
+                        <% highlights.map(highlight => { %>
+                          <button
+                            class="btn btn-outline-success col-6"
+                            onclick="confirm('Seguro que quieres agregar esta noticia a destacados <%= highlight.number %>') ? document.getElementById('form-highlight-<%= highlight.number%>-<%= newsItem.id%>').submit() : ''"
+                          >
+                            <span><i class="fas fa-star text-xs"></i></span> <%=
+                            highlight.number %>
+                          </button>
+                          <form
+                            action="/panel/news/<%= newsItem.slug %>/highlight?_method=PUT"
+                            class="d-none"
+                            method="post"
+                            id="form-highlight-<%= highlight.number%>-<%= newsItem.id%>"
+                          >
+                            <input type="hidden" name="_method" value="PUT" />
+                            <input
+                            type="hidden"
+                            name="number"
+                            value="<%= highlight.number%>"
+                            />
+                          </form>
+                        <% }) %>
+                      </div>
                     </div>
                   </div>
                   <% } %> <% } %>

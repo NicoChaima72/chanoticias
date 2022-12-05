@@ -36,3 +36,12 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+div.ck.ck-reset_all.ck-widget__resizer {
+  height: 0 !important;
+  width: 0 !important;
+}
+div.ck-fake-selection-container {
+  display: none !important;
+  background-color: red!important;
+}

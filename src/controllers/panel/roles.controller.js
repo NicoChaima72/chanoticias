@@ -64,14 +64,14 @@ module.exports = {
       });
     } catch (err) {
       return res
-        .status(400)
-        .json({ ok: false, error: helpers.handleErrorSequelize(err) });
+      .status(400)
+      .json({ ok: false, error: helpers.handleErrorSequelize(err) });
     }
-
+    
     try {
       const thereAreProtectedPermissions = await Permission.findAll({
         where: {
-          [Op.and]: [{ protected: true }, { id: { [Op.in]: permissions } }],
+          [Op.and]: [{ protected: true }, { id: { [Op.in]: [...permissions] } }],
         },
       });
       if (thereAreProtectedPermissions.length > 0) {
@@ -79,9 +79,11 @@ module.exports = {
         req.flash("data", req.body);
         return res.redirect(req.header("Referer") || "/");
       }
-
+      
       await role.addPermissions(permissions);
     } catch (err) {
+      console.log({err});
+      
       await role.destroy();
       return res
         .status(400)
