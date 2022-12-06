@@ -10,6 +10,7 @@ const path = require("path");
 const passport = require("passport");
 const mysqlSession = require("express-mysql-session");
 const routes = require("../routes/routes");
+const cors = require("cors");
 
 module.exports = (app) => {
   // database
@@ -18,15 +19,16 @@ module.exports = (app) => {
   // settings
   app.set("port", process.env.PORT);
   app.set("views", path.join(path.dirname(__dirname), "views"));
-  app.set('view engine', 'ejs');
+  app.set("view engine", "ejs");
   // app.set("layout extractScripts", true);
   // configurando en cada una de las rutas principales ver: panel/routes.js
   // app.set("layout", "layouts/layout.html");
-  
+
   // middlewares
   app.use(expressLayouts);
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
+  app.use(cors());
   app.use(methodOverride("_method"));
   app.use(
     session({
@@ -34,16 +36,16 @@ module.exports = (app) => {
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: true,
-      store: new mysqlSession({
-        host: process.env.DB_HOST,
-        port: process.env.DB_PORT,
-        user: process.env.DB_USER,
-        database: process.env.DB_DATABASE,
-      }),
+      // store: new mysqlSession({
+      //   host: process.env.DB_HOST,
+      //   port: process.env.DB_PORT,
+      //   user: process.env.DB_USER,
+      //   database: process.env.DB_DATABASE,
+      // }),
     })
   );
   app.use(passport.initialize());
-  app.use(passport.session());
+  // app.use(passport.session());
   app.use(flash());
 
   // global variables
@@ -66,8 +68,14 @@ module.exports = (app) => {
 
   // config extra
   app.use(express.static(path.join(__dirname, "../../public")));
-  app.use('/adminlte/dist', express.static(path.join(__dirname, "../../node_modules/admin-lte/dist")));
-  app.use('/adminlte/plugins', express.static(path.join(__dirname, "../../node_modules/admin-lte/plugins")));
+  app.use(
+    "/adminlte/dist",
+    express.static(path.join(__dirname, "../../node_modules/admin-lte/dist"))
+  );
+  app.use(
+    "/adminlte/plugins",
+    express.static(path.join(__dirname, "../../node_modules/admin-lte/plugins"))
+  );
   app.use(
     "/flowbite",
     express.static(path.join(__dirname, "../../node_modules/flowbite/dist"))

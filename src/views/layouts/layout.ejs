@@ -5,33 +5,39 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- <meta name="theme-color" media="(color-theme: light)" content="#439843"> -->
-    <meta name="theme-color" content="#111827">
+    <meta name="theme-color" content="#111827" />
+    <meta http-equiv="Content-Security-Policy" content="font-src 'self' *" />
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
     <link rel="manifest" href="/favicon/site.webmanifest" />
     <title>Chaimanoticias - <%- defineContent('title') || 'Inicio' %></title>
     <link rel="stylesheet" href="/css/style.css" />
-    <%- defineContent('head') %>
-    <%- defineContent('styles') %>
-    
-    <script src="https://kit.fontawesome.com/e28f7980be.js" crossorigin="anonymous"></script>
+    <%- defineContent('head') %> <%- defineContent('styles') %>
+
+    <script
+      src="https://kit.fontawesome.com/e28f7980be.js"
+      crossorigin="anonymous"
+    ></script>
     <script>
       // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-      if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-          document.documentElement.classList.add('dark');
+      if (
+        localStorage.getItem("color-theme") === "dark" ||
+        (!("color-theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.classList.add("dark");
       } else {
-          document.documentElement.classList.remove('dark')
+        document.documentElement.classList.remove("dark");
       }
-  </script>
+    </script>
   </head>
-  <body class="bg-white dark:bg-gray-900 dark:text-white text-gray-700 min-h-screen relative pb-32">
-    <%- include('../partials/navbar.ejs') %>
-    <%- include('../partials/messages.ejs') %>
-    <div class="container max-w-none mt-5 pb-32">
-      <%- body %>
-    </div>
-    
+  <body
+    class="bg-white dark:bg-gray-900 dark:text-white text-gray-700 min-h-screen relative pb-32"
+  >
+    <%- include('../partials/navbar.ejs') %> <%- include('../partials/messages.ejs') %>
+    <div class="container max-w-none mt-5 pb-32"><%- body %></div>
+
     <%- include('../partials/footer.ejs') %>
     <script src="/flowbite/flowbite.js"></script>
     <%- defineContent('scripts') %>
