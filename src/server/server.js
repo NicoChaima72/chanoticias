@@ -45,7 +45,7 @@ module.exports = (app) => {
     })
   );
   app.use(passport.initialize());
-  // app.use(passport.session());
+  app.use(passport.session());
   app.use(flash());
 
   // global variables
@@ -68,18 +68,12 @@ module.exports = (app) => {
 
   // config extra
   app.use(express.static(path.join(__dirname, "../../public")));
-  app.use(
-    "/adminlte/dist",
-    express.static(path.join(__dirname, "../../node_modules/admin-lte/dist"))
-  );
+  app.use("/adminlte/dist", express.static(path.join(__dirname, "../../node_modules/admin-lte/dist")));
   app.use(
     "/adminlte/plugins",
     express.static(path.join(__dirname, "../../node_modules/admin-lte/plugins"))
   );
-  app.use(
-    "/flowbite",
-    express.static(path.join(__dirname, "../../node_modules/flowbite/dist"))
-  );
+  app.use("/flowbite", express.static(path.join(__dirname, "../../node_modules/flowbite/dist")));
 
   // routes
   app.use(routes(app));

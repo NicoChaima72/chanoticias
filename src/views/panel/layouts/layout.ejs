@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Content-Security-Policy" content="font-src 'self' *" />
     <link
       rel="apple-touch-icon"
       sizes="180x180"
@@ -27,18 +28,14 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
     />
-    <link
-      rel="stylesheet"
-      href="/adminlte/plugins/fontawesome-free/css/all.min.css"
-    />
+    <link rel="stylesheet" href="/adminlte/plugins/fontawesome-free/css/all.min.css" />
     <link rel="stylesheet" href="/adminlte/dist/css/adminlte.min.css" />
     <script src="/adminlte/plugins/jquery/jquery.min.js"></script>
     <%- defineContent('styles') %>
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
-      <%- include('../partials/navbar.ejs') %> <%-
-      include('../partials/sidebar.ejs') %>
+      <%- include('../partials/navbar.ejs') %> <%- include('../partials/sidebar.ejs') %>
 
       <div class="content-wrapper">
         <%- include('../partials/messages.ejs') %>
